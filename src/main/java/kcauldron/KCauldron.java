@@ -111,6 +111,7 @@ public class KCauldron {
     public static int lookupForgeRevision() {
         if (sForgeRevision != 0) return sForgeRevision;
         int revision = Integer.parseInt(System.getProperty("kcauldron.forgeRevision", "0"));
+        if (revision != 0) return sForgeRevision = revision;
         try {
             Properties p = new Properties();
             p.load(KCauldron.class
