@@ -16,7 +16,7 @@ public class TickLimiter {
 	}
 	
 	public boolean shouldContinue() {
-		if (++tick >= 300 && !shouldContinue) {
+		if (++tick >= 300 && shouldContinue) {
 			tick = 0;
 			shouldContinue = System.currentTimeMillis() - startTime < maxTime; 
 		}
