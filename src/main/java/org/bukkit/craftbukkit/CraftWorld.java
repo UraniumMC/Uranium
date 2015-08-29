@@ -683,16 +683,16 @@ public class CraftWorld implements World {
     public List<Entity> getEntities() {
         List<Entity> list = new ArrayList<Entity>();
 
-        for (Object o : world.loadedEntityList) {
-            if (o instanceof net.minecraft.entity.Entity) {
-                net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
+        for (net.minecraft.entity.Entity mcEnt : world.loadedEntityList_KC) {
+            //if (o instanceof net.minecraft.entity.Entity) {
+                //net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
                 Entity bukkitEntity = mcEnt.getBukkitEntity();
 
                 // Assuming that bukkitEntity isn't null
                 if (bukkitEntity != null) {
                     list.add(bukkitEntity);
                 }
-            }
+            //}
         }
 
         return list;
@@ -701,16 +701,16 @@ public class CraftWorld implements World {
     public List<LivingEntity> getLivingEntities() {
         List<LivingEntity> list = new ArrayList<LivingEntity>();
 
-        for (Object o : world.loadedEntityList) {
-            if (o instanceof net.minecraft.entity.Entity) {
-                net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
+        for (net.minecraft.entity.Entity mcEnt : world.loadedEntityList_KC) {
+            //if (o instanceof net.minecraft.entity.Entity) {
+                //net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
                 Entity bukkitEntity = mcEnt.getBukkitEntity();
 
                 // Assuming that bukkitEntity isn't null
                 if (bukkitEntity != null && bukkitEntity instanceof LivingEntity) {
                     list.add((LivingEntity) bukkitEntity);
                 }
-            }
+            //}
         }
 
         return list;
@@ -726,9 +726,9 @@ public class CraftWorld implements World {
     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> clazz) {
         Collection<T> list = new ArrayList<T>();
 
-        for (Object entity: world.loadedEntityList) {
-            if (entity instanceof net.minecraft.entity.Entity) {
-                Entity bukkitEntity = ((net.minecraft.entity.Entity) entity).getBukkitEntity();
+        for (net.minecraft.entity.Entity entity : world.loadedEntityList_KC) {
+            //if (entity instanceof net.minecraft.entity.Entity) {
+                Entity bukkitEntity = entity.getBukkitEntity();
 
                 if (bukkitEntity == null) {
                     continue;
@@ -739,7 +739,7 @@ public class CraftWorld implements World {
                 if (clazz.isAssignableFrom(bukkitClass)) {
                     list.add((T) bukkitEntity);
                 }
-            }
+            //}
         }
 
         return list;
@@ -748,9 +748,9 @@ public class CraftWorld implements World {
     public Collection<Entity> getEntitiesByClasses(Class<?>... classes) {
         Collection<Entity> list = new ArrayList<Entity>();
 
-        for (Object entity: world.loadedEntityList) {
-            if (entity instanceof net.minecraft.entity.Entity) {
-                Entity bukkitEntity = ((net.minecraft.entity.Entity) entity).getBukkitEntity();
+        for (net.minecraft.entity.Entity entity: world.loadedEntityList_KC) {
+            //if (entity instanceof net.minecraft.entity.Entity) {
+                Entity bukkitEntity = entity.getBukkitEntity();
 
                 if (bukkitEntity == null) {
                     continue;
@@ -764,7 +764,7 @@ public class CraftWorld implements World {
                         break;
                     }
                 }
-            }
+            //}
         }
 
         return list;
@@ -773,15 +773,15 @@ public class CraftWorld implements World {
     public List<Player> getPlayers() {
         List<Player> list = new ArrayList<Player>();
 
-        for (Object o : world.loadedEntityList) {
-            if (o instanceof net.minecraft.entity.Entity) {
-                net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
+        for (net.minecraft.entity.Entity mcEnt : world.loadedEntityList_KC) {
+            //if (o instanceof net.minecraft.entity.Entity) {
+                //net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
                 Entity bukkitEntity = mcEnt.getBukkitEntity();
 
                 if ((bukkitEntity != null) && (bukkitEntity instanceof Player)) {
                     list.add((Player) bukkitEntity);
                 }
-            }
+            //}
         }
 
         return list;
