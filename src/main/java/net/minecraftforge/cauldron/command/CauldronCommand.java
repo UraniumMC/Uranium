@@ -115,7 +115,7 @@ public class CauldronCommand extends Command
                     ChatColor.GOLD + " Loaded Chunks: " + ChatColor.GRAY + world.theChunkProviderServer.loadedChunkHashMap_KC.size() +
                     ChatColor.GOLD + " Active Chunks: " + ChatColor.GRAY + world.activeChunkSet.size() +
                     ChatColor.GOLD + " Entities: " + ChatColor.GRAY + world.loadedEntityList_KC.size() +
-                    ChatColor.GOLD + " Tile Entities: " + ChatColor.GRAY + world.loadedTileEntityList.size()
+                    ChatColor.GOLD + " Tile Entities: " + ChatColor.GRAY + world.loadedTileEntityList_KC.size()
                     );
             sender.sendMessage(ChatColor.GOLD + " Entities Last Tick: " + ChatColor.GRAY + world.entitiesTicked +
                     ChatColor.GOLD + " Tiles Last Tick: " + ChatColor.GRAY + world.tilesTicked
