@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/tileentity/TileEntity.java
 +++ ../src-work/minecraft/net/minecraft/tileentity/TileEntity.java
-@@ -22,18 +22,22 @@
+@@ -22,18 +22,23 @@
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
  
@@ -22,10 +22,11 @@
      public int blockMetadata = -1;
      public Block blockType;
 +    public CustomTimingsHandler tickTimer = org.bukkit.craftbukkit.SpigotTimings.getTileEntityTimings(this); // Spigot
++    public boolean markedForRemoval = false;
      private static final String __OBFID = "CL_00000340";
  
      public static void addMapping(Class p_145826_0_, String p_145826_1_)
-@@ -106,7 +110,11 @@
+@@ -106,7 +111,11 @@
          }
          catch (Exception exception)
          {
@@ -38,7 +39,7 @@
          }
  
          if (tileentity != null)
-@@ -282,6 +290,20 @@
+@@ -282,6 +291,20 @@
          addMapping(TileEntityFlowerPot.class, "FlowerPot");
      }
  
