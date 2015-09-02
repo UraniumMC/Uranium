@@ -1,0 +1,33 @@
+--- ../src-base/minecraft/org/bukkit/command/defaults/StopCommand.java
++++ ../src-work/minecraft/org/bukkit/command/defaults/StopCommand.java
+@@ -12,6 +12,8 @@
+ 
+ import com.google.common.collect.ImmutableList;
+ 
++import net.minecraft.server.dedicated.DedicatedServer;
++
+ public class StopCommand extends VanillaCommand {
+     public StopCommand() {
+         super("stop");
+@@ -23,16 +25,19 @@
+     @Override
+     public boolean execute(CommandSender sender, String currentAlias, String[] args) {
+         if (!testPermission(sender)) return true;
++        
++        DedicatedServer.allowPlayerLogins = false; // KCauldron - immediately disable logins
+ 
+         Command.broadcastCommandMessage(sender, "Stopping the server..");
+-        Bukkit.shutdown();
+ 
+         String reason = this.createString(args, 0);
+         if (StringUtils.isNotEmpty(reason)) {
+-            for (Player player : Bukkit.getOnlinePlayers()) {
++            for (Player player : ImmutableList.copyOf(Bukkit.getOnlinePlayers())) {
+                 player.kickPlayer(reason);
+             }
+         }
++        
++        Bukkit.shutdown(); // KCauldron - shutdown server after all players kicked
+ 
+         return true;
+     }

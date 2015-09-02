@@ -670,7 +670,7 @@ public final class CraftServer implements Server {
 
     @Override
     public List<World> getWorlds() {
-        return new ArrayList<World>(worlds.values());
+        return ImmutableList.copyOf(worlds.values());
     }
 
     public DedicatedPlayerList getHandle() {
