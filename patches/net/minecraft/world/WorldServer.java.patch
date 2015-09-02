@@ -69,12 +69,13 @@
          this.mcServer = p_i45284_1_;
          this.theEntityTracker = new EntityTracker(this);
          this.thePlayerManager = new PlayerManager(this);
-@@ -124,6 +147,47 @@
+@@ -124,6 +147,48 @@
              this.mapStorage.setData("scoreboard", scoreboardsavedata);
          }
  
 +        scoreboardsavedata.func_96499_a(this.worldScoreboard);
 +        ((ServerScoreboard) this.worldScoreboard).func_96547_a(scoreboardsavedata);
++        DimensionManager.setWorld(p_i45284_4_, this);
 +    }
 +
 +    // Add env and gen to constructor
@@ -117,7 +118,7 @@
          if (!(this instanceof WorldServerMulti)) //Forge: We fix the global mapStorage, which causes us to share scoreboards early. So don't associate the save data with the temporary scoreboard
          {
              scoreboardsavedata.func_96499_a(this.worldScoreboard);
-@@ -132,6 +196,31 @@
+@@ -132,6 +197,31 @@
          DimensionManager.setWorld(p_i45284_4_, this);
      }
  
@@ -149,7 +150,7 @@
      public void tick()
      {
          super.tick();
-@@ -155,12 +244,19 @@
+@@ -155,12 +245,19 @@
          }
  
          this.theProfiler.startSection("mobSpawner");
@@ -172,7 +173,7 @@
          this.theProfiler.endStartSection("chunkSource");
          this.chunkProvider.unloadQueuedChunks();
          int j = this.calculateSkylightSubtracted(1.0F);
-@@ -170,30 +266,47 @@
+@@ -170,30 +267,47 @@
              this.skylightSubtracted = j;
          }
  
@@ -221,7 +222,7 @@
      }
  
      public BiomeGenBase.SpawnListEntry spawnRandomCreature(EnumCreatureType p_73057_1_, int p_73057_2_, int p_73057_3_, int p_73057_4_)
-@@ -212,7 +325,7 @@
+@@ -212,7 +326,7 @@
          {
              EntityPlayer entityplayer = (EntityPlayer)iterator.next();
  
@@ -230,7 +231,7 @@
              {
                  this.allPlayersSleeping = false;
                  break;
-@@ -240,7 +353,25 @@
+@@ -240,7 +354,25 @@
  
      private void resetRainAndThunder()
      {
@@ -257,7 +258,7 @@
      }
  
      public boolean areAllPlayersAsleep()
-@@ -248,19 +379,26 @@
+@@ -248,19 +380,26 @@
          if (this.allPlayersSleeping && !this.isRemote)
          {
              Iterator iterator = this.playerEntities.iterator();
@@ -287,7 +288,7 @@
              return false;
          }
          else
-@@ -302,15 +440,29 @@
+@@ -302,15 +441,29 @@
          super.func_147456_g();
          int i = 0;
          int j = 0;
@@ -323,7 +324,7 @@
              this.func_147467_a(k, l, chunk);
              this.theProfiler.endStartSection("tickChunk");
              chunk.func_150804_b(false);
-@@ -346,12 +498,32 @@
+@@ -346,12 +499,32 @@
  
                  if (this.isBlockFreezableNaturally(j1 + k, l1 - 1, k1 + l))
                  {
@@ -358,7 +359,7 @@
                  }
  
                  if (this.isRaining())
-@@ -388,6 +560,7 @@
+@@ -388,6 +561,7 @@
                          if (block.getTickRandomly())
                          {
                              ++i;
@@ -366,7 +367,7 @@
                              block.updateTick(this, j2 + k, l2 + extendedblockstorage.getYLocation(), k2 + l, this.rand);
                          }
                      }
-@@ -396,6 +569,13 @@
+@@ -396,6 +570,13 @@
  
              this.theProfiler.endSection();
          }
@@ -380,7 +381,7 @@
      }
  
      public boolean isBlockTickScheduledThisTick(int p_147477_1_, int p_147477_2_, int p_147477_3_, Block p_147477_4_)
-@@ -474,7 +654,7 @@
+@@ -474,7 +655,7 @@
  
      public void updateEntities()
      {
@@ -389,7 +390,7 @@
          {
              if (this.updateEntityTick++ >= 1200)
              {
-@@ -506,7 +686,16 @@
+@@ -506,7 +687,16 @@
          {
              if (i > 1000)
              {
@@ -407,7 +408,7 @@
              }
  
              this.theProfiler.startSection("cleaning");
-@@ -651,7 +840,37 @@
+@@ -651,7 +841,37 @@
      protected IChunkProvider createChunkProvider()
      {
          IChunkLoader ichunkloader = this.saveHandler.getChunkLoader(this.provider);
@@ -446,7 +447,7 @@
          return this.theChunkProviderServer;
      }
  
-@@ -659,29 +878,31 @@
+@@ -659,29 +879,31 @@
      {
          ArrayList arraylist = new ArrayList();
  
@@ -493,7 +494,7 @@
          return arraylist;
      }
  
-@@ -733,7 +954,28 @@
+@@ -733,7 +955,28 @@
              int i = 0;
              int j = this.provider.getAverageGroundLevel();
              int k = 0;
@@ -522,7 +523,7 @@
              if (chunkposition != null)
              {
                  i = chunkposition.chunkPosX;
-@@ -876,6 +1118,20 @@
+@@ -876,6 +1119,20 @@
  
      public boolean addWeatherEffect(Entity p_72942_1_)
      {
@@ -543,7 +544,7 @@
          if (super.addWeatherEffect(p_72942_1_))
          {
              this.mcServer.getConfigurationManager().sendToAllNear(p_72942_1_.posX, p_72942_1_.posY, p_72942_1_.posZ, 512.0D, this.provider.dimensionId, new S2CPacketSpawnGlobalEntity(p_72942_1_));
-@@ -894,13 +1150,23 @@
+@@ -894,13 +1151,23 @@
  
      public Explosion newExplosion(Entity p_72885_1_, double p_72885_2_, double p_72885_4_, double p_72885_6_, float p_72885_8_, boolean p_72885_9_, boolean p_72885_10_)
      {
@@ -568,7 +569,7 @@
          if (!p_72885_10_)
          {
              explosion.affectedBlockPositions.clear();
-@@ -977,7 +1243,7 @@
+@@ -977,7 +1244,7 @@
      {
          boolean flag = this.isRaining();
          super.updateWeather();
@@ -577,7 +578,7 @@
          if (this.prevRainingStrength != this.rainingStrength)
          {
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(7, this.rainingStrength), this.provider.dimensionId);
-@@ -988,10 +1254,6 @@
+@@ -988,10 +1255,6 @@
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(8, this.thunderingStrength), this.provider.dimensionId);
          }
  
@@ -588,7 +589,7 @@
          if (flag != this.isRaining())
          {
              if (flag)
-@@ -1006,6 +1268,33 @@
+@@ -1006,6 +1269,33 @@
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(7, this.rainingStrength), this.provider.dimensionId);
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(8, this.thunderingStrength), this.provider.dimensionId);
          }
@@ -622,7 +623,7 @@
      }
  
      protected int func_152379_p()
-@@ -1069,4 +1358,51 @@
+@@ -1069,4 +1359,51 @@
                  this();
              }
          }
