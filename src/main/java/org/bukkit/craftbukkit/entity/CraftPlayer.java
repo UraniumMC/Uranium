@@ -22,6 +22,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.EntityTrackerEntry;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.network.play.server.S33PacketUpdateSign;
@@ -79,6 +80,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         super(server, entity);
 
         firstPlayed = System.currentTimeMillis();
+        double maxHealth = entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).getBaseValue();
+        if (maxHealth != health) {
+        	healthScale = maxHealth;
+        	scaledHealth = true;
+        }
     }
 
     public GameProfile getProfile() {

@@ -895,7 +895,7 @@
 +            entity = entityIterator.next();
 +            
 +            if (entity.markedForRemoval || entity.isDead) {
-+            	theProfiler.startSection("remove");
++                theProfiler.startSection("remove");
 +                int x = entity.chunkCoordX;
 +                int y = entity.chunkCoordZ;
 +                if (entity.addedToChunk && chunkExists(x, y)) 
