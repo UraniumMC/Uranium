@@ -62,6 +62,24 @@
      public int experienceLevel;
      public int experienceTotal;
      public float experience;
+@@ -254,7 +281,7 @@
+             --this.xpCooldown;
+         }
+ 
+-        if (this.isPlayerSleeping())
++        /*if (this.isPlayerSleeping()) KCauldron - moved into EntityPlayerMP
+         {
+             ++this.sleepTimer;
+ 
+@@ -283,7 +310,7 @@
+             {
+                 this.sleepTimer = 0;
+             }
+-        }
++        }*/
+ 
+         super.onUpdate();
+ 
 @@ -416,6 +443,42 @@
          {
              this.updateItemUse(this.itemInUse, 16);
@@ -485,6 +503,15 @@
          if (p_70999_1_)
          {
              this.sleepTimer = 0;
+@@ -1491,7 +1712,7 @@
+         }
+     }
+ 
+-    private boolean isInBed()
++    protected boolean isInBed() // KCauldron - private -> protected
+     {
+         return this.worldObj.getBlock(this.playerLocation.posX, this.playerLocation.posY, this.playerLocation.posZ).isBed(worldObj, playerLocation.posX, playerLocation.posY, playerLocation.posZ, this);
+     }
 @@ -1606,11 +1827,13 @@
          {
              this.spawnChunk = new ChunkCoordinates(p_71063_1_);

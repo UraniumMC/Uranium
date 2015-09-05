@@ -136,6 +136,9 @@ public class SpigotTimings {
         public final CustomTimingsHandler tracker;
         public final CustomTimingsHandler doTick;
         public final CustomTimingsHandler tickEntities;
+        public final CustomTimingsHandler weatherUpdate;
+        public final CustomTimingsHandler cleanupCache;
+        public final CustomTimingsHandler fullTick;
 
         public final CustomTimingsHandler syncChunkLoadTimer;
         public final CustomTimingsHandler syncChunkLoadDataTimer;
@@ -173,6 +176,9 @@ public class SpigotTimings {
             tracker = new CustomTimingsHandler(name + "tracker");
             doTick = new CustomTimingsHandler(name + "doTick");
             tickEntities = new CustomTimingsHandler(name + "tickEntities");
+            weatherUpdate = new CustomTimingsHandler(name + "weatherUpdate");
+            cleanupCache = new CustomTimingsHandler(name + "cleanupCache");
+            fullTick = new CustomTimingsHandler(name + "fullTick");
         }
     }
 }

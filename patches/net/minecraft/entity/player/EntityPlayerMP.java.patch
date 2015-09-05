@@ -190,7 +190,46 @@
                              iterator1.remove();
                          }
                      }
-@@ -309,9 +407,10 @@
+@@ -286,6 +384,38 @@
+                 }
+             }
+         }
++        // KCauldron start
++        if (this.isPlayerSleeping())
++        {
++            ++this.sleepTimer;
++
++            if (this.sleepTimer > 100)
++            {
++                this.sleepTimer = 100;
++            }
++
++            if (!this.worldObj.isRemote)
++            {
++                if (!this.isInBed())
++                {
++                    this.wakeUpPlayer(true, true, false);
++                }
++                else if (this.worldObj.isDaytime())
++                {
++                    this.wakeUpPlayer(false, true, true);
++                }
++            }
++        }
++        else if (this.sleepTimer > 0)
++        {
++            ++this.sleepTimer;
++
++            if (this.sleepTimer >= 110)
++            {
++                this.sleepTimer = 0;
++            }
++        }
++        // KCauldron end
+     }
+ 
+     public void onUpdateEntity()
+@@ -309,9 +439,10 @@
                  }
              }
  
@@ -202,7 +241,7 @@
                  this.lastHealth = this.getHealth();
                  this.lastFoodLevel = this.foodStats.getFoodLevel();
                  this.wasHungry = this.foodStats.getSaturationLevel() == 0.0F;
-@@ -320,16 +419,18 @@
+@@ -320,16 +451,18 @@
              if (this.getHealth() + this.getAbsorptionAmount() != this.field_130068_bO)
              {
                  this.field_130068_bO = this.getHealth() + this.getAbsorptionAmount();
@@ -228,7 +267,7 @@
              if (this.experienceTotal != this.lastExperience)
              {
                  this.lastExperience = this.experienceTotal;
-@@ -340,6 +441,20 @@
+@@ -340,6 +473,20 @@
              {
                  this.func_147098_j();
              }
@@ -249,7 +288,7 @@
          }
          catch (Throwable throwable)
          {
-@@ -402,34 +517,74 @@
+@@ -402,34 +549,74 @@
  
      public void onDeath(DamageSource p_70645_1_)
      {
@@ -333,7 +372,7 @@
              score.func_96648_a();
          }
  
-@@ -495,7 +650,8 @@
+@@ -495,7 +682,8 @@
  
      public boolean canAttackPlayer(EntityPlayer p_96122_1_)
      {
@@ -343,7 +382,7 @@
      }
  
      public void travelToDimension(int p_71027_1_)
-@@ -526,7 +682,10 @@
+@@ -526,7 +714,10 @@
                  this.triggerAchievement(AchievementList.portal);
              }
  
@@ -355,7 +394,7 @@
              this.lastExperience = -1;
              this.lastHealth = -1.0F;
              this.lastFoodLevel = -1;
-@@ -569,6 +728,11 @@
+@@ -569,6 +760,11 @@
  
      public void wakeUpPlayer(boolean p_70999_1_, boolean p_70999_2_, boolean p_70999_3_)
      {
@@ -367,7 +406,7 @@
          if (this.isPlayerSleeping())
          {
              this.getServerForPlayer().getEntityTracker().func_151248_b(this, new S0BPacketAnimation(this, 2));
-@@ -584,11 +748,27 @@
+@@ -584,11 +780,27 @@
  
      public void mountEntity(Entity p_70078_1_)
      {
@@ -398,7 +437,7 @@
      protected void updateFallState(double p_70064_1_, boolean p_70064_3_) {}
  
      public void handleFalling(double p_71122_1_, boolean p_71122_3_)
-@@ -610,29 +790,64 @@
+@@ -610,29 +822,64 @@
          this.currentWindowId = this.currentWindowId % 100 + 1;
      }
  
@@ -466,7 +505,7 @@
          this.openContainer.windowId = this.currentWindowId;
          this.openContainer.addCraftingToCrafters(this);
      }
-@@ -644,71 +859,150 @@
+@@ -644,71 +891,150 @@
              this.closeScreen();
          }
  
@@ -625,7 +664,7 @@
          this.openContainer.windowId = this.currentWindowId;
          this.openContainer.addCraftingToCrafters(this);
          InventoryMerchant inventorymerchant = ((ContainerMerchant)this.openContainer).getMerchantInventory();
-@@ -725,7 +1019,7 @@
+@@ -725,7 +1051,7 @@
                  merchantrecipelist.func_151391_a(packetbuffer);
                  this.playerNetServerHandler.sendPacket(new S3FPacketCustomPayload("MC|TrList", packetbuffer));
              }
@@ -634,7 +673,7 @@
              {
                  logger.error("Couldn\'t send trade list", ioexception);
              }
-@@ -738,6 +1032,17 @@
+@@ -738,6 +1064,17 @@
  
      public void displayGUIHorse(EntityHorse p_110298_1_, IInventory p_110298_2_)
      {
@@ -652,7 +691,7 @@
          if (this.openContainer != this.inventoryContainer)
          {
              this.closeScreen();
-@@ -745,7 +1050,7 @@
+@@ -745,7 +1082,7 @@
  
          this.getNextWindowId();
          this.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(this.currentWindowId, 11, p_110298_2_.getInventoryName(), p_110298_2_.getSizeInventory(), p_110298_2_.hasCustomInventoryName(), p_110298_1_.getEntityId()));
@@ -661,7 +700,7 @@
          this.openContainer.windowId = this.currentWindowId;
          this.openContainer.addCraftingToCrafters(this);
      }
-@@ -770,6 +1075,15 @@
+@@ -770,6 +1107,15 @@
      {
          this.playerNetServerHandler.sendPacket(new S30PacketWindowItems(p_71110_1_.windowId, p_71110_2_));
          this.playerNetServerHandler.sendPacket(new S2FPacketSetSlot(-1, -1, this.inventory.getItemStack()));
@@ -677,7 +716,7 @@
      }
  
      public void sendProgressBarUpdate(Container p_71112_1_, int p_71112_2_, int p_71112_3_)
-@@ -779,6 +1093,7 @@
+@@ -779,6 +1125,7 @@
  
      public void closeScreen()
      {
@@ -685,7 +724,7 @@
          this.playerNetServerHandler.sendPacket(new S2EPacketCloseWindow(this.openContainer.windowId));
          this.closeContainer();
      }
-@@ -853,8 +1168,19 @@
+@@ -853,8 +1200,19 @@
      public void setPlayerHealthUpdated()
      {
          this.lastHealth = -1.0E8F;
@@ -705,7 +744,7 @@
      public void addChatComponentMessage(IChatComponent p_146105_1_)
      {
          this.playerNetServerHandler.sendPacket(new S02PacketChat(p_146105_1_));
-@@ -1037,6 +1363,114 @@
+@@ -1037,6 +1395,114 @@
          return this.field_143005_bX;
      }
  

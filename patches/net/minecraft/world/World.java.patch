@@ -1166,7 +1166,17 @@
      }
  
      public boolean func_147469_q(int p_147469_1_, int p_147469_2_, int p_147469_3_)
-@@ -2718,7 +3258,15 @@
+@@ -2666,7 +3206,9 @@
+ 
+     public void tick()
+     {
++        timings.weatherUpdate.startTiming(); // KCauldron
+         this.updateWeather();
++        timings.weatherUpdate.stopTiming(); // KCauldron
+     }
+ 
+     private void calculateInitialWeather()
+@@ -2718,7 +3260,15 @@
  
                      if (i <= 0)
                      {
@@ -1183,7 +1193,7 @@
                      }
                  }
  
-@@ -2754,7 +3302,15 @@
+@@ -2754,7 +3304,15 @@
  
                      if (j <= 0)
                      {
@@ -1200,7 +1210,7 @@
                      }
                  }
  
-@@ -2777,8 +3333,41 @@
+@@ -2777,8 +3335,41 @@
      protected void setActivePlayerChunksAndCheckLight()
      {
          this.activeChunkSet.clear();
@@ -1243,7 +1253,7 @@
          int i;
          EntityPlayer entityplayer;
          int j;
-@@ -2788,17 +3377,28 @@
+@@ -2788,17 +3379,28 @@
          for (i = 0; i < this.playerEntities.size(); ++i)
          {
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
@@ -1278,7 +1288,7 @@
          }
  
          this.theProfiler.endSection();
-@@ -2810,7 +3410,7 @@
+@@ -2810,7 +3412,7 @@
  
          this.theProfiler.startSection("playerCheckLight");
  
@@ -1287,7 +1297,7 @@
          {
              i = this.rand.nextInt(this.playerEntities.size());
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
-@@ -3280,12 +3880,23 @@
+@@ -3280,12 +3882,23 @@
      {
          int i = 0;
  
@@ -1314,7 +1324,7 @@
                  ++i;
              }
          }
-@@ -3298,9 +3909,10 @@
+@@ -3298,9 +3911,10 @@
          for (int i = 0; i < p_72868_1_.size(); ++i)
          {
              Entity entity = (Entity)p_72868_1_.get(i);
@@ -1326,7 +1336,7 @@
                  this.onEntityAdded(entity);
              }
          }
-@@ -3308,14 +3920,25 @@
+@@ -3308,14 +3922,25 @@
  
      public void unloadEntities(List p_72828_1_)
      {
@@ -1354,7 +1364,7 @@
      }
  
      public PathEntity getPathEntityToEntity(Entity p_72865_1_, Entity p_72865_2_, float p_72865_3_, boolean p_72865_4_, boolean p_72865_5_, boolean p_72865_6_, boolean p_72865_7_)
-@@ -3464,6 +4087,12 @@
+@@ -3464,6 +4089,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1367,7 +1377,7 @@
              double d5 = entityplayer1.getDistanceSq(p_72977_1_, p_72977_3_, p_72977_5_);
  
              if ((p_72977_7_ < 0.0D || d5 < p_72977_7_ * p_72977_7_) && (d4 == -1.0D || d5 < d4))
-@@ -3489,7 +4118,12 @@
+@@ -3489,7 +4120,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1381,7 +1391,7 @@
              if (!entityplayer1.capabilities.disableDamage && entityplayer1.isEntityAlive())
              {
                  double d5 = entityplayer1.getDistanceSq(p_72846_1_, p_72846_3_, p_72846_5_);
-@@ -3612,11 +4246,11 @@
+@@ -3612,11 +4248,11 @@
              }
          }
  
@@ -1395,7 +1405,7 @@
              }
          }
      }
-@@ -3660,6 +4294,18 @@
+@@ -3660,6 +4296,18 @@
  
      public void updateAllPlayersSleepingFlag() {}
  
@@ -1414,7 +1424,7 @@
      public float getWeightedThunderStrength(float p_72819_1_)
      {
          return (this.prevThunderingStrength + (this.thunderingStrength - this.prevThunderingStrength) * p_72819_1_) * this.getRainStrength(p_72819_1_);
-@@ -3932,8 +4578,8 @@
+@@ -3932,8 +4580,8 @@
       */
      public void addTileEntity(TileEntity entity)
      {
@@ -1425,7 +1435,7 @@
          {
              dest.add(entity);
          }
-@@ -4020,13 +4666,82 @@
+@@ -4020,13 +4668,82 @@
      public int countEntities(EnumCreatureType type, boolean forSpawnCount)
      {
          int count = 0;

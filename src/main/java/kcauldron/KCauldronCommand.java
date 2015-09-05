@@ -12,6 +12,7 @@ import kcauldron.updater.KCauldronUpdater;
 import kcauldron.updater.KVersionRetriever;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.server.command.ForgeCommand;
 
 public class KCauldronCommand extends Command {
@@ -92,8 +93,8 @@ public class KCauldronCommand extends Command {
                     double worldTPS = Math.min(1000.0 / worldTickTime, 20);
 
                     sender.sendMessage(String.format("%s[%d] %s%s %s- %s%.2fms / %.2ftps", ChatColor.GOLD, dimensionId,
-                        	current ? ChatColor.GREEN : ChatColor.YELLOW, displayName, ChatColor.RESET, ChatColor.DARK_RED, worldTickTime,
-                        	worldTPS));
+                            current ? ChatColor.GREEN : ChatColor.YELLOW, displayName, ChatColor.RESET, ChatColor.DARK_RED, worldTickTime,
+                            worldTPS));
                 }
             }
             double meanTickTime = mean(server.tickTimeArray) * 1.0E-6D;
