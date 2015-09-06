@@ -321,8 +321,7 @@
 -                if (this.playerEntity.isPlayerSleeping())
 +                /*if (this.playerEntity.isPlayerSleeping()) // KCauldron - moved up
                  {
--                    this.playerEntity.onUpdateEntity();
-+                    this.playerEntity.onUpdateEntity();
+                     this.playerEntity.onUpdateEntity();
                      this.playerEntity.setPositionAndRotation(this.lastPosX, this.lastPosY, this.lastPosZ, this.playerEntity.rotationYaw, this.playerEntity.rotationPitch);
                      worldserver.updateEntity(this.playerEntity);
                      return;

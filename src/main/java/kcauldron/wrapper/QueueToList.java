@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Queue;
 
-public class QueueToList<T> extends CollectionWrapper<T, Queue<T>>implements List<T> {
+public class QueueToList<T> extends CollectionWrapper<T, Queue<T>> implements List<T> {
     private final Queue<T> mQueue;
     private final LinkedHelper<T> mHelper;
 

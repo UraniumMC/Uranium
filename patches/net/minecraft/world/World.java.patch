@@ -107,11 +107,11 @@
 -    public List loadedTileEntityList = new ArrayList();
 -    private List addedTileEntityList = new ArrayList();
 -    private List field_147483_b = new ArrayList();
-+    public Queue<Entity> loadedEntityList_KC = new ConcurrentLinkedQueue<Entity>(); // KCauldron
-+    public List<Entity> loadedEntityList = new kcauldron.wrapper.QueueToList<Entity>(loadedEntityList_KC); // KCauldron
++    public Queue<Entity> loadedEntityList_KC = new kcauldron.wrapper.ProcessingQueue<Entity>(new ConcurrentLinkedQueue<Entity>()); // KCauldron
++    public List<Entity> loadedEntityList = new kcauldron.wrapper.QueueToList<Entity>(((kcauldron.wrapper.ProcessingQueue<Entity>)loadedEntityList_KC).unwrap()); // KCauldron
 +    public List<Entity> unloadedEntityList = com.google.common.collect.ImmutableList.of(); // KCauldron
-+    public Queue<TileEntity> loadedTileEntityList_KC = new ConcurrentLinkedQueue<TileEntity>(); // KCauldron
-+    public List<TileEntity> loadedTileEntityList = new kcauldron.wrapper.QueueToList<TileEntity>(loadedTileEntityList_KC); // KCauldron
++    public Queue<TileEntity> loadedTileEntityList_KC = new kcauldron.wrapper.ProcessingQueue<TileEntity>(new ConcurrentLinkedQueue<TileEntity>()); // KCauldron
++    public List<TileEntity> loadedTileEntityList = new kcauldron.wrapper.QueueToList<TileEntity>(((kcauldron.wrapper.ProcessingQueue<TileEntity>)loadedTileEntityList_KC).unwrap()); // KCauldron
 +    private List<TileEntity> addedTileEntityList = new ArrayList<TileEntity>(); // KCauldron
 +    public List<TileEntity> field_147483_b = com.google.common.collect.ImmutableList.of(); // KCauldron
      public List playerEntities = new ArrayList();

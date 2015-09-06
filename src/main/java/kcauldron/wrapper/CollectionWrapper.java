@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class CollectionWrapper<T, C extends Collection<T>> implements Collection<T> {
-    private C mCollection;
+    protected C mCollection;
 
     public CollectionWrapper(C collection) {
         mCollection = collection;
@@ -22,7 +22,7 @@ public class CollectionWrapper<T, C extends Collection<T>> implements Collection
 
     @Override
     public void clear() {
-        mCollection.clear();        
+        mCollection.clear();
     }
 
     @Override
@@ -73,5 +73,9 @@ public class CollectionWrapper<T, C extends Collection<T>> implements Collection
     @Override
     public <T> T[] toArray(T[] a) {
         return mCollection.toArray(a);
+    }
+
+    public C unwrap() {
+        return mCollection;
     }
 }
