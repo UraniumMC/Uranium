@@ -193,7 +193,7 @@
 +    // Spigot start
 +
 +    /** Positions to update */
-+    protected final gnu.trove.map.hash.TLongShortHashMap activeChunkSet_CB;
++    public final gnu.trove.map.hash.TLongShortHashMap activeChunkSet_CB;
 +    public float growthOdds = 100;
 +    protected float modifiedOdds = 100;
 +
