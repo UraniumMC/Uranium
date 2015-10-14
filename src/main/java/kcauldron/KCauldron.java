@@ -13,6 +13,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 
 public class KCauldron {
+    public static final ThreadGroup sKCauldronThreadGroup = new ThreadGroup("KCauldron");
+
     private static boolean sManifestParsed = false;
 
     private static void parseManifest() {

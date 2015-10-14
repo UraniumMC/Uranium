@@ -56,8 +56,7 @@ public class KVersionRetriever implements Runnable, UncaughtExceptionHandler {
         mUpToDateSupport = upToDateSupport;
         mGroup = group;
         mName = name;
-        mThread = new Thread(this);
-        mThread.setName("KCauldron version retrievier");
+        mThread = new Thread(KCauldron.sKCauldronThreadGroup, this, "KCauldron version retrievier");
         mThread.setPriority(Thread.MIN_PRIORITY);
         mThread.setDaemon(true);
         mThread.setUncaughtExceptionHandler(this);

@@ -134,7 +134,7 @@ public class CauldronCommand extends Command
         sender.sendMessage("Chunk info complete");
     }
 
-	private boolean getToggle(CommandSender sender, String[] args)
+    private boolean getToggle(CommandSender sender, String[] args)
     {
         try
         {

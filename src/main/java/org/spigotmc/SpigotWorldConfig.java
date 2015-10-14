@@ -283,8 +283,8 @@ public class SpigotWorldConfig
     public int entityMaxTickTime;
     private void maxTickTimes()
     {
-    	tileMaxTickTime = getInt("max-tick-time.tile", 50);
-    	entityMaxTickTime = getInt("max-tick-time.entity", 50);
-    	log("Tile Max Tick Time: " + tileMaxTickTime + "ms Entity max Tick Time: " + entityMaxTickTime + "ms");
+        tileMaxTickTime = getInt("max-tick-time.tile", 50);
+        entityMaxTickTime = getInt("max-tick-time.entity", 50);
+        log("Tile Max Tick Time: " + tileMaxTickTime + "ms Entity max Tick Time: " + entityMaxTickTime + "ms");
     }
 }

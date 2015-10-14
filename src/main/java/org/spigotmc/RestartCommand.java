@@ -28,7 +28,7 @@ public class RestartCommand extends Command
     }
     
     public static void restart() {
-    	restart(false);
+        restart(false);
     }
 
     public static void restart(boolean forbidShutdown)
@@ -102,10 +102,10 @@ public class RestartCommand extends Command
                 Runtime.getRuntime().addShutdownHook( shutdownHook );
             } else
             {
-            	if (forbidShutdown) {
-            		System.out.println("Attempt to restart server without restart script, decline request");
-            		return;
-            	}
+                if (forbidShutdown) {
+                    System.out.println("Attempt to restart server without restart script, decline request");
+                    return;
+                }
                 System.out.println( "Startup script '" + SpigotConfig.restartScript + "' does not exist! Stopping server." );
             }
             cpw.mods.fml.common.FMLCommonHandler.instance().exitJava(0, false);

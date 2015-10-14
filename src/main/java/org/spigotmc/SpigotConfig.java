@@ -271,6 +271,6 @@ public class SpigotConfig
     public static int fullMatchRate;
     private static void fullMatchRate()
     {
-    	fullMatchRate = getInt( "settings.fullMatchRate", 10);
+        fullMatchRate = getInt( "settings.fullMatchRate", 10);
     }
 }

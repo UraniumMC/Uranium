@@ -82,8 +82,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         firstPlayed = System.currentTimeMillis();
         double maxHealth = entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).getBaseValue();
         if (maxHealth != health) {
-        	healthScale = maxHealth;
-        	scaledHealth = true;
+            healthScale = maxHealth;
+            scaledHealth = true;
         }
     }
 
