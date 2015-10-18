@@ -77,7 +77,7 @@
                  packet.processPacket(this.netHandler);
              }
  
-@@ -225,6 +257,8 @@
+@@ -225,8 +257,11 @@
  
      public void closeChannel(IChatComponent p_150718_1_)
      {
@@ -85,8 +85,11 @@
 +
          if (this.channel.isOpen())
          {
++            this.outboundPacketsQueue.clear(); // KCauldron
              this.channel.close();
-@@ -254,7 +288,7 @@
+             this.terminationReason = p_150718_1_;
+         }
+@@ -254,7 +289,7 @@
                  {
                      ;
                  }
@@ -95,7 +98,7 @@
                  try
                  {
                      p_initChannel_1_.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(false));
-@@ -322,6 +356,13 @@
+@@ -322,6 +357,13 @@
          return channel;
      }
  

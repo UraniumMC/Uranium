@@ -1,0 +1,19 @@
+--- ../src-base/minecraft/net/minecraft/world/storage/ThreadedFileIOBase.java
++++ ../src-work/minecraft/net/minecraft/world/storage/ThreadedFileIOBase.java
+@@ -39,14 +39,14 @@
+                 ++this.savedIOCounter;
+             }
+ 
+-            try
++            /*try // KCauldron start
+             {
+                 Thread.sleep(this.isThreadWaiting ? 0L : 10L);
+             }
+             catch (InterruptedException interruptedexception1)
+             {
+                 interruptedexception1.printStackTrace();
+-            }
++            }*/ // KCauldron end
+         }
+ 
+         if (this.threadedIOQueue.isEmpty())

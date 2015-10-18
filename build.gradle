@@ -173,6 +173,7 @@ def generateManifest(boolean legacy = false) {
             'KCauldron-Channel'     : project.name,
             'KCauldron-Version'     : project.version,
             'KCauldron-Legacy'      : legacy,
+            'KCauldron-Official'    : project.hasProperty('officialBuild'),
             'Implementation-Vendor' : 'Prototik',
             'Implementation-Title'  : project.name,
             'Implementation-Version': project.version,

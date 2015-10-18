@@ -15,10 +15,12 @@
  public class MapData extends WorldSavedData
  {
      public int xCenter;
-@@ -24,11 +32,21 @@
+@@ -23,12 +31,22 @@
+     public byte[] colors = new byte[16384];
      public List playersArrayList = new ArrayList();
      private Map playersHashMap = new HashMap();
-     public Map playersVisibleOnMap = new LinkedHashMap();
+-    public Map playersVisibleOnMap = new LinkedHashMap();
++    public Map<UUID, MapData.MapCoord> playersVisibleOnMap = new LinkedHashMap();
 +
 +    // CraftBukkit start
 +    public final CraftMapView mapView;
@@ -37,7 +39,7 @@
      }
  
      public void readFromNBT(NBTTagCompound p_76184_1_)
-@@ -107,7 +125,7 @@
+@@ -107,14 +125,14 @@
      {
          if (!this.playersHashMap.containsKey(p_76191_1_))
          {
@@ -46,6 +48,41 @@
              this.playersHashMap.put(p_76191_1_, mapinfo);
              this.playersArrayList.add(mapinfo);
          }
+ 
+         if (!p_76191_1_.inventory.hasItemStack(p_76191_2_))
+         {
+-            this.playersVisibleOnMap.remove(p_76191_1_.getCommandSenderName());
++            this.playersVisibleOnMap.remove(p_76191_1_.getUniqueID());
+         }
+ 
+         for (int i = 0; i < this.playersArrayList.size(); ++i)
+@@ -166,7 +184,7 @@
+         {
+             if (Math.abs(f) >= 320.0F || Math.abs(f1) >= 320.0F)
+             {
+-                this.playersVisibleOnMap.remove(p_82567_3_);
++                this.playersVisibleOnMap.remove(java.util.UUID.nameUUIDFromBytes(p_82567_3_.getBytes(org.apache.commons.codec.Charsets.US_ASCII)));
+                 return;
+             }
+ 
+@@ -194,7 +212,7 @@
+             }
+         }
+ 
+-        this.playersVisibleOnMap.put(p_82567_3_, new MapData.MapCoord((byte)p_82567_1_, b0, b1, b2));
++        this.playersVisibleOnMap.put(java.util.UUID.nameUUIDFromBytes(p_82567_3_.getBytes(org.apache.commons.codec.Charsets.US_ASCII)), new MapData.MapCoord((byte)p_82567_1_, b0, b1, b2));
+     }
+ 
+     public byte[] getUpdatePacketData(ItemStack p_76193_1_, World p_76193_2_, EntityPlayer p_76193_3_)
+@@ -250,7 +268,7 @@
+                 byte b3 = p_76192_1_[i * 3 + 2];
+                 byte b0 = p_76192_1_[i * 3 + 3];
+                 byte b1 = (byte)(p_76192_1_[i * 3 + 1] & 15);
+-                this.playersVisibleOnMap.put("icon-" + i, new MapData.MapCoord(b2, b3, b0, b1));
++                this.playersVisibleOnMap.put(java.util.UUID.nameUUIDFromBytes(("icon-" + i).getBytes(org.apache.commons.codec.Charsets.US_ASCII)), new MapData.MapCoord(b2, b3, b0, b1));
+             }
+         }
+         else if (p_76192_1_[0] == 2)
 @@ -265,7 +283,7 @@
  
          if (mapinfo == null)

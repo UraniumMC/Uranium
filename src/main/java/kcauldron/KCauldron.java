@@ -41,6 +41,8 @@ public class KCauldron {
                     sGroup = manifest.getProperty("KCauldron-Group");
                     sBranch = manifest.getProperty("KCauldron-Branch");
                     sChannel = manifest.getProperty("KCauldron-Channel");
+                    sLegacy = Boolean.parseBoolean(manifest.getProperty("KCauldron-Legacy"));
+                    sOfficial = Boolean.parseBoolean(manifest.getProperty("KCauldron-Official"));
                     break;
                 }
                 manifest.clear();
@@ -98,6 +100,18 @@ public class KCauldron {
     public static String getChannel() {
         parseManifest();
         return sChannel;
+    }
+    
+    private static boolean sLegacy, sOfficial;
+    
+    public static boolean isLegacy() {
+    	parseManifest();
+    	return sLegacy;
+    }
+    
+    public static boolean isOfficial() {
+    	parseManifest();
+    	return sOfficial;
     }
 
     public static File sNewServerLocation;

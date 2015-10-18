@@ -1,0 +1,33 @@
+--- ../src-base/minecraft/net/minecraft/world/chunk/storage/RegionFile.java
++++ ../src-work/minecraft/net/minecraft/world/chunk/storage/RegionFile.java
+@@ -43,7 +43,8 @@
+ 
+             if (this.dataFile.length() < 4096L)
+             {
+-                for (i = 0; i < 1024; ++i)
++            	// KCauldron start
++                /*for (i = 0; i < 1024; ++i)
+                 {
+                     this.dataFile.writeInt(0);
+                 }
+@@ -51,7 +52,10 @@
+                 for (i = 0; i < 1024; ++i)
+                 {
+                     this.dataFile.writeInt(0);
+-                }
++                }*/
++            	dataFile.write(emptySector);
++            	dataFile.write(emptySector);
++            	// KCauldron end
+ 
+                 this.sizeDelta += 8192;
+             }
+@@ -209,7 +213,7 @@
+ 
+     public DataOutputStream getChunkDataOutputStream(int p_76710_1_, int p_76710_2_)
+     {
+-        return this.outOfBounds(p_76710_1_, p_76710_2_) ? null : new DataOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(p_76710_1_, p_76710_2_)));
++        return this.outOfBounds(p_76710_1_, p_76710_2_) ? null : new DataOutputStream(new java.io.BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(p_76710_1_, p_76710_2_)))); // KCauldron
+     }
+ 
+     protected synchronized void write(int p_76706_1_, int p_76706_2_, byte[] p_76706_3_, int p_76706_4_)

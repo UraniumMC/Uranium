@@ -83,6 +83,7 @@ public class KVersionRetriever implements Runnable, UncaughtExceptionHandler {
                     .get()
                     .setUri("https://api.prok.pw/repo/version/" + mGroup + "/"
                             + mName)
+                    .addParameter("version", KCauldron.getCurrentVersion())
                     .addParameter("hostname", sServer.getHostname())
                     .addParameter("port", "" + sServer.getPort()).build();
             HttpResponse response = HttpClientBuilder.create()

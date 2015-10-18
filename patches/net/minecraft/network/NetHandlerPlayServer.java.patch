@@ -608,7 +608,7 @@
          }
  
 +        // CraftBukkit start
-+        if (p_147359_1_ == null)
++        if (p_147359_1_ == null || this.processedDisconnect) // KCauldron
 +        {
 +            return;
 +        }
@@ -1822,7 +1822,7 @@
          {
              packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
 @@ -1093,16 +2409,18 @@
- 
+                 {
                      if (itemstack.getItem() == Items.writable_book && itemstack.getItem() == itemstack1.getItem())
                      {
 -                        itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
@@ -1845,7 +1845,7 @@
              finally
              {
 @@ -1135,19 +2453,18 @@
-                 {
+ 
                      if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
                      {
 -                        itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));
