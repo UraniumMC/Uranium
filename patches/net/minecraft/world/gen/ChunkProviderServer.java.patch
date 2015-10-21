@@ -250,9 +250,9 @@
 +        Chunk chunk = (Chunk) this.loadedChunkHashMap_KC.get(LongHash.toLong(p_73154_1_, p_73154_2_));
 +        chunk = chunk == null ? (shouldLoadChunk() ? this.loadChunk(p_73154_1_, p_73154_2_) : this.defaultEmptyChunk) : chunk; // Cauldron handle forge server tick events and load the chunk within 5 seconds of the world being loaded (for chunk loaders)
 +
-+        if (chunk == this.defaultEmptyChunk || chunk == null)
++        if (chunk == defaultEmptyChunk || chunk == null)
 +        {
-+            return chunk;
++            return defaultEmptyChunk;
 +        }
 +
 +        if ((p_73154_1_ != chunk.xPosition || p_73154_2_ != chunk.zPosition) && !worldObj.isProfilingWorld())
