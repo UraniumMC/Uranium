@@ -5,29 +5,27 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class LinkedHelper<T> {
-    private Iterable<T> mIterable;
-    private Iterator<T> mIterator;
-    private int iteratorIndex;
-    private T indexValue;
+    private final Iterable<T> mIterable;
+    private volatile Iterator<T> mIndexIterator;
+    private volatile int mIndex;
+    private volatile T mIndexValue;
 
     public LinkedHelper(Iterable<T> iterable) {
         mIterable = iterable;
     }
 
-    public T get(int index) {
-        if (iteratorIndex > index || mIterator == null) {
-            mIterator = mIterable.iterator();
-            iteratorIndex = -1;
+    public synchronized T get(int index) {
+        if (mIndexIterator == null || mIndex > index) {
+            mIndexIterator = mIterable.iterator();
+            mIndex = -1;
         }
-        while (iteratorIndex < index) {
-            if (mIterator.hasNext()) {
-                indexValue = mIterator.next();
-                iteratorIndex++;
-            } else {
-                throw new IndexOutOfBoundsException();
-            }
+        if (mIndex == index) return mIndexValue;
+        T value = null;
+        while (mIndex < index) {
+            value = mIndexIterator.next();
+            mIndex++;
         }
-        return indexValue;
+        return mIndexValue = value;
     }
 
     public int indexOf(Object o) {
@@ -43,7 +41,6 @@ public class LinkedHelper<T> {
     public int lastIndexOf(Object o) {
         if (!(mIterable instanceof List)) {
             throw new UnsupportedOperationException();
-
         }
         ListIterator<T> iterator = ((List<T>) mIterable).listIterator();
         int i = 0;
@@ -114,7 +111,7 @@ public class LinkedHelper<T> {
 
         @Override
         public int nextIndex() {
-            return mNextIndex;
+            return mListIterator != null ? mListIterator.nextIndex() : mNextIndex;
         }
 
         @Override
@@ -131,8 +128,7 @@ public class LinkedHelper<T> {
 
         @Override
         public void remove() {
-            ensureListIterator();
-            mListIterator.remove();
+            mIterator.remove();
         }
 
         @Override
