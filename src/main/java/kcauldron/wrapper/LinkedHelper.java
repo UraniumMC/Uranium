@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class LinkedHelper<T> {
     private final Iterable<T> mIterable;
     private volatile Iterator<T> mIndexIterator;
@@ -21,9 +23,20 @@ public class LinkedHelper<T> {
         }
         if (mIndex == index) return mIndexValue;
         T value = null;
-        while (mIndex < index) {
+        while (mIndex < index && mIndexIterator.hasNext()) {
             value = mIndexIterator.next();
             mIndex++;
+        }
+        if (mIndex < index) {
+            mIndexIterator = mIterable.iterator();
+            mIndex = -1;
+            while (mIndex < index && mIndexIterator.hasNext()) {
+                value = mIndexIterator.next();
+                mIndex++;
+            }
+        }
+        if (mIndex < index) {
+            FMLLog.bigWarning("LinkedHelper desync, report this to KCauldron tracker!");
         }
         return mIndexValue = value;
     }

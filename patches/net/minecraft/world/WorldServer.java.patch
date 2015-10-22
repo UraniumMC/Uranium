@@ -69,6 +69,15 @@
          this.mcServer = p_i45284_1_;
          this.theEntityTracker = new EntityTracker(this);
          this.thePlayerManager = new PlayerManager(this);
+@@ -106,7 +129,7 @@
+ 
+         if (this.pendingTickListEntriesHashSet == null)
+         {
+-            this.pendingTickListEntriesHashSet = new HashSet();
++            this.pendingTickListEntriesHashSet = com.google.common.collect.Sets.newConcurrentHashSet();
+         }
+ 
+         if (this.pendingTickListEntriesTreeSet == null)
 @@ -124,6 +147,48 @@
              this.mapStorage.setData("scoreboard", scoreboardsavedata);
          }
@@ -97,7 +106,7 @@
 +
 +        if (this.pendingTickListEntriesHashSet == null)
 +        {
-+            this.pendingTickListEntriesHashSet = new HashSet();
++            this.pendingTickListEntriesHashSet = com.google.common.collect.Sets.newConcurrentHashSet();
 +        }
 +
 +        if (this.pendingTickListEntriesTreeSet == null)
@@ -391,7 +400,23 @@
      }
  
      public boolean isBlockTickScheduledThisTick(int p_147477_1_, int p_147477_2_, int p_147477_3_, Block p_147477_4_)
-@@ -474,7 +657,7 @@
+@@ -450,7 +633,7 @@
+             if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry))
+             {
+                 this.pendingTickListEntriesHashSet.add(nextticklistentry);
+-                this.pendingTickListEntriesTreeSet.add(nextticklistentry);
++                //this.pendingTickListEntriesTreeSet.add(nextticklistentry); // KCauldron
+             }
+         }
+     }
+@@ -468,13 +651,13 @@
+         if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry))
+         {
+             this.pendingTickListEntriesHashSet.add(nextticklistentry);
+-            this.pendingTickListEntriesTreeSet.add(nextticklistentry);
++            //this.pendingTickListEntriesTreeSet.add(nextticklistentry); // KCauldron
+         }
+     }
  
      public void updateEntities()
      {
@@ -400,6 +425,15 @@
          {
              if (this.updateEntityTick++ >= 1200)
              {
+@@ -498,7 +681,7 @@
+     {
+         int i = this.pendingTickListEntriesTreeSet.size();
+ 
+-        if (i != this.pendingTickListEntriesHashSet.size())
++        if (i != this.pendingTickListEntriesHashSet.size() && false) // KCauldron
+         {
+             throw new IllegalStateException("TickNextTick list out of synch");
+         }
 @@ -506,7 +689,16 @@
          {
              if (i > 1000)
@@ -418,6 +452,24 @@
              }
  
              this.theProfiler.startSection("cleaning");
+@@ -521,7 +713,7 @@
+                     break;
+                 }
+ 
+-                this.pendingTickListEntriesTreeSet.remove(nextticklistentry);
++                //this.pendingTickListEntriesTreeSet.remove(nextticklistentry); // KCauldron
+                 this.pendingTickListEntriesHashSet.remove(nextticklistentry);
+                 this.pendingTickListEntriesThisTick.add(nextticklistentry);
+             }
+@@ -596,7 +788,7 @@
+ 
+             if (i1 == 0)
+             {
+-                iterator = this.pendingTickListEntriesTreeSet.iterator();
++                iterator = this.pendingTickListEntriesHashSet.iterator();
+             }
+             else
+             {
 @@ -651,7 +843,37 @@
      protected IChunkProvider createChunkProvider()
      {
@@ -504,6 +556,15 @@
          return arraylist;
      }
  
+@@ -704,7 +928,7 @@
+ 
+         if (this.pendingTickListEntriesHashSet == null)
+         {
+-            this.pendingTickListEntriesHashSet = new HashSet();
++            this.pendingTickListEntriesHashSet = com.google.common.collect.Sets.newConcurrentHashSet();
+         }
+ 
+         if (this.pendingTickListEntriesTreeSet == null)
 @@ -733,7 +957,28 @@
              int i = 0;
              int j = this.provider.getAverageGroundLevel();
