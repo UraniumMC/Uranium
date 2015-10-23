@@ -425,16 +425,19 @@
          {
              if (this.updateEntityTick++ >= 1200)
              {
-@@ -498,7 +681,7 @@
+@@ -496,9 +679,9 @@
+ 
+     public boolean tickUpdates(boolean p_72955_1_)
      {
-         int i = this.pendingTickListEntriesTreeSet.size();
+-        int i = this.pendingTickListEntriesTreeSet.size();
++        int i = this.pendingTickListEntriesHashSet.size();
  
 -        if (i != this.pendingTickListEntriesHashSet.size())
-+        if (i != this.pendingTickListEntriesHashSet.size() && false) // KCauldron
++        if (false) // KCauldron
          {
              throw new IllegalStateException("TickNextTick list out of synch");
          }
-@@ -506,7 +689,16 @@
+@@ -506,22 +689,31 @@
          {
              if (i > 1000)
              {
@@ -452,7 +455,16 @@
              }
  
              this.theProfiler.startSection("cleaning");
-@@ -521,7 +713,7 @@
+             NextTickListEntry nextticklistentry;
+ 
+-            for (int j = 0; j < i; ++j)
++            for (Iterator iter = pendingTickListEntriesHashSet.iterator(); i >= 0 && iter.hasNext(); i--)
+             {
+-                nextticklistentry = (NextTickListEntry)this.pendingTickListEntriesTreeSet.first();
++                nextticklistentry = (NextTickListEntry) iter.next();
+ 
+                 if (!p_72955_1_ && nextticklistentry.scheduledTime > this.worldInfo.getWorldTotalTime())
+                 {
                      break;
                  }
  
