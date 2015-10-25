@@ -233,8 +233,7 @@ task packageBundle(type: Zip, dependsOn: installBundle) {
     rename bundleStub.archiveName, 'KCauldron.jar'
 }
 
-task signJars(type: Sign, dependsOn: [packageUniversal, packageChangelog, packageBundle, jar, 'generatePomFileForMavenPublication']) {
-    sign packageUniversal
+task signJars(type: Sign, dependsOn: [packageChangelog, packageBundle, jar, 'generatePomFileForMavenPublication']) {
     sign packageChangelog
     sign packageBundle
     sign jar
@@ -253,12 +252,10 @@ def getPomSignature = {
 
 def getSignatureFiles = {
     def allFiles = project.tasks.signJars.signatureFiles.collect { it }
-    def signedServer = allFiles.find { it.name.contains('-server') }
     def signedChangelog = allFiles.find { it.name.contains('-changelog') }
     def signedBundle = allFiles.find { it.name.contains('-bundle') }
-    def signedJar = (allFiles - [signedServer, signedChangelog, signedBundle])[0]
+    def signedJar = (allFiles - [signedChangelog, signedBundle])[0]
     return [
-            [archive: signedServer, classifier: 'server', extension: 'jar.asc'],
             [archive: signedChangelog, classifier: 'changelog', extension: 'txt.asc'],
             [archive: signedBundle, classifier: 'bundle', extension: 'zip.asc'],
             [archive: signedJar, classifier: null, extension: 'jar.asc']
@@ -289,7 +286,6 @@ publishing {
                 classifier = null
                 extension = 'pom.asc'
             }
-            artifact packageUniversal
             artifact packageChangelog
             artifact packageBundle
             artifact jar
