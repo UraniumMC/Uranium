@@ -472,7 +472,7 @@
  
          this.calculateInitialSkylight();
          this.calculateInitialWeather();
-+        if (getServer() != null) getServer().addWorld(world); // CraftBukkit
++        if (getServer() != null && world != null) getServer().addWorld(world); // CraftBukkit
      }
 +    // Cauldron end    
  

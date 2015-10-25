@@ -473,6 +473,15 @@
                  this.pendingTickListEntriesHashSet.remove(nextticklistentry);
                  this.pendingTickListEntriesThisTick.add(nextticklistentry);
              }
+@@ -577,7 +769,7 @@
+ 
+             this.theProfiler.endSection();
+             this.pendingTickListEntriesThisTick.clear();
+-            return !this.pendingTickListEntriesTreeSet.isEmpty();
++            return !this.pendingTickListEntriesHashSet.isEmpty();
+         }
+     }
+ 
 @@ -596,7 +788,7 @@
  
              if (i1 == 0)
