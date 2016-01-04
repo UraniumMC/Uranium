@@ -452,7 +452,7 @@ public final class CraftServer implements Server {
 
     @Override
     public List<CraftPlayer> getOnlinePlayers() {
-        return this.playerView;
+        return ImmutableList.copyOf(this.playerView);
     }
 
     @Override
