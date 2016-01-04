@@ -105,13 +105,13 @@ public class KCauldron {
     private static boolean sLegacy, sOfficial;
     
     public static boolean isLegacy() {
-    	parseManifest();
-    	return sLegacy;
+        parseManifest();
+        return sLegacy;
     }
     
     public static boolean isOfficial() {
-    	parseManifest();
-    	return sOfficial;
+        parseManifest();
+        return sOfficial;
     }
 
     public static File sNewServerLocation;

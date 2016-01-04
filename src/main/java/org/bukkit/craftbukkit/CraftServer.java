@@ -263,7 +263,6 @@ public final class CraftServer implements Server {
         waterAnimalSpawn = configuration.getInt("spawn-limits.water-animals");
         ambientSpawn = configuration.getInt("spawn-limits.ambient");
         console.autosavePeriod = configuration.getInt("ticks-per.autosave");
-        console.invalidateWorldSaver();
         warningState = WarningState.value(configuration.getString("settings.deprecated-verbose"));
         loadIcon();
         chunkGCEnabled = configuration.getBoolean("chunk-gc.enabled"); // Cauldron
@@ -671,7 +670,7 @@ public final class CraftServer implements Server {
 
     @Override
     public List<World> getWorlds() {
-        return ImmutableList.copyOf(worlds.values());
+        return new ArrayList<World>(worlds.values());
     }
 
     public DedicatedPlayerList getHandle() {
@@ -765,7 +764,6 @@ public final class CraftServer implements Server {
         warningState = WarningState.value(configuration.getString("settings.deprecated-verbose"));
         printSaveWarning = false;
         console.autosavePeriod = configuration.getInt("ticks-per.autosave");
-        console.invalidateWorldSaver();
         chunkGCPeriod = configuration.getInt("chunk-gc.period-in-ticks");
         chunkGCLoadThresh = configuration.getInt("chunk-gc.load-threshold");
         loadIcon();
@@ -1152,7 +1150,7 @@ public final class CraftServer implements Server {
 
     @Override
     public Map<String, String[]> getCommandAliases() {
-        ConfigurationSection section = commandsConfiguration.getConfigurationSection("aliases");
+        ConfigurationSection section = configuration.getConfigurationSection("aliases");
         Map<String, String[]> result = new LinkedHashMap<String, String[]>();
 
         if (section != null) {

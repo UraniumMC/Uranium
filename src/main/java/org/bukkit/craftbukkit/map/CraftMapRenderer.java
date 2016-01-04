@@ -1,17 +1,12 @@
 package org.bukkit.craftbukkit.map;
 
 
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-
-import net.minecraft.world.storage.MapData;
 
 public class CraftMapRenderer extends MapRenderer {
 
@@ -37,14 +32,14 @@ public class CraftMapRenderer extends MapRenderer {
             cursors.removeCursor(cursors.getCursor(0));
         }
 
-        for (Map.Entry<UUID, MapData.MapCoord> key : worldMap.playersVisibleOnMap.entrySet()) {
+        for (Object key : worldMap.playersVisibleOnMap.keySet()) {
             // If this cursor is for a player check visibility with vanish system
-            Player other = Bukkit.getPlayer(key.getKey());
+            Player other = Bukkit.getPlayerExact((String) key);
             if (other != null && !player.canSee(other)) {
                 continue;
             }
 
-            MapData.MapCoord decoration = key.getValue();
+            net.minecraft.world.storage.MapData.MapCoord decoration = (net.minecraft.world.storage.MapData.MapCoord) worldMap.playersVisibleOnMap.get(key);
             cursors.addCursor(decoration.centerX, decoration.centerZ, (byte) (decoration.iconRotation & 15), decoration.iconSize);
         }
     }

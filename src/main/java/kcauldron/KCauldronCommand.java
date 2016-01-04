@@ -20,6 +20,7 @@ import kcauldron.updater.KVersionRetriever;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.NextTickListEntry;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -129,22 +130,22 @@ public class KCauldronCommand extends Command {
                             world.provider.getDimensionName(), world.dimension));
                     writer.write("Current tick: " + world.worldInfo.getWorldTotalTime() + "\n");
                     writer.write("\nEntities: ");
-                    writer.write("count - " + world.loadedEntityList_KC.size() + "\n");
-                    for (Entity entity : world.loadedEntityList_KC) {
+                    writer.write("count - " + world.loadedEntityList.size() + "\n");
+                    for (Entity entity : (Iterable<Entity>) world.loadedEntityList) {
                         writer.write(String.format("  %s at (%.4f;%.4f;%.4f)\n", entity.getClass().getName(),
                                 entity.posX, entity.posY, entity.posZ));
                     }
                     writer.write("\nTileEntities: ");
-                    writer.write("count - " + world.loadedTileEntityList_KC.size() + "\n");
-                    for (TileEntity entity : world.loadedTileEntityList_KC) {
+                    writer.write("count - " + world.loadedTileEntityList.size() + "\n");
+                    for (TileEntity entity : (Iterable<TileEntity>) world.loadedTileEntityList) {
                         writer.write(String.format("  %s at (%d;%d;%d)\n", entity.getClass().getName(), entity.xCoord,
                                 entity.yCoord, entity.zCoord));
                     }
                     writer.write("\nLoaded chunks: ");
-                    writer.write("count - " + world.activeChunkSet_CB.size() + "\n");
-                    for (long chunkKey : world.activeChunkSet_CB.keys()) {
-                        final int x = WorldServer.keyToX(chunkKey);
-                        final int z = WorldServer.keyToZ(chunkKey);
+                    writer.write("count - " + world.activeChunkSet.size() + "\n");
+                    for (ChunkCoordIntPair chunkCoords : (Iterable<ChunkCoordIntPair>) world.activeChunkSet) {
+                        final int x = chunkCoords.chunkXPos;
+                        final int z = chunkCoords.chunkZPos;
                         Chunk chunk = world.chunkProvider.provideChunk(x, z);
                         if (chunk == null)
                             continue;
