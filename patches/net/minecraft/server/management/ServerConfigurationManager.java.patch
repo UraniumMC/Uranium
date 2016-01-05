@@ -294,7 +294,21 @@
      }
  
      public String allowUserToConnect(SocketAddress p_148542_1_, GameProfile p_148542_2_)
-@@ -372,6 +516,71 @@
+@@ -352,7 +496,7 @@
+         }
+         else if (!this.func_152607_e(p_148542_2_))
+         {
+-            return "You are not white-listed on this server!";
++            return org.spigotmc.SpigotConfig.whitelistMessage;
+         }
+         else if (this.bannedIPs.func_152708_a(p_148542_1_))
+         {
+@@ -368,10 +512,75 @@
+         }
+         else
+         {
+-            return this.playerEntityList.size() >= this.maxPlayers ? "The server is full!" : null;
++            return this.playerEntityList.size() >= this.maxPlayers ? org.spigotmc.SpigotConfig.serverFullMessage : null;
          }
      }
  

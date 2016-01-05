@@ -2,9 +2,12 @@ package org.spigotmc;
 
 import java.io.File;
 import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
+import org.bukkit.entity.Player;
 
 public class RestartCommand extends Command
 {
@@ -40,12 +43,14 @@ public class RestartCommand extends Command
             {
                 System.out.println( "Attempting to restart with " + SpigotConfig.restartScript );
 
+                // Forbid new logons
+                net.minecraft.server.dedicated.DedicatedServer.allowPlayerLogins = false;
+
                 // Kick all players
-                for ( net.minecraft.entity.player.EntityPlayerMP p : (List< net.minecraft.entity.player.EntityPlayerMP>) net.minecraft.server.MinecraftServer.getServer().getConfigurationManager().playerEntityList )
-                {
-                    p.playerNetServerHandler.kickPlayerFromServer(SpigotConfig.restartMessage);
-                    p.playerNetServerHandler.netManager.isChannelOpen();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.kickPlayer(SpigotConfig.restartMessage);
                 }
+
                 // Give the socket a chance to send the packets
                 try
                 {
@@ -67,7 +72,7 @@ public class RestartCommand extends Command
                 // Actually shutdown
                 try
                 {
-                    net.minecraft.server.MinecraftServer.getServer().stopServer();
+                    Bukkit.shutdown();
                 } catch ( Throwable t )
                 {
                 }
@@ -88,7 +93,7 @@ public class RestartCommand extends Command
                             {
                                 Runtime.getRuntime().exec( new String[]
                                 {
-                                    "sh", file.getPath()
+                                    "/bin/sh", file.getPath()
                                 } );
                             }
                         } catch ( Exception e )
