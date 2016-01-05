@@ -287,4 +287,15 @@ public class SpigotWorldConfig
         entityMaxTickTime = getInt("max-tick-time.entity", 50);
         log("Tile Max Tick Time: " + tileMaxTickTime + "ms Entity max Tick Time: " + entityMaxTickTime + "ms");
     }
+
+    public int currentPrimedTnt = 0;
+    public int maxTntTicksPerTick;
+    private void maxTntPerTick() {
+        if ( SpigotConfig.version < 7 )
+        {
+            set( "max-tnt-per-tick", 100 );
+        }
+        maxTntTicksPerTick = getInt( "max-tnt-per-tick", 100 );
+        log( "Max TNT Explosions: " + maxTntTicksPerTick );
+    }
 }
