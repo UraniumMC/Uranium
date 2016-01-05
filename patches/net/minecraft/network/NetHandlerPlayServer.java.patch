@@ -125,7 +125,7 @@
          this.playerEntity = p_i1530_3_;
          p_i1530_3_.playerNetServerHandler = this;
 +        // CraftBukkit start
-+        this.server = p_i1530_1_.server;
++        this.server = p_i1530_1_ == null ? null : p_i1530_1_.server;
      }
  
 +    private final org.bukkit.craftbukkit.CraftServer server;
