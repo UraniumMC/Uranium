@@ -64,7 +64,7 @@
  
      public void scheduleOutboundPacket(Packet p_150725_1_, GenericFutureListener ... p_150725_2_)
      {
-+        if (p_150725_1_ == null || !field_152463_r) return;
++        if (p_150725_1_ == null) return;
          if (this.channel != null && this.channel.isOpen())
          {
              this.flushOutboundQueue();

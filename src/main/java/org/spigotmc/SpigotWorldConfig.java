@@ -298,4 +298,11 @@ public class SpigotWorldConfig
         maxTntTicksPerTick = getInt( "max-tnt-per-tick", 100 );
         log( "Max TNT Explosions: " + maxTntTicksPerTick );
     }
+
+    public boolean useAsyncLighting;
+    private void useAsyncLighting()
+    {
+        useAsyncLighting = getBoolean( "use-async-lighting", true );
+        log( "World async lighting: " + useAsyncLighting );
+    }
 }
