@@ -261,6 +261,15 @@
              this.worldObj.unloadEntities(this.entityLists[i]);
          }
          MinecraftForge.EVENT_BUS.post(new ChunkEvent.Unload(this));
+@@ -1015,7 +1161,7 @@
+                 return true;
+             }
+         }
+-        else if (this.hasEntities && this.worldObj.getTotalWorldTime() >= this.lastSaveTime + 600L)
++        else if (this.hasEntities && this.worldObj.getTotalWorldTime() >= this.lastSaveTime + net.minecraft.server.MinecraftServer.getServer().autosavePeriod * 4) // PaperSpigot - Only save if we've passed 4 auto save intervals without modification
+         {
+             return true;
+         }
 @@ -1025,7 +1171,7 @@
  
      public Random getRandomWithSeed(long p_76617_1_)
