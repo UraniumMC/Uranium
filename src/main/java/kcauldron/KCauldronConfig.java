@@ -29,6 +29,10 @@ public class KCauldronConfig extends ConfigBase {
         
     public BoolSetting commonAllowNetherPortal = new BoolSetting(this,
             "common.allowNetherPortalBesidesOverworld", false, "Allow nether portals in dimensions besides overworld");
+
+    public BoolSetting experimentalTileEntityListRecreation = new BoolSetting(this,
+            "experimental.tileEntityListRecreation", false, "EXPERIMENTAL! Recreate list of TE each tick.");    
+    public static boolean tileEntityListRecreation;
     
     public KCauldronConfig() {
         super("kcauldron.yml", "kc");
@@ -41,6 +45,7 @@ public class KCauldronConfig extends ConfigBase {
         register(loggingMaterialInjection);
         register(loggingClientModList);
         register(commonAllowNetherPortal);
+        register(experimentalTileEntityListRecreation);
         load();
     }
 
@@ -82,5 +87,6 @@ public class KCauldronConfig extends ConfigBase {
                     "Could not load " + this.configFile);
             ex.printStackTrace();
         }
+        tileEntityListRecreation = experimentalTileEntityListRecreation.getValue();
     }
 }

@@ -59,3 +59,10 @@
      // -- BEGIN FORGE PATCHES --
      /**
       * Determines if this TileEntity requires update calls.
+@@ -370,4 +392,6 @@
+         }
+         return bb;
+     }
++
++    public boolean dead;
+ }
