@@ -354,7 +354,7 @@
                  }
              }
              else if (p_76607_4_ && this.storageArrays[l] != null && this.storageArrays[l].getBlockMSBArray() != null)
-@@ -1523,4 +1677,21 @@
+@@ -1523,4 +1677,24 @@
              }
          }
      }
@@ -375,4 +375,7 @@
 +            }
 +        });
 +    }
++    
++    // KCauldron hold block updates into each chunk individually
++    public final java.util.Set<net.minecraft.world.NextTickListEntry> blockUpdates = new java.util.TreeSet<net.minecraft.world.NextTickListEntry>();
  }
