@@ -450,10 +450,10 @@
 +    // Cauldron start - refactor entire method for sanity.
 +    public EntityPlayerMP respawnPlayer(EntityPlayerMP par1EntityPlayerMP, int par2, boolean par3)
 +    {
-+       return this.respawnPlayer(par1EntityPlayerMP, par2, par3, null);
++       return this.respawnPlayer(par1EntityPlayerMP, par2, par3, null, TeleportCause.DEATH);
 +    }
 +
-+    public EntityPlayerMP respawnPlayer(EntityPlayerMP par1EntityPlayerMP, int targetDimension, boolean returnFromEnd, Location location)
++    public EntityPlayerMP respawnPlayer(EntityPlayerMP par1EntityPlayerMP, int targetDimension, boolean returnFromEnd, Location location, TeleportCause cause)
 +    {
 +        // Phase 1 - check if the player is allowed to respawn in same dimension
 +        World world = mcServer.worldServerForDimension(targetDimension);
@@ -506,7 +506,7 @@
 +        EntityPlayerMP entityplayermp1 = new EntityPlayerMP(mcServer, mcServer.worldServerForDimension(targetDimension), par1EntityPlayerMP.getGameProfile(), new ItemInWorldManager(mcServer.worldServerForDimension(targetDimension)));
 +        entityplayermp1.playerNetServerHandler = par1EntityPlayerMP.playerNetServerHandler;
 +        entityplayermp1.playerNetServerHandler.playerEntity = entityplayermp1;
-+        entityplayermp1.clonePlayer(par1EntityPlayerMP, returnFromEnd); // KCauldron - clone player
++        entityplayermp1.clonePlayer(par1EntityPlayerMP, cause != TeleportCause.DEATH); // KCauldron - clone player
 +        entityplayermp1.setWorld(mcServer.worldServerForDimension(targetDimension));;
 +        entityplayermp1.playerConqueredTheEnd = false;
 +        entityplayermp1.setEntityId(par1EntityPlayerMP.getEntityId());
