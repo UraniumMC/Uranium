@@ -423,11 +423,21 @@
              }
  
              this.theProfiler.startSection("cleaning");
-@@ -523,6 +714,7 @@
+@@ -515,14 +706,15 @@
+             for (int j = 0; j < i; ++j)
+             {
+                 nextticklistentry = (NextTickListEntry)this.pendingTickListEntriesTreeSet.first();
+-
+-                if (!p_72955_1_ && nextticklistentry.scheduledTime > this.worldInfo.getWorldTotalTime())
++                Chunk chunk = getChunkIfLoaded(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4);
++                if (!p_72955_1_ && (nextticklistentry.scheduledTime > this.worldInfo.getWorldTotalTime() || chunk == null))
+                 {
+                     break;
+                 }
  
                  this.pendingTickListEntriesTreeSet.remove(nextticklistentry);
                  this.pendingTickListEntriesHashSet.remove(nextticklistentry);
-+                getChunkFromBlockCoords(nextticklistentry.xCoord, nextticklistentry.zCoord).blockUpdates.remove(nextticklistentry); // KCauldron
++                chunk.blockUpdates.remove(nextticklistentry); // KCauldron
                  this.pendingTickListEntriesThisTick.add(nextticklistentry);
              }
  
