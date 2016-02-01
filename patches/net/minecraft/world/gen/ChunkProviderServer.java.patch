@@ -67,7 +67,7 @@
 -    public List loadedChunks = new ArrayList();
 +    public boolean loadChunkOnProvideRequest = MinecraftServer.getServer().cauldronConfig.loadChunkOnRequest.getValue(); // Cauldron - if true, allows mods to force load chunks. to disable, set load-chunk-on-request in cauldron.yml to false
 +    public int initialTick; // Cauldron counter to keep track of when this loader was created
-+    public TLongObjectMap<Chunk> loadedChunkHashMap_KC = new TSynchronizedLongObjectMap<Chunk>(new TLongObjectHashMap<Chunk>());
++    public TLongObjectMap<Chunk> loadedChunkHashMap_KC = new TLongObjectHashMap<Chunk>();
 +    public List loadedChunks = new ArrayList(); // Cauldron - vanilla compatibility
      public WorldServer worldObj;
      private Set<Long> loadingChunks = com.google.common.collect.Sets.newHashSet();
