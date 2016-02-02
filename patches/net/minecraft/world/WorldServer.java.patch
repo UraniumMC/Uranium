@@ -380,15 +380,34 @@
      }
  
      public boolean isBlockTickScheduledThisTick(int p_147477_1_, int p_147477_2_, int p_147477_3_, Block p_147477_4_)
-@@ -451,6 +631,7 @@
+@@ -447,10 +627,11 @@
+                 nextticklistentry.setPriority(p_147454_6_);
+             }
+ 
+-            if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry))
++            if (this.pendingTickListEntriesHashSet.add(nextticklistentry))
              {
-                 this.pendingTickListEntriesHashSet.add(nextticklistentry);
-                 this.pendingTickListEntriesTreeSet.add(nextticklistentry);
-+                getChunkFromBlockCoords(p_147454_1_, p_147454_3_).blockUpdates.add(nextticklistentry); // KCauldron
+-                this.pendingTickListEntriesHashSet.add(nextticklistentry);
+-                this.pendingTickListEntriesTreeSet.add(nextticklistentry);
++                
++                if (!this.pendingTickListEntriesTreeSet.add(nextticklistentry)) pendingTickListEntriesHashSet.remove(nextticklistentry); else {
++                Chunk chunk = getChunkIfLoaded(p_147454_1_ >> 4, p_147454_3_ >> 4); if (chunk != null) chunk.blockUpdates.add(nextticklistentry); } // KCauldron
              }
          }
      }
-@@ -474,7 +655,7 @@
+@@ -465,16 +646,16 @@
+             nextticklistentry.setScheduledTime((long)p_147446_5_ + this.worldInfo.getWorldTotalTime());
+         }
+ 
+-        if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry))
++        if (this.pendingTickListEntriesHashSet.add(nextticklistentry))
+         {
+-            this.pendingTickListEntriesHashSet.add(nextticklistentry);
+-            this.pendingTickListEntriesTreeSet.add(nextticklistentry);
++            if (!this.pendingTickListEntriesTreeSet.add(nextticklistentry)) pendingTickListEntriesHashSet.remove(nextticklistentry); else {
++            Chunk chunk = getChunkIfLoaded(p_147446_1_ >> 4, p_147446_3_ >> 4); if (chunk != null) chunk.blockUpdates.add(nextticklistentry); }
+         }
+     }
  
      public void updateEntities()
      {
@@ -655,7 +674,7 @@
      }
  
      protected int func_152379_p()
-@@ -1069,4 +1361,65 @@
+@@ -1069,4 +1361,64 @@
                  this();
              }
          }
@@ -714,9 +733,8 @@
 +        nextticklistentry.setPriority(priority);
 +        if (block.getMaterial() != Material.air)
 +            nextticklistentry.setScheduledTime((long)time + this.worldInfo.getWorldTotalTime());
-+        if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry)) {
-+            this.pendingTickListEntriesHashSet.add(nextticklistentry);
-+            this.pendingTickListEntriesTreeSet.add(nextticklistentry);
++        if (this.pendingTickListEntriesHashSet.add(nextticklistentry)) {
++            if (!this.pendingTickListEntriesTreeSet.add(nextticklistentry)) pendingTickListEntriesHashSet.remove(nextticklistentry);
 +        }
 +        return nextticklistentry;
 +    }
