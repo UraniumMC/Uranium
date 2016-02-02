@@ -1,3 +1,4 @@
+**[Join KCauldron's Discord!](https://discord.gg/0nuu0DLm3WJq1Z23)**
 # KCauldron
 ### KCauldron - continuation of Cauldron minecraft server
 [![Donate PayPal USD][donate_paypal_usd_img]][donate_paypal_usd_url][![Donate PayPal RUB][donate_paypal_rub_img]][donate_paypal_rub_url]
