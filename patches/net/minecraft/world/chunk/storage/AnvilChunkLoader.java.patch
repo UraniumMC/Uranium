@@ -142,6 +142,26 @@
  
          if (list != null)
          {
+@@ -389,13 +410,13 @@
+ 
+             while (iterator.hasNext())
+             {
+-                NextTickListEntry nextticklistentry = (NextTickListEntry)iterator.next();
++                kcauldron.BlockUpdateEntry nextticklistentry = (kcauldron.BlockUpdateEntry)iterator.next();
+                 NBTTagCompound nbttagcompound2 = new NBTTagCompound();
+-                nbttagcompound2.setInteger("i", Block.getIdFromBlock(nextticklistentry.func_151351_a()));
+-                nbttagcompound2.setInteger("x", nextticklistentry.xCoord);
+-                nbttagcompound2.setInteger("y", nextticklistentry.yCoord);
+-                nbttagcompound2.setInteger("z", nextticklistentry.zCoord);
+-                nbttagcompound2.setInteger("t", (int)(nextticklistentry.scheduledTime - k));
++                nbttagcompound2.setInteger("i", Block.getIdFromBlock(nextticklistentry.block));
++                nbttagcompound2.setInteger("x", nextticklistentry.x);
++                nbttagcompound2.setInteger("y", nextticklistentry.y);
++                nbttagcompound2.setInteger("z", nextticklistentry.z);
++                nbttagcompound2.setInteger("t", (int)(nextticklistentry.time - k));
+                 nbttagcompound2.setInteger("p", nextticklistentry.priority);
+                 nbttaglist1.appendTag(nbttagcompound2);
+             }
 @@ -455,6 +476,7 @@
  
      public void loadEntities(World p_75823_1_, NBTTagCompound p_75823_2_, Chunk chunk)
@@ -232,7 +252,7 @@
                  {
                      NBTTagCompound nbttagcompound5 = nbttaglist3.getCompoundTagAt(j1);
 -                    p_75823_1_.func_147446_b(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), Block.getBlockById(nbttagcompound5.getInteger("i")), nbttagcompound5.getInteger("t"), nbttagcompound5.getInteger("p"));
-+                    NextTickListEntry entry = ((net.minecraft.world.WorldServer) p_75823_1_).allocateEntry(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), Block.getBlockById(nbttagcompound5.getInteger("i")), nbttagcompound5.getInteger("t"), nbttagcompound5.getInteger("p"));
++                    kcauldron.BlockUpdateEntry entry = ((net.minecraft.world.WorldServer) p_75823_1_).blockUpdatesTracker.allocateEntry(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), nbttagcompound5.getInteger("p"), nbttagcompound5.getInteger("t"), Block.getBlockById(nbttagcompound5.getInteger("i")));
 +                    chunk.blockUpdates.add(entry);
                  }
              }
