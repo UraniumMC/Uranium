@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.cauldron.configuration.BoolSetting;
 import net.minecraftforge.cauldron.configuration.ConfigBase;
+import net.minecraftforge.cauldron.configuration.IntSetting;
 import net.minecraftforge.cauldron.configuration.Setting;
 import net.minecraftforge.cauldron.configuration.StringSetting;
 
@@ -29,6 +30,12 @@ public class KCauldronConfig extends ConfigBase {
         
     public BoolSetting commonAllowNetherPortal = new BoolSetting(this,
             "common.allowNetherPortalBesidesOverworld", false, "Allow nether portals in dimensions besides overworld");
+    public BoolSetting commonFastLeavesDecayEnable = new BoolSetting(this,
+            "common.fastLeavesDecay.enable", false, "Enable fast decaying of leaves, not affects drop chanches /etc");
+    public IntSetting commonFastLeavesDecayMinTickTime = new IntSetting(this,
+            "common.fastLeavesDecay.minTickTime", 5, "Minimal amount of tick between block updates");
+    public IntSetting commonFastLeavesDecayMaxTickTime = new IntSetting(this,
+            "common.fastLeavesDecay.maxTickTime", 10, "Minimal amount of tick between block updates");
 
     public BoolSetting experimentalTileEntityListRecreation = new BoolSetting(this,
             "experimental.tileEntityListRecreation", false, "EXPERIMENTAL! Recreate list of TE each tick.");    
@@ -45,6 +52,9 @@ public class KCauldronConfig extends ConfigBase {
         register(loggingMaterialInjection);
         register(loggingClientModList);
         register(commonAllowNetherPortal);
+        register(commonFastLeavesDecayEnable);
+        register(commonFastLeavesDecayMinTickTime);
+        register(commonFastLeavesDecayMaxTickTime);
         register(experimentalTileEntityListRecreation);
         load();
     }

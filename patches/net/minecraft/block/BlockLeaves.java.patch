@@ -26,3 +26,17 @@
          this.dropBlockAsItem(p_150126_1_, p_150126_2_, p_150126_3_, p_150126_4_, p_150126_1_.getBlockMetadata(p_150126_2_, p_150126_3_, p_150126_4_), 0);
          p_150126_1_.setBlockToAir(p_150126_2_, p_150126_3_, p_150126_4_);
      }
+@@ -308,6 +320,13 @@
+             world.setBlockMetadataWithNotify(x, y, z, i2 | 8, 4);
+         }
+         world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) | 8, 4);
++        // KCauldron start - fast leaves decay
++        if (net.minecraft.server.MinecraftServer.kcauldronConfig.commonFastLeavesDecayEnable.getValue()) {
++            int min = net.minecraft.server.MinecraftServer.kcauldronConfig.commonFastLeavesDecayMinTickTime.getValue();
++            int max = net.minecraft.server.MinecraftServer.kcauldronConfig.commonFastLeavesDecayMaxTickTime.getValue();
++            world.scheduleBlockUpdate(x, y, z, this, min + world.rand.nextInt(max - min));
++        }
++        // KCauldron end
+     }
+ 
+     @Override
