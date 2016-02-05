@@ -506,7 +506,7 @@
 +        // CraftBukkit start
 +        EntityPlayerMP entityplayermp1 = par1EntityPlayerMP;
 +        entityplayermp1.setWorld(this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension)); // make sure to update reference for bed spawn logic
-+        MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerEvent.Clone(entityplayermp1, entityplayermp1, !returnFromEnd));
++        MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerEvent.Clone(entityplayermp1, entityplayermp1, cause == TeleportCause.DEATH));
 +        entityplayermp1.playerConqueredTheEnd = false;
          ChunkCoordinates chunkcoordinates1;
 +        boolean isBedSpawn = false;
