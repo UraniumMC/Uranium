@@ -11,7 +11,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
     public CraftInventoryPlayer(net.minecraft.entity.player.InventoryPlayer inventory) {
         super(inventory);
     }
-    
+
     @Override
     public net.minecraft.entity.player.InventoryPlayer getInventory() {
         return (net.minecraft.entity.player.InventoryPlayer) inventory;

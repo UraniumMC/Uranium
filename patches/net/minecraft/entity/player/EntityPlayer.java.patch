@@ -23,12 +23,8 @@
  public abstract class EntityPlayer extends EntityLivingBase implements ICommandSender
  {
      public static final String PERSISTED_NBT_TAG = "PlayerPersisted";
-@@ -99,10 +115,10 @@
-     private HashMap<Integer, Boolean> spawnForcedMap = new HashMap<Integer, Boolean>();
- 
-     public InventoryPlayer inventory = new InventoryPlayer(this);
--    private InventoryEnderChest theInventoryEnderChest = new InventoryEnderChest();
-+    public InventoryEnderChest theInventoryEnderChest = new InventoryEnderChest();
+@@ -102,7 +118,7 @@
+     private InventoryEnderChest theInventoryEnderChest = new InventoryEnderChest();
      public Container inventoryContainer;
      public Container openContainer;
 -    protected FoodStats foodStats = new FoodStats();
@@ -503,12 +499,12 @@
          }
      }
  
-@@ -2023,7 +2246,7 @@
-             this.setScore(p_71049_1_.getScore());
+@@ -2035,7 +2258,7 @@
+         {
+             getEntityData().setTag(PERSISTED_NBT_TAG, old.getCompoundTag(PERSISTED_NBT_TAG));
          }
+-        MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerEvent.Clone(this, p_71049_1_, !p_71049_2_));
++        //MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerEvent.Clone(this, p_71049_1_, !p_71049_2_)); // KCauldron - moved to ReverseClonner
+     }
  
--        this.theInventoryEnderChest = p_71049_1_.theInventoryEnderChest;
-+        // this.theInventoryEnderChest = p_71049_1_.theInventoryEnderChest; // KCauldron - moved up
- 
-         this.spawnChunkMap = p_71049_1_.spawnChunkMap;
-         this.spawnForcedMap = p_71049_1_.spawnForcedMap;
+     protected boolean canTriggerWalking()
