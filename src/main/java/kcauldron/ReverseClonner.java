@@ -14,7 +14,7 @@ public enum ReverseClonner {
         EntityPlayerMP shadowCopy = new EntityPlayerMP(player.mcServer, (WorldServer) player.worldObj,
                 player.getGameProfile(), new ItemInWorldManager(player.worldObj));
         shadowCopy.clonePlayer(player, true);
-        if (wasDeath)  {
+        if (wasDeath && !player.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))  {
             player.inventory.clearInventory(null, -1);
             player.inventoryContainer = new ContainerPlayer(player.inventory, !player.worldObj.isRemote, player);
         }

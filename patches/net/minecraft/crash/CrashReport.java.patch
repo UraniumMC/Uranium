@@ -34,7 +34,7 @@
 +        this.theReportCategory.addCrashSectionCallable("KCauldron Version", new Callable<String>() {
 +            @Override
 +            public String call() throws Exception {
-+                return String.format("%s:%s:%s", KCauldron.getGroup(), KCauldron.getChannel(), KCauldron.getCurrentVersion());
++                return String.format("%s:%s:%s %s", KCauldron.getGroup(), KCauldron.getChannel(), KCauldron.getCurrentVersion(), KCauldron.isOfficial() ? "Official" : "UNOFFICIAL DON'T REPORT THIS CRASH");
 +            }
 +        });
 +        this.theReportCategory.addCrashSectionCallable("Plugins", new Callable<String>() {
