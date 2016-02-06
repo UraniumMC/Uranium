@@ -1,7 +1,6 @@
 package kcauldron;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.world.WorldServer;
@@ -10,11 +9,13 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public enum ReverseClonner {
     ;
+
     public static EntityPlayerMP clone(EntityPlayerMP player, boolean wasDeath) {
         EntityPlayerMP shadowCopy = new EntityPlayerMP(player.mcServer, (WorldServer) player.worldObj,
                 player.getGameProfile(), new ItemInWorldManager(player.worldObj));
+        shadowCopy.playerNetServerHandler = player.playerNetServerHandler;
         shadowCopy.clonePlayer(player, true);
-        if (wasDeath && !player.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))  {
+        if (wasDeath && !player.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")) {
             player.inventory.clearInventory(null, -1);
             player.inventoryContainer = new ContainerPlayer(player.inventory, !player.worldObj.isRemote, player);
         }
