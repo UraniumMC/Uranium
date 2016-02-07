@@ -25,6 +25,7 @@ public class TerminalConsoleWriterThread implements Runnable {
             message = QueueLogAppender.getNextLogEvent("TerminalConsole");
             if (message == null) {
                 Thread.yield();
+                continue;
             }
 
             try {
