@@ -1,8 +1,7 @@
 **[Join KCauldron's Discord!](https://discord.gg/0nuu0DLm3WJq1Z23)**
 # KCauldron
 ### KCauldron - continuation of Cauldron minecraft server
-[![Donate PayPal USD][donate_paypal_usd_img]][donate_paypal_usd_url][![Donate PayPal RUB][donate_paypal_rub_img]][donate_paypal_rub_url]
-[![Donate Yandex Money][donate_yandex_img]][donate_yandex_url]<a href="https://repo.prok.pw/pw/prok/KCauldron/?C=M&O=D" target="_blank">![Download][download_img]</a>
+[![Donate][donate_img]][donate_url][![Download KCauldron][download_img]][download_url]
 
 ## Building KCauldron
 * Checkout project
@@ -38,10 +37,7 @@ If you're once checkout source - you not need to do it again
   * Make sure that similar issue not exists already
   * Please fill [issue form](https://gitlab.prok.pw/Prototik/KCauldron/issues/new) else
 
-[donate_paypal_usd_url]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=me%40prok%2epw&lc=US&item_name=ProK&item_number=KCauldron%20USD&currency_code=USD&bn=PP%2dDonationsBF%3adonate_paypal_usd%2epng%3aNonHosted
-[donate_paypal_usd_img]: https://prok.pw/donate_paypal_usd.png
-[donate_paypal_rub_url]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=me%40prok%2epw&lc=US&item_name=ProK&item_number=KCauldron%20RUB&currency_code=RUB&bn=PP%2dDonationsBF%3adonate_paypal_rub%2epng%3aNonHosted
-[donate_paypal_rub_img]: https://prok.pw/donate_paypal_rub.png
-[donate_yandex_url]: https://prok.pw/donate/donate_yandex.htm
-[donate_yandex_img]: https://prok.pw/donate_yandex.png
+[donate_url]: https://prok.pw/donate.html
+[donate_img]: https://prok.pw/donate.png
+[download_url]: https://prok.pw/downloads.html#pw.prok:KCauldron
 [download_img]: https://prok.pw/download.png
