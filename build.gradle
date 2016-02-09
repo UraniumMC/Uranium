@@ -176,7 +176,7 @@ def generateManifest(boolean legacy = false) {
             'KCauldron-Official'    : project.hasProperty('officialBuild'),
             'Implementation-Vendor' : 'Prototik',
             'Implementation-Title'  : project.name,
-            'Implementation-Version': project.version,
+            'Implementation-Version': '1.7.10-R0.1-SNAPSHOT',
             'Specification-Vendor'  : 'Bukkit Team',
             'Specification-Title'   : 'Bukkit',
             'Specification-Version' : '1.7.10-R0.1-SNAPSHOT',
