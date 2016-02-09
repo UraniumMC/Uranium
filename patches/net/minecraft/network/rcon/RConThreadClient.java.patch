@@ -12,20 +12,7 @@
              {
                  if (!this.running)
                  {
-@@ -53,6 +53,12 @@
-                 BufferedInputStream bufferedinputstream = new BufferedInputStream(this.clientSocket.getInputStream());
-                 int i = bufferedinputstream.read(this.buffer, 0, 1460);
- 
-+                if (i < 10)
-+                {
-+                    this.running = false; // Cauldron
-+                    return;
-+                }
-+
-                 if (10 <= i)
-                 {
-                     byte b0 = 0;
-@@ -110,26 +116,23 @@
+@@ -110,26 +110,23 @@
                      }
                  }
              }
@@ -55,7 +42,7 @@
      }
  
      private void sendResponse(int p_72654_1_, int p_72654_2_, String p_72654_3_) throws IOException
-@@ -167,6 +170,7 @@
+@@ -167,6 +164,7 @@
  
      private void closeSocket()
      {

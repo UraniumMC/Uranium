@@ -86,7 +86,7 @@
 +                        {
 +                            s = bufferedreader.readLine();
 +                        }
-+                        if (s != null)
++                        if (s != null && !s.isEmpty())
 +                        {
 +                            this.server.addPendingCommand(s, this.server);
 +                        }
