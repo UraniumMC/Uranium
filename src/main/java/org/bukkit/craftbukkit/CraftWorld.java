@@ -138,14 +138,18 @@ public class CraftWorld implements World {
     }
 
     public Chunk[] getLoadedChunks() {
-        Object[] chunks = world.theChunkProviderServer.loadedChunkHashMap_KC.values();
-        org.bukkit.Chunk[] craftChunks = new CraftChunk[chunks.length];
-
-        for (int i = 0; i < chunks.length; i++) {
-            net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) chunks[i];
-            craftChunks[i] = chunk.bukkitChunk;
-        }
-
+        // KCauldron start
+        final kcauldron.ChunkManager chunkManager = world.theChunkProviderServer.chunkManager;
+        final org.bukkit.Chunk[] craftChunks = new CraftChunk[chunkManager.size()];
+        chunkManager.forEach(new cern.colt.function.ObjectProcedure() {
+            int i = 0;
+            @Override
+            public boolean apply(Object arg) {
+                craftChunks[i++] = ((net.minecraft.world.chunk.Chunk) arg).bukkitChunk;
+                return true;
+            }            
+        });
+        // KCauldron end
         return craftChunks;
     }
 
@@ -262,7 +266,7 @@ public class CraftWorld implements World {
         }
 
         world.theChunkProviderServer.chunksToUnload.remove(x, z);
-        net.minecraft.world.chunk.Chunk chunk = world.theChunkProviderServer.loadedChunkHashMap_KC.get(LongHash.toLong(x, z));
+        net.minecraft.world.chunk.Chunk chunk = world.theChunkProviderServer.chunkManager.getChunk(x, z);
 
         if (chunk == null) {
             world.timings.syncChunkLoadTimer.startTiming(); // Spigot
@@ -276,7 +280,7 @@ public class CraftWorld implements World {
 
     private void chunkLoadPostProcess(net.minecraft.world.chunk.Chunk chunk, int x, int z) {
         if (chunk != null) {
-            world.theChunkProviderServer.loadedChunkHashMap_KC.put(LongHash.toLong(x, z), chunk);
+            world.theChunkProviderServer.chunkManager.putChunk(chunk, x, z); // KCauldron
             world.theChunkProviderServer.loadedChunks.add(chunk); // Cauldron - vanilla compatibility
 
             chunk.onChunkLoad();
@@ -1394,9 +1398,10 @@ public class CraftWorld implements World {
         }
 
         final net.minecraft.world.gen.ChunkProviderServer cps = world.theChunkProviderServer;
-        cps.loadedChunkHashMap_KC.forEachValue(new TObjectProcedure<net.minecraft.world.chunk.Chunk>() {
+        cps.chunkManager.forEach(new cern.colt.function.ObjectProcedure() {
             @Override
-            public boolean execute(net.minecraft.world.chunk.Chunk chunk) {
+            public boolean apply(Object arg) {
+                net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) arg;
                 // If in use, skip it
                 if (isChunkInUse(chunk.xPosition, chunk.zPosition)) {
                     return true;

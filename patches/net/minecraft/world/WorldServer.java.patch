@@ -69,7 +69,12 @@
          this.mcServer = p_i45284_1_;
          this.theEntityTracker = new EntityTracker(this);
          this.thePlayerManager = new PlayerManager(this);
-@@ -106,12 +129,12 @@
+@@ -103,15 +126,17 @@
+         {
+             this.entityIdMap = new IntHashMap();
+         }
++        
++        if (this.blockUpdatesTracker == null) this.blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
  
          if (this.pendingTickListEntriesHashSet == null)
          {
@@ -84,7 +89,7 @@
          }
  
          this.worldTeleporter = new Teleporter(this);
-@@ -124,6 +147,47 @@
+@@ -124,6 +149,49 @@
              this.mapStorage.setData("scoreboard", scoreboardsavedata);
          }
  
@@ -108,6 +113,8 @@
 +        {
 +            this.entityIdMap = new IntHashMap();
 +        }
++        
++        if (this.blockUpdatesTracker == null) this.blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
 +
 +        if (this.pendingTickListEntriesHashSet == null)
 +        {
@@ -132,7 +139,7 @@
          if (!(this instanceof WorldServerMulti)) //Forge: We fix the global mapStorage, which causes us to share scoreboards early. So don't associate the save data with the temporary scoreboard
          {
              scoreboardsavedata.func_96499_a(this.worldScoreboard);
-@@ -132,6 +196,31 @@
+@@ -132,6 +200,32 @@
          DimensionManager.setWorld(p_i45284_4_, this);
      }
  
@@ -146,6 +153,7 @@
 +        this.theEntityTracker = null;
 +        this.thePlayerManager = null;
 +        this.worldTeleporter = null;
++        this.blockUpdatesTracker = null;
 +    }
 +
 +    private boolean canSpawn(int x, int z)
@@ -164,7 +172,7 @@
      public void tick()
      {
          super.tick();
-@@ -155,12 +244,19 @@
+@@ -155,12 +249,19 @@
          }
  
          this.theProfiler.startSection("mobSpawner");
@@ -187,7 +195,7 @@
          this.theProfiler.endStartSection("chunkSource");
          this.chunkProvider.unloadQueuedChunks();
          int j = this.calculateSkylightSubtracted(1.0F);
-@@ -170,30 +266,47 @@
+@@ -170,30 +271,47 @@
              this.skylightSubtracted = j;
          }
  
@@ -236,7 +244,7 @@
      }
  
      public BiomeGenBase.SpawnListEntry spawnRandomCreature(EnumCreatureType p_73057_1_, int p_73057_2_, int p_73057_3_, int p_73057_4_)
-@@ -212,7 +325,7 @@
+@@ -212,7 +330,7 @@
          {
              EntityPlayer entityplayer = (EntityPlayer)iterator.next();
  
@@ -245,7 +253,7 @@
              {
                  this.allPlayersSleeping = false;
                  break;
-@@ -240,7 +353,25 @@
+@@ -240,7 +358,25 @@
  
      private void resetRainAndThunder()
      {
@@ -272,7 +280,7 @@
      }
  
      public boolean areAllPlayersAsleep()
-@@ -248,19 +379,26 @@
+@@ -248,19 +384,26 @@
          if (this.allPlayersSleeping && !this.isRemote)
          {
              Iterator iterator = this.playerEntities.iterator();
@@ -302,7 +310,7 @@
              return false;
          }
          else
-@@ -302,15 +440,29 @@
+@@ -302,15 +445,29 @@
          super.func_147456_g();
          int i = 0;
          int j = 0;
@@ -338,7 +346,7 @@
              this.func_147467_a(k, l, chunk);
              this.theProfiler.endStartSection("tickChunk");
              chunk.func_150804_b(false);
-@@ -346,12 +498,32 @@
+@@ -346,12 +503,32 @@
  
                  if (this.isBlockFreezableNaturally(j1 + k, l1 - 1, k1 + l))
                  {
@@ -373,7 +381,7 @@
                  }
  
                  if (this.isRaining())
-@@ -388,6 +560,7 @@
+@@ -388,6 +565,7 @@
                          if (block.getTickRandomly())
                          {
                              ++i;
@@ -381,7 +389,7 @@
                              block.updateTick(this, j2 + k, l2 + extendedblockstorage.getYLocation(), k2 + l, this.rand);
                          }
                      }
-@@ -396,12 +569,19 @@
+@@ -396,12 +574,19 @@
  
              this.theProfiler.endSection();
          }
@@ -403,7 +411,7 @@
      }
  
      public void scheduleBlockUpdate(int p_147464_1_, int p_147464_2_, int p_147464_3_, Block p_147464_4_, int p_147464_5_)
-@@ -411,70 +591,29 @@
+@@ -411,70 +596,29 @@
  
      public void scheduleBlockUpdateWithPriority(int p_147454_1_, int p_147454_2_, int p_147454_3_, Block p_147454_4_, int p_147454_5_, int p_147454_6_)
      {
@@ -484,7 +492,7 @@
          {
              if (this.updateEntityTick++ >= 1200)
              {
-@@ -487,6 +626,7 @@
+@@ -487,6 +631,7 @@
          }
  
          super.updateEntities();
@@ -492,7 +500,7 @@
      }
  
      public void resetUpdateEntityTick()
-@@ -496,33 +636,40 @@
+@@ -496,33 +641,40 @@
  
      public boolean tickUpdates(boolean p_72955_1_)
      {
@@ -547,7 +555,7 @@
                  this.pendingTickListEntriesThisTick.add(nextticklistentry);
              }
  
-@@ -532,22 +679,22 @@
+@@ -532,22 +684,22 @@
  
              while (iterator.hasNext())
              {
@@ -575,7 +583,7 @@
                          }
                          catch (Throwable throwable1)
                          {
-@@ -557,27 +704,27 @@
+@@ -557,27 +709,27 @@
  
                              try
                              {
@@ -607,7 +615,7 @@
          }
      }
  
-@@ -596,7 +743,7 @@
+@@ -596,7 +748,7 @@
  
              if (i1 == 0)
              {
@@ -616,7 +624,7 @@
              }
              else
              {
-@@ -610,13 +757,13 @@
+@@ -610,13 +762,13 @@
  
              while (iterator.hasNext())
              {
@@ -633,7 +641,7 @@
                          iterator.remove();
                      }
  
-@@ -651,7 +798,37 @@
+@@ -651,7 +803,37 @@
      protected IChunkProvider createChunkProvider()
      {
          IChunkLoader ichunkloader = this.saveHandler.getChunkLoader(this.provider);
@@ -672,7 +680,7 @@
          return this.theChunkProviderServer;
      }
  
-@@ -659,29 +836,31 @@
+@@ -659,29 +841,31 @@
      {
          ArrayList arraylist = new ArrayList();
  
@@ -719,26 +727,27 @@
          return arraylist;
      }
  
-@@ -702,14 +881,14 @@
+@@ -701,15 +885,17 @@
+         {
              this.entityIdMap = new IntHashMap();
          }
++        
++        if (blockUpdatesTracker == null) blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
  
--        if (this.pendingTickListEntriesHashSet == null)
-+        if (this.pendingTickListEntriesHashSet == null && blockUpdatesTracker != null)
+         if (this.pendingTickListEntriesHashSet == null)
          {
 -            this.pendingTickListEntriesHashSet = new HashSet();
 +            this.pendingTickListEntriesHashSet = blockUpdatesTracker.hashSet;
          }
  
--        if (this.pendingTickListEntriesTreeSet == null)
-+        if (this.pendingTickListEntriesTreeSet == null && blockUpdatesTracker != null)
+         if (this.pendingTickListEntriesTreeSet == null)
          {
 -            this.pendingTickListEntriesTreeSet = new TreeSet();
 +            this.pendingTickListEntriesTreeSet = blockUpdatesTracker.treeSet;
          }
  
          this.createSpawnPosition(p_72963_1_);
-@@ -733,7 +912,28 @@
+@@ -733,7 +919,28 @@
              int i = 0;
              int j = this.provider.getAverageGroundLevel();
              int k = 0;
@@ -767,7 +776,7 @@
              if (chunkposition != null)
              {
                  i = chunkposition.chunkPosX;
-@@ -876,6 +1076,20 @@
+@@ -876,6 +1083,20 @@
  
      public boolean addWeatherEffect(Entity p_72942_1_)
      {
@@ -788,7 +797,7 @@
          if (super.addWeatherEffect(p_72942_1_))
          {
              this.mcServer.getConfigurationManager().sendToAllNear(p_72942_1_.posX, p_72942_1_.posY, p_72942_1_.posZ, 512.0D, this.provider.dimensionId, new S2CPacketSpawnGlobalEntity(p_72942_1_));
-@@ -894,13 +1108,23 @@
+@@ -894,13 +1115,23 @@
  
      public Explosion newExplosion(Entity p_72885_1_, double p_72885_2_, double p_72885_4_, double p_72885_6_, float p_72885_8_, boolean p_72885_9_, boolean p_72885_10_)
      {
@@ -813,7 +822,7 @@
          if (!p_72885_10_)
          {
              explosion.affectedBlockPositions.clear();
-@@ -977,7 +1201,7 @@
+@@ -977,7 +1208,7 @@
      {
          boolean flag = this.isRaining();
          super.updateWeather();
@@ -822,7 +831,7 @@
          if (this.prevRainingStrength != this.rainingStrength)
          {
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(7, this.rainingStrength), this.provider.dimensionId);
-@@ -988,10 +1212,6 @@
+@@ -988,10 +1219,6 @@
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(8, this.thunderingStrength), this.provider.dimensionId);
          }
  
@@ -833,7 +842,7 @@
          if (flag != this.isRaining())
          {
              if (flag)
-@@ -1006,6 +1226,33 @@
+@@ -1006,6 +1233,33 @@
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(7, this.rainingStrength), this.provider.dimensionId);
              this.mcServer.getConfigurationManager().sendPacketToAllPlayersInDimension(new S2BPacketChangeGameState(8, this.thunderingStrength), this.provider.dimensionId);
          }
@@ -867,7 +876,7 @@
      }
  
      protected int func_152379_p()
-@@ -1069,4 +1316,54 @@
+@@ -1069,4 +1323,54 @@
                  this();
              }
          }
@@ -920,5 +929,5 @@
 +    // CraftBukkit end
 +    
 +    // KCauldron start
-+    public final kcauldron.BlockUpdatesTracker blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
++    public kcauldron.BlockUpdatesTracker blockUpdatesTracker;
  }

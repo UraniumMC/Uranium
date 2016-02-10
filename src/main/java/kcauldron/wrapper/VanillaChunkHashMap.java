@@ -1,36 +1,37 @@
 package kcauldron.wrapper;
 
-import gnu.trove.map.TLongObjectMap;
+import kcauldron.ChunkManager;
+import net.minecraft.util.LongHashMap;
 import net.minecraft.world.chunk.Chunk;
 
-import org.bukkit.craftbukkit.util.LongHash;
+public class VanillaChunkHashMap extends LongHashMap {
+    private ChunkManager manager;
 
-public class VanillaChunkHashMap extends LongHashMapTrove<Chunk> {
-    public VanillaChunkHashMap(TLongObjectMap<Chunk> map) {
-        super(map);
+    public VanillaChunkHashMap(ChunkManager manager) {
+        this.manager = manager;
     }
 
-    private static long V2B(long key) {
-        return LongHash.toLong((int) (key & 0xFFFFFFFFL), (int) (key >>> 32));
-    }
-    
     @Override
     public void add(long key, Object value) {
-        super.add(V2B(key), value);
+        manager.putChunk((Chunk) value);
     }
-    
+
     @Override
     public boolean containsItem(long key) {
-        return super.containsItem(V2B(key));
+        return getValueByKey(key) != null;
     }
-    
+
     @Override
     public Object getValueByKey(long key) {
-        return super.getValueByKey(V2B(key));
+        final int x = (int) (key >>> 32);
+        final int z = (int) (key);
+        return manager.getChunk(x, z);
     }
-    
+
     @Override
     public Object remove(long key) {
-        return super.remove(V2B(key));
+        final int x = (int) (key >>> 32);
+        final int z = (int) (key);
+        return manager.remove(x, z);
     }
 }
