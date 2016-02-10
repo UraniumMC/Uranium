@@ -104,16 +104,18 @@ public class KCauldronCommand extends Command {
 
                     double worldTickTime = mean(server.worldTickTimes.get(dimensionId)) * 1.0E-6D;
                     double worldTPS = Math.min(1000.0 / worldTickTime, 20);
+                    ChatColor color = worldTPS >= 19.2 ? ChatColor.GREEN : worldTPS >= 15 ? ChatColor.YELLOW : ChatColor.RED;
 
-                    sender.sendMessage(String.format("%s[%d] %s%s %s- %s%.2fms / %.2ftps", ChatColor.GOLD, dimensionId,
+                    sender.sendMessage(String.format("%s[%d] %s%s %s- %s%.2fms %s/ %s%.2ftps", ChatColor.GOLD, dimensionId,
                             current ? ChatColor.GREEN : ChatColor.YELLOW, displayName, ChatColor.RESET,
-                            ChatColor.DARK_RED, worldTickTime, worldTPS));
+                                    color, worldTickTime, ChatColor.WHITE, color, worldTPS));
                 }
             }
             double meanTickTime = mean(server.tickTimeArray) * 1.0E-6D;
             double meanTPS = Math.min(1000.0 / meanTickTime, 20);
-            sender.sendMessage(String.format("%sOverall - %s%s%.2fms / %.2ftps", ChatColor.BLUE, ChatColor.RESET,
-                    ChatColor.DARK_RED, meanTickTime, meanTPS));
+            ChatColor color = meanTPS >= 19.2 ? ChatColor.GREEN : meanTPS >= 15 ? ChatColor.YELLOW : ChatColor.RED;
+            sender.sendMessage(String.format("%sOverall - %s%s%.2fms %s/ %s%.2ftps", ChatColor.BLUE, ChatColor.RESET,
+                    color, meanTickTime, ChatColor.WHITE, color, meanTPS));
         } else if ("restart".equals(action)) {
             if (!testPermission(sender, RESTART))
                 return true;
@@ -172,6 +174,7 @@ public class KCauldronCommand extends Command {
     }
 
     private static final long mean(long[] array) {
+        if (array == null || array.length == 0) return 0l;
         long r = 0;
         for (long i : array)
             r += i;
