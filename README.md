@@ -22,7 +22,7 @@ If you're once checkout source - you not need to do it again
 * Update sources
   * `git pull origin master`
 * Reapply patches & build binaries
-  * `./gradle clean setupCauldron jar`
+  * `./gradlew clean setupCauldron jar`
 
 
 ## Issue submitting rule
