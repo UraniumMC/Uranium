@@ -13,7 +13,9 @@ public class VanillaChunkHashMap extends LongHashMap {
 
     @Override
     public void add(long key, Object value) {
-        manager.putChunk((Chunk) value);
+        final int z = (int) (key >>> 32);
+        final int x = (int) (key);
+        manager.putChunk((Chunk) value, x, z);
     }
 
     @Override
@@ -23,15 +25,15 @@ public class VanillaChunkHashMap extends LongHashMap {
 
     @Override
     public Object getValueByKey(long key) {
-        final int x = (int) (key >>> 32);
-        final int z = (int) (key);
+        final int z = (int) (key >>> 32);
+        final int x = (int) (key);
         return manager.getChunk(x, z);
     }
 
     @Override
     public Object remove(long key) {
-        final int x = (int) (key >>> 32);
-        final int z = (int) (key);
+        final int z = (int) (key >>> 32);
+        final int x = (int) (key);
         return manager.remove(x, z);
     }
 }
