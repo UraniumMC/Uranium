@@ -18,7 +18,9 @@ public class CustomProjectileEntity extends CraftCustomEntity implements Project
 
     @Override
     public LivingEntity _INVALID_getShooter() {
-        throw new IllegalStateException("Not implemented!");
+        if (shooter instanceof LivingEntity)
+            return (LivingEntity) shooter;
+        return null;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class CustomProjectileEntity extends CraftCustomEntity implements Project
 
     @Override
     public void _INVALID_setShooter(LivingEntity shooter) {
-        throw new IllegalStateException("Not implemented!");
+        this.shooter = shooter instanceof ProjectileSource ? (ProjectileSource) shooter : null;
     }
 
     @Override
