@@ -188,13 +188,27 @@
          // We can only use the queue for already generated chunks
          if (chunk == null && loader != null && loader.chunkExists(this.worldObj, par1, par2))
          {
-@@ -142,18 +213,19 @@
+@@ -128,6 +199,12 @@
+         }
+         else if (chunk == null)
+         {
++            // KCauldron start
++            if (runnable != null) {
++                kcauldron.ChunkGenerator.INSTANCE.queueChunkGeneration(this, par1, par2, new net.minecraftforge.common.chunkio.ChunkIOExecutor.RunnableCallback(runnable));
++                return null;
++            }
++            // KCauldron end
+             chunk = this.originalLoadChunk(par1, par2);
+         }
+ 
+@@ -142,18 +219,20 @@
  
      public Chunk originalLoadChunk(int p_73158_1_, int p_73158_2_)
      {
 -        long k = ChunkCoordIntPair.chunkXZ2Int(p_73158_1_, p_73158_2_);
 -        this.chunksToUnload.remove(Long.valueOf(k));
 -        Chunk chunk = (Chunk)this.loadedChunkHashMap.getValueByKey(k);
++        generatorLock.lock(); try { // KCauldron
 +        this.chunksToUnload.remove(p_73158_1_, p_73158_2_);
 +        Chunk chunk = (Chunk) this.chunkManager.getChunk(p_73158_1_, p_73158_2_); // KCauldron
 +        boolean newChunk = false; // CraftBukkit
@@ -213,7 +227,7 @@
              if (chunk == null)
              {
                  chunk = this.safeLoadChunk(p_73158_1_, p_73158_2_);
-@@ -176,18 +248,53 @@
+@@ -176,30 +255,84 @@
                          CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Exception generating new chunk");
                          CrashReportCategory crashreportcategory = crashreport.makeCategory("Chunk to be generated");
                          crashreportcategory.addCrashSection("Location", String.format("%d,%d", new Object[] {Integer.valueOf(p_73158_1_), Integer.valueOf(p_73158_2_)}));
@@ -272,7 +286,8 @@
          }
  
          return chunk;
-@@ -195,11 +302,29 @@
++        } finally { generatorLock.unlock(); } // KCauldron
+     }
  
      public Chunk provideChunk(int p_73154_1_, int p_73154_2_)
      {
@@ -305,7 +320,7 @@
      {
          if (this.currentChunkLoader == null)
          {
-@@ -209,6 +334,7 @@
+@@ -209,6 +342,7 @@
          {
              try
              {
@@ -313,7 +328,7 @@
                  Chunk chunk = this.currentChunkLoader.loadChunk(this.worldObj, p_73239_1_, p_73239_2_);
  
                  if (chunk != null)
-@@ -217,8 +343,11 @@
+@@ -217,8 +351,11 @@
  
                      if (this.currentChunkProvider != null)
                      {
@@ -325,7 +340,7 @@
                  }
  
                  return chunk;
-@@ -231,7 +360,7 @@
+@@ -231,7 +368,7 @@
          }
      }
  
@@ -334,7 +349,7 @@
      {
          if (this.currentChunkLoader != null)
          {
-@@ -246,7 +375,7 @@
+@@ -246,7 +383,7 @@
          }
      }
  
@@ -343,7 +358,7 @@
      {
          if (this.currentChunkLoader != null)
          {
-@@ -254,15 +383,18 @@
+@@ -254,15 +391,18 @@
              {
                  p_73242_1_.lastSaveTime = this.worldObj.getTotalWorldTime();
                  this.currentChunkLoader.saveChunk(this.worldObj, p_73242_1_);
@@ -363,7 +378,7 @@
          }
      }
  
-@@ -277,6 +409,35 @@
+@@ -277,6 +417,35 @@
              if (this.currentChunkProvider != null)
              {
                  this.currentChunkProvider.populate(p_73153_1_, p_73153_2_, p_73153_3_);
@@ -399,7 +414,7 @@
                  GameRegistry.generateWorld(p_73153_2_, p_73153_3_, worldObj, currentChunkProvider, p_73153_1_);
                  chunk.setChunkModified();
              }
-@@ -286,11 +447,13 @@
+@@ -286,11 +455,13 @@
      public boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_)
      {
          int i = 0;
@@ -416,7 +431,7 @@
  
              if (p_73151_1_)
              {
-@@ -325,36 +488,73 @@
+@@ -325,36 +496,73 @@
      {
          if (!this.worldObj.levelSaving)
          {
@@ -509,7 +524,7 @@
              if (this.currentChunkLoader != null)
              {
                  this.currentChunkLoader.chunkTick();
-@@ -371,7 +571,7 @@
+@@ -371,7 +579,7 @@
  
      public String makeString()
      {
@@ -518,7 +533,7 @@
      }
  
      public List getPossibleCreatures(EnumCreatureType p_73155_1_, int p_73155_2_, int p_73155_3_, int p_73155_4_)
-@@ -386,8 +586,30 @@
+@@ -386,8 +594,53 @@
  
      public int getLoadedChunkCount()
      {
@@ -549,4 +564,27 @@
 +        return MinecraftServer.getServer().getTickCounter() - chunk.lastAccessedTick > CauldronConfig.chunkGCGracePeriod.getValue();
 +    }*/
 +    // Cauldron end
++    // KCauldron start
++    private final java.util.concurrent.locks.Lock generatorLock = new java.util.concurrent.locks.ReentrantLock();
++    
++    public boolean loadAsync(int x, int z, boolean generateOnRequest, kcauldron.ChunkCallback callback) {
++        Chunk chunk = getChunkIfLoaded(x, z);
++        if (chunk != null) {
++            callback.onChunkLoaded(chunk);
++        } else if (((net.minecraft.world.chunk.storage.AnvilChunkLoader) currentChunkLoader).chunkExists(worldObj, x, z)) {
++            net.minecraftforge.common.chunkio.ChunkIOExecutor.queueChunkLoad(this.worldObj,
++                    (net.minecraft.world.chunk.storage.AnvilChunkLoader) currentChunkLoader, this, x, z, callback);
++        } else if (generateOnRequest) {
++            callback.onChunkLoaded(originalLoadChunk(x, z));
++        } else {
++            return false;
++        }
++        return true;
++    }
++
++    public void loadAsync(int x, int z, kcauldron.ChunkCallback callback) {
++        if (!loadAsync(x, z, false, callback))
++            kcauldron.ChunkGenerator.INSTANCE.queueChunkGeneration(this, x, z, callback);
++    }
++    // KCauldron end
  }

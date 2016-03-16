@@ -36,6 +36,8 @@ public class KCauldronConfig extends ConfigBase {
             "common.fastLeavesDecay.minTickTime", 5, "Minimal amount of tick between block updates");
     public IntSetting commonFastLeavesDecayMaxTickTime = new IntSetting(this,
             "common.fastLeavesDecay.maxTickTime", 10, "Minimal amount of tick between block updates");
+    public IntSetting commonMaxChunkGenPerTick = new IntSetting(this,
+            "common.maxChunkGenPerTick", 1, "How many chunks generate during tick");
 
     public BoolSetting experimentalTileEntityListRecreation = new BoolSetting(this,
             "experimental.tileEntityListRecreation", false, "EXPERIMENTAL! Recreate list of TE each tick.");    
