@@ -6,7 +6,7 @@
 ## Building KCauldron
 * Checkout project
   * You can use IDE or clone from console:
-  `git clone https://gitlab.prok.pw/Prototik/KCauldron.git`
+  `git clone https://gitlab.prok.pw/KCauldron/KCauldron.git`
 * Init submodules
   * Since this project is merger of two other we need both.
   `git submodule update --init --recursive`
