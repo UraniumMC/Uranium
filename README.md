@@ -4,6 +4,7 @@
 [![Donate][donate_img]][donate_url][![Download KCauldron][download_img]][download_url]
 
 ## Building KCauldron
+* Ensure you are using Java JDK 8u101 or higher.
 * Checkout project
   * You can use IDE or clone from console:
   `git clone https://gitlab.prok.pw/KCauldron/KCauldron.git`
