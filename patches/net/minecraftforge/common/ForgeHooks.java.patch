@@ -65,7 +65,7 @@
          {
              // Let the client know the block still exists
              entityPlayer.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
-@@ -500,81 +514,137 @@
+@@ -500,81 +514,144 @@
          if (!(itemstack.getItem() instanceof ItemBucket)) // if not bucket
          {
              world.captureBlockSnapshots = true;
@@ -169,6 +169,8 @@
 +                List<net.minecraftforge.common.util.BlockSnapshot> blockSnapshots = (List<net.minecraftforge.common.util.BlockSnapshot>) world.capturedBlockSnapshots
 +                        .clone();
 +                world.capturedBlockSnapshots.clear();
++                List<net.minecraftforge.common.util.EntitySnapshot> tDropItemSnapshots=(List<net.minecraftforge.common.util.EntitySnapshot>)world.capturedItems.clone();
++                world.capturedItems.clear();
 +
 +                // make sure to set pre-placement item data for event
 +                itemstack.setItemDamage(meta);
@@ -202,13 +204,14 @@
 -                    if (newBlock != null && !(newBlock.hasTileEntity(metadata))) // Containers get placed automatically
 +                    flag = false; // cancel placement
 +                    // revert back all captured blocks
-+                    for (net.minecraftforge.common.util.BlockSnapshot blocksnapshot : blockSnapshots)
-                     {
--                        newBlock.onBlockAdded(world, blockX, blockY, blockZ);
-+                        world.restoringBlockSnapshots = true;
-+                        blocksnapshot.restore(true, false);
-+                        world.restoringBlockSnapshots = false;
-                     }
++                    for(int i=blockSnapshots.size();i>0;){
++                        world.restoringBlockSnapshots=true;
++                        blockSnapshots.get(--i).restore(true,false);
++                        world.restoringBlockSnapshots=false;
++                    }
++                    for(net.minecraftforge.common.util.EntitySnapshot sEntityItem : tDropItemSnapshots){
++                        sEntityItem.cancel();
++                    }
 +                }
 +                else
 +                {
@@ -216,9 +219,10 @@
 +                    itemstack.setItemDamage(newMeta);
 +                    itemstack.stackSize = newSize;
 +                    if (nbt != null)
-+                    {
+                     {
+-                        newBlock.onBlockAdded(world, blockX, blockY, blockZ);
 +                        itemstack.setTagCompound(newNBT);
-+                    }
+                     }
  
 -                    world.markAndNotifyBlock(blockX, blockY, blockZ, null, oldBlock, newBlock, updateFlag);
 +                    for (net.minecraftforge.common.util.BlockSnapshot blocksnapshot : blockSnapshots)
@@ -239,6 +243,9 @@
 +                        }
 +
 +                        world.markAndNotifyBlock(blockX, blockY, blockZ, null, oldBlock, newBlock, updateFlag);
++                    }
++                    for(net.minecraftforge.common.util.EntitySnapshot sEntityItem : tDropItemSnapshots){
++                        sEntityItem.apply();
 +                    }
 +                    player.addStat(StatList.objectUseStats[Item.getIdFromItem(itemstack.getItem())], 1);
                  }
