@@ -67,7 +67,7 @@ def buildInfo(String key) {
             buildInfoCached = new JsonSlurper().parse(new URL("https://api.prok.pw/repo/version/${group}/${name}"))
         } else {
             buildInfoCached = [
-                    nextBuildNumber: 'UNOFFICIAL',
+                    nextBuildNumber: '176',
                     version        : 'NONE'
             ]
         }
