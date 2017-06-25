@@ -5,15 +5,16 @@ import kcauldron.VersionParser
 
 buildscript {
     repositories {
+        mavenLocal()
+        mavenCentral()
         maven {
-            name 'prok'
-            url 'https://repo.prok.pw/'
+            name 'yumc'
+            url 'http://repo.yumc.pw/content/groups/public/'
         }
         maven {
             name 'forge'
             url 'http://files.minecraftforge.net/maven'
         }
-        mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
@@ -30,10 +31,11 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 repositories {
-    clear()
+    mavenLocal()
+    mavenCentral()
     maven {
-        name 'prok'
-        url 'https://repo.prok.pw/'
+        name 'yumc'
+        url 'http://repo.yumc.pw/content/groups/public/'
     }
     maven {
         name 'forge'
@@ -134,7 +136,7 @@ dependencies {
     libraries 'commons-lang:commons-lang:2.6'
     libraries 'org.avaje:ebean:2.7.3'
     libraries 'jline:jline:2.6'
-    libraries 'net.md-5:SpecialSource:1.7-SNAPSHOT'
+    libraries 'net.md-5:SpecialSource:1.7.3'
     libraries 'net.sourceforge.argo:argo:2.25'
     libraries 'org.fusesource.jansi:jansi:1.8'
     libraries 'com.googlecode.json-simple:json-simple:1.1'
@@ -145,6 +147,7 @@ dependencies {
     libraries 'pw.prok:KImagine:0.2.0@jar'
     libraries 'org.apache.httpcomponents:httpclient:4.4.1'
     libraries 'colt:colt:1.2.0'
+    libraries 'java3d:vecmath:1.3.1'
 }
 
 packageUniversal {
@@ -300,8 +303,8 @@ tasks.generateProjectCauldron << {
 repositories {
     clear()
     maven {
-        name 'prok'
-        url 'https://repo.prok.pw/'
+        name 'yumc'
+        url 'http://repo.yumc.pw/content/groups/public/'
     }
     maven {
         name 'forge'
