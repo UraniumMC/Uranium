@@ -36,6 +36,15 @@
          if (p_72785_2_ > this.entityViewDistance)
          {
              p_72785_2_ = this.entityViewDistance;
+@@ -193,7 +195,7 @@
+         {
+             if (this.trackedEntityIDs.containsItem(p_72785_1_.getEntityId()))
+             {
+-                throw new IllegalStateException("Entity is already tracked!");
++                return;
+             }
+ 
+             EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(p_72785_1_, p_72785_2_, p_72785_3_, p_72785_4_);
 @@ -223,7 +225,9 @@
              });
              p_72785_1_.addEntityCrashInfo(crashreportcategory);
