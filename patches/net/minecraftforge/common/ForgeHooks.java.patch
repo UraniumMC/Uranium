@@ -169,8 +169,8 @@
 +                List<net.minecraftforge.common.util.BlockSnapshot> blockSnapshots = (List<net.minecraftforge.common.util.BlockSnapshot>) world.capturedBlockSnapshots
 +                        .clone();
 +                world.capturedBlockSnapshots.clear();
-+                List<net.minecraftforge.common.util.EntitySnapshot> tDropItemSnapshots=(List<net.minecraftforge.common.util.EntitySnapshot>)world.capturedItems.clone();
-+                world.capturedItems.clear();
++                List<net.minecraftforge.common.util.EntitySnapshot> tDropItemSnapshots=(List<net.minecraftforge.common.util.EntitySnapshot>)world.capturedEntityItemSnapshots.clone();
++                world.capturedEntityItemSnapshots.clear();
 +
 +                // make sure to set pre-placement item data for event
 +                itemstack.setItemDamage(meta);
