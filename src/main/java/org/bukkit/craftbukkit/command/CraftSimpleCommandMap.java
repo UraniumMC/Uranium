@@ -5,12 +5,14 @@ import static org.bukkit.util.Java15Compat.Arrays_copyOfRange;
 import java.util.regex.Pattern;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.network.rcon.RConConsoleSource;
 
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 
@@ -49,6 +51,9 @@ public class CraftSimpleCommandMap extends SimpleCommandMap {
                 if (sender instanceof ConsoleCommandSender)
                 {
                     FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(this.vanillaConsoleSender, commandLine);
+                }
+                else if (sender instanceof RemoteConsoleCommandSender){
+                    FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(RConConsoleSource.instance, commandLine);
                 }
                 else FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(((CraftPlayer)sender).getHandle(), commandLine);
             }
