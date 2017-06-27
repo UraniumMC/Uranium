@@ -10,6 +10,8 @@ public class EntitySnapshot{
     public final Entity mEntity;
     public final SpawnReason mReason;
 
+    private boolean mApply=false;
+
     public EntitySnapshot(World pWorld,Entity pEntity,SpawnReason pReason){
         this.mWorld=pWorld;
         this.mEntity=pEntity;
@@ -17,7 +19,11 @@ public class EntitySnapshot{
     }
 
     public boolean apply(){
-        return this.mWorld.addEntity(this.mEntity,this.mReason);
+        if(!this.mApply){
+            this.mApply=true;
+            return this.mWorld.addEntity(this.mEntity,this.mReason);
+        }
+        return true;
     }
 
     public void cancel(){
