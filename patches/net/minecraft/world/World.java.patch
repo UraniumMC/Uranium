@@ -1079,7 +1079,7 @@
      public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
      {
 +        if (p_72866_1_.isDead) return;
-+        if(!CauldronHooks.canEntityTick(p_72866_1_,this)&&!p_72866_2_){
++        if(!CauldronHooks.canEntityTick(p_72866_1_,this)){
 +            p_72866_1_.ticksExisted++;
 +            p_72866_1_.inactiveTick();
 +            return;
