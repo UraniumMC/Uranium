@@ -46,6 +46,7 @@ public class CauldronHooks
     public static int tickingDimension = 0;
     public static ChunkCoordIntPair tickingChunk = null;
     public static Map<Class<? extends TileEntity>, TileEntityCache> tileEntityCache = new HashMap<Class<? extends TileEntity>, TileEntityCache>();
+    public static Map<Class<? extends Entity>, EntityCache> entityCache = new HashMap<Class<? extends Entity>, EntityCache>();
 
     private static TObjectLongHashMap<CollisionWarning> recentWarnings = new TObjectLongHashMap<CollisionWarning>();
 
@@ -299,6 +300,26 @@ public class CauldronHooks
             // Skip tick interval
             if (teCache.tickInterval > 0 && (world.getWorldInfo().getWorldTotalTime() % teCache.tickInterval == 0L))
             {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    
+    public static boolean canEntityTick(Entity pEntity,World world){
+        if(pEntity==null||world.tileentityConfig==null) return false;
+        if(MinecraftServer.entityConfig.skipEntityTicks.getValue()){
+            EntityCache eCache=entityCache.get(pEntity.getClass());
+            if(eCache==null){
+                String teConfigPath=pEntity.getClass().getName().replace(".","-");
+                teConfigPath=teConfigPath.replaceAll("[^A-Za-z0-9\\-]",""); // Fix up odd class names to prevent YAML errors
+                eCache=new EntityCache(pEntity.getClass(),world.getWorldInfo().getWorldName().toLowerCase(),teConfigPath,world.entityConfig.getInt(teConfigPath+".tick-interval",1));
+                entityCache.put(pEntity.getClass(),eCache);
+            }
+
+            // Skip tick interval
+            if(eCache.tickInterval>0&&(world.getWorldInfo().getWorldTotalTime()%eCache.tickInterval==0L)){
                 return true;
             }
             return false;
