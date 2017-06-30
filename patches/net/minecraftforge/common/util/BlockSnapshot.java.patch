@@ -1,0 +1,14 @@
+--- ../src-base/minecraft/net/minecraftforge/common/util/BlockSnapshot.java
++++ ../src-work/minecraft/net/minecraftforge/common/util/BlockSnapshot.java
+@@ -127,6 +127,11 @@
+     {
+         return world.getBlock(x, y, z);
+     }
++    
++    public int getCurrentBlockMeta() 
++    {
++        return world.getBlockMetadata(x, y, z);
++    }
+ 
+     public World getWorld() 
+     {
