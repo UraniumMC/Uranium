@@ -152,7 +152,6 @@
      int[] lightUpdateBlockList;
 +    // Cauldron start
 +    public boolean captureTreeGeneration = false;
-+    public ArrayList<EntityItem> capturedItems = new ArrayList<EntityItem>();
 +    public int entitiesTicked;
 +    public int tilesTicked;
 +    public CauldronWorldConfig cauldronConfig;
@@ -209,7 +208,8 @@
      public boolean restoringBlockSnapshots = false;
      public boolean captureBlockSnapshots = false;
      public ArrayList<net.minecraftforge.common.util.BlockSnapshot> capturedBlockSnapshots = new ArrayList<net.minecraftforge.common.util.BlockSnapshot>();
-+    public ArrayList<net.minecraftforge.common.util.EntitySnapshot> capturedEntityItemSnapshots=new ArrayList<net.minecraftforge.common.util.EntitySnapshot>();
++    public ArrayList<net.minecraftforge.common.util.EntitySnapshot> capturedEntitySnapshots=new ArrayList<net.minecraftforge.common.util.EntitySnapshot>();
++    public ArrayList<ItemStack> capturedItems=new ArrayList<ItemStack>();
  
      public BiomeGenBase getBiomeGenForCoords(final int p_72807_1_, final int p_72807_2_)
      {
@@ -631,7 +631,7 @@
 +            if(p_72838_1_ instanceof net.minecraft.entity.item.EntityItem&&this.restoringBlockSnapshots)
 +                return false;
 +            if(this.captureBlockSnapshots&&!(p_72838_1_ instanceof EntityPlayerMP)){
-+                this.capturedEntityItemSnapshots.add(new net.minecraftforge.common.util.EntitySnapshot(this,p_72838_1_,spawnReason));
++                this.capturedEntitySnapshots.add(new net.minecraftforge.common.util.EntitySnapshot(this,p_72838_1_,spawnReason));
 +                return true;
 +            }
 +        }

@@ -65,7 +65,7 @@
          {
              // Let the client know the block still exists
              entityPlayer.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
-@@ -500,81 +514,144 @@
+@@ -500,81 +514,157 @@
          if (!(itemstack.getItem() instanceof ItemBucket)) // if not bucket
          {
              world.captureBlockSnapshots = true;
@@ -169,8 +169,10 @@
 +                List<net.minecraftforge.common.util.BlockSnapshot> blockSnapshots = (List<net.minecraftforge.common.util.BlockSnapshot>) world.capturedBlockSnapshots
 +                        .clone();
 +                world.capturedBlockSnapshots.clear();
-+                List<net.minecraftforge.common.util.EntitySnapshot> tDropItemSnapshots=(List<net.minecraftforge.common.util.EntitySnapshot>)world.capturedEntityItemSnapshots.clone();
-+                world.capturedEntityItemSnapshots.clear();
++                List<net.minecraftforge.common.util.EntitySnapshot> tDropItemSnapshots=(List<net.minecraftforge.common.util.EntitySnapshot>)world.capturedEntitySnapshots.clone();
++                world.capturedEntitySnapshots.clear();
++                List<ItemStack> tCaptureItems=(List<ItemStack>)world.capturedItems.clone();
++                world.capturedItems.clear();
 +
 +                // make sure to set pre-placement item data for event
 +                itemstack.setItemDamage(meta);
@@ -246,6 +248,17 @@
 +                    }
 +                    for(net.minecraftforge.common.util.EntitySnapshot sEntityItem : tDropItemSnapshots){
 +                        sEntityItem.apply();
++                    }
++                    if(!tCaptureItems.isEmpty()){
++                        boolean tAdded=false;
++                        for(ItemStack sItem : tCaptureItems){
++                            if(!player.inventory.addItemStackToInventory(sItem)){
++                                world.spawnEntityInWorld(new EntityItem(world,player.posX,player.posY,player.posZ,sItem));
++                            }else{
++                                tAdded=true;
++                            }
++                        }
++                        if(tAdded) player.openContainer.detectAndSendChanges();
 +                    }
 +                    player.addStat(StatList.objectUseStats[Item.getIdFromItem(itemstack.getItem())], 1);
                  }
