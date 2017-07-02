@@ -1,4 +1,4 @@
-package net.minecraftforge.common.util;
+package cc.capture;
 
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import net.minecraft.entity.Entity;
