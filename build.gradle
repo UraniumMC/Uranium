@@ -54,11 +54,10 @@ minecraft {
     mainClass = 'cpw.mods.fml.relauncher.ServerLaunchWrapper'
     tweakClass = 'cpw.mods.fml.common.launcher.FMLTweaker'
     installerVersion = "1.4"
+
     srgExtra "PK: org/bukkit/craftbukkit org/bukkit/craftbukkit/v1_7_R4"
 }
-
 group = 'pw.prok'
-
 ext.buildInfoCached = null;
 
 def buildInfo(String key) {
@@ -105,7 +104,7 @@ version = "${mcVersion}-${forgeVersion}.${revision}"
 if (project.hasProperty('officialBuild')) println "Updated KCauldron version: ${version}"
 
 launch4j {
-    jreMinVersion = '1.6.0'
+    jreMinVersion = '1.7.0'
 }
 
 configurations {

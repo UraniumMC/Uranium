@@ -8,11 +8,12 @@
  import cpw.mods.fml.relauncher.Side;
  import cpw.mods.fml.relauncher.SideOnly;
  import java.io.BufferedReader;
-@@ -34,9 +35,21 @@
+@@ -34,9 +35,23 @@
  import net.minecraft.world.World;
  import net.minecraft.world.WorldSettings;
  import net.minecraft.world.WorldType;
 +import net.minecraft.world.chunk.storage.AnvilSaveConverter;
++import net.minecraftforge.common.MinecraftForge;
 +import net.minecraftforge.common.util.FakePlayer;
 +import net.minecraftforge.event.ForgeEventFactory;
  import org.apache.logging.log4j.LogManager;
@@ -24,13 +25,14 @@
 +
 +import org.bukkit.craftbukkit.LoggerOutputStream;
 +import org.bukkit.craftbukkit.SpigotTimings; // Spigot
++import org.bukkit.event.player.PlayerLoginEvent;
 +import org.bukkit.event.server.ServerCommandEvent;
 +// CraftBukkit end
 +
  @SideOnly(Side.SERVER)
  public class DedicatedServer extends MinecraftServer implements IServer
  {
-@@ -44,7 +57,7 @@
+@@ -44,7 +59,7 @@
      public final List pendingCommandList = Collections.synchronizedList(new ArrayList());
      private RConThreadQuery theRConThreadQuery;
      private RConThreadMain theRConThreadMain;
@@ -39,7 +41,7 @@
      private ServerEula field_154332_n;
      private boolean canSpawnStructures;
      private WorldSettings.GameType gameType;
-@@ -52,10 +65,13 @@
+@@ -52,10 +67,13 @@
      public static boolean allowPlayerLogins = false;
      private static final String __OBFID = "CL_00001784";
  
@@ -56,7 +58,7 @@
          {
              private static final String __OBFID = "CL_00001787";
              {
-@@ -82,31 +98,77 @@
+@@ -82,31 +100,77 @@
          };
      }
  
@@ -141,7 +143,7 @@
          field_155771_h.info("Starting minecraft server version 1.7.10");
  
          if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L)
-@@ -117,7 +179,7 @@
+@@ -117,7 +181,7 @@
          FMLCommonHandler.instance().onServerStart(this);
  
          field_155771_h.info("Loading properties");
@@ -150,7 +152,7 @@
          this.field_154332_n = new ServerEula(new File("eula.txt"));
  
          if (!this.field_154332_n.func_154346_a())
-@@ -172,6 +234,18 @@
+@@ -172,6 +236,18 @@
                  this.setServerPort(this.settings.getIntProperty("server-port", 25565));
              }
  
@@ -169,7 +171,7 @@
              field_155771_h.info("Generating keypair");
              this.setKeyPair(CryptManager.createNewKeyPair());
              field_155771_h.info("Starting Minecraft server on " + (this.getServerHostname().length() == 0 ? "*" : this.getServerHostname()) + ":" + this.getServerPort());
-@@ -180,7 +254,7 @@
+@@ -180,7 +256,7 @@
              {
                  this.func_147137_ag().addLanEndpoint(inetaddress, this.getServerPort());
              }
@@ -178,7 +180,7 @@
              {
                  field_155771_h.warn("**** FAILED TO BIND TO PORT!");
                  field_155771_h.warn("The exception was: {}", new Object[] {ioexception.toString()});
-@@ -196,10 +270,17 @@
+@@ -196,10 +272,17 @@
                  field_155771_h.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
              }
  
@@ -198,7 +200,7 @@
  
              if (!PreYggdrasilConverter.func_152714_a(this.settings))
              {
-@@ -208,7 +289,8 @@
+@@ -208,7 +291,8 @@
              else
              {
                  FMLCommonHandler.instance().onServerStarted();
@@ -208,7 +210,7 @@
                  long j = System.nanoTime();
  
                  if (this.getFolderName() == null)
-@@ -274,11 +356,36 @@
+@@ -274,11 +358,36 @@
                      this.theRConThreadMain.startThread();
                  }
  
@@ -225,7 +227,7 @@
 +                // CraftBukkit end
 +                // KCauldronX start
 +                for(FakePlayer fp:FakePlayer.fakePlayers){
-+                    PlayerEvent.PlayerLoggedInEvent join=new PlayerEvent.PlayerLoggedInEvent(fp);
++                    fp.callBukkitLoginEvent();
 +                }
 +                FakePlayer.fakePlayers=null;
 +                FakePlayer.BukkitInited=true;
@@ -245,7 +247,7 @@
      public boolean canStructuresSpawn()
      {
          return this.canSpawnStructures;
-@@ -364,11 +471,19 @@
+@@ -364,11 +473,19 @@
  
      public void executePendingCommands()
      {
