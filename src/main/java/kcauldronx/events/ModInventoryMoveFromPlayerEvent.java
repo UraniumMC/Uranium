@@ -6,13 +6,13 @@ import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.Inventory;
 
 /**
  * Created by xjboss on 2017/7/3.
  */
 public class ModInventoryMoveFromPlayerEvent extends InventoryMoveItemEvent {
-    public ModInventoryMoveFromPlayerEvent(IInventory sourceInventory, net.minecraft.item.ItemStack itemStack, PlayerInventory destinationInventory, boolean didSourceInitiate) {
-        super(new CraftInventory(sourceInventory), CraftItemStack.asCraftMirror(itemStack), new CraftInventoryPlayer((InventoryPlayer)destinationInventory), didSourceInitiate);
+    public ModInventoryMoveFromPlayerEvent(InventoryPlayer sourceInventory, net.minecraft.item.ItemStack itemStack, IInventory destinationInventory, boolean didSourceInitiate) {
+        super(new CraftInventoryPlayer(sourceInventory), CraftItemStack.asCraftMirror(itemStack),new CraftInventory(destinationInventory) , didSourceInitiate);
     }
 }
