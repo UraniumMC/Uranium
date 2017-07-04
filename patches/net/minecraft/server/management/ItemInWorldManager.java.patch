@@ -8,7 +8,7 @@
  import net.minecraft.item.ItemStack;
  import net.minecraft.item.ItemSword;
  import net.minecraft.network.play.server.S23PacketBlockChange;
-@@ -13,13 +14,32 @@
+@@ -13,13 +14,33 @@
  import net.minecraft.world.WorldSettings;
  import net.minecraftforge.common.ForgeHooks;
  import net.minecraftforge.common.MinecraftForge;
@@ -29,6 +29,7 @@
 +import org.bukkit.event.block.Action;
 +import org.bukkit.event.player.PlayerInteractEvent;
 +
++import cc.capture.type.CaptureBlock;
 +// CraftBukkit end
 +// Cauldron start
 +import net.minecraft.inventory.ContainerPlayer;
@@ -44,7 +45,7 @@
  public class ItemInWorldManager
  {
      /** Forge reach distance */
-@@ -135,15 +155,29 @@
+@@ -135,15 +156,29 @@
  
      public void onBlockClicked(int p_73074_1_, int p_73074_2_, int p_73074_3_, int p_73074_4_)
      {
@@ -77,7 +78,7 @@
              if (this.isCreative())
              {
                  if (!this.theWorld.extinguishFire((EntityPlayer)null, p_73074_1_, p_73074_2_, p_73074_3_, p_73074_4_))
-@@ -157,30 +191,56 @@
+@@ -157,30 +192,56 @@
                  float f = 1.0F;
                  Block block = this.theWorld.getBlock(p_73074_1_, p_73074_2_, p_73074_3_);
  
@@ -146,7 +147,7 @@
                  if (!block.isAir(theWorld, p_73074_1_, p_73074_2_, p_73074_3_) && f >= 1.0F)
                  {
                      this.tryHarvestBlock(p_73074_1_, p_73074_2_, p_73074_3_);
-@@ -269,6 +329,12 @@
+@@ -269,6 +330,12 @@
                  return false;
              }
              Block block = this.theWorld.getBlock(p_73084_1_, p_73084_2_, p_73084_3_);
@@ -159,7 +160,7 @@
              int l = this.theWorld.getBlockMetadata(p_73084_1_, p_73084_2_, p_73084_3_);
              this.theWorld.playAuxSFXAtEntity(this.thisPlayerMP, 2001, p_73084_1_, p_73084_2_, p_73084_3_, Block.getIdFromBlock(block) + (this.theWorld.getBlockMetadata(p_73084_1_, p_73084_2_, p_73084_3_) << 12));
              boolean flag = false;
-@@ -312,6 +378,7 @@
+@@ -312,6 +379,7 @@
      public boolean tryUseItem(EntityPlayer p_73085_1_, World p_73085_2_, ItemStack p_73085_3_)
      {
          int i = p_73085_3_.stackSize;
@@ -167,7 +168,7 @@
          int j = p_73085_3_.getItemDamage();
          ItemStack itemstack1 = p_73085_3_.useItemRightClick(p_73085_2_, p_73085_1_);
  
-@@ -350,57 +417,105 @@
+@@ -350,57 +418,111 @@
  
      public boolean activateBlockOrUseItem(EntityPlayer p_73078_1_, World p_73078_2_, ItemStack p_73078_3_, int p_73078_4_, int p_73078_5_, int p_73078_6_, int p_73078_7_, float p_73078_8_, float p_73078_9_, float p_73078_10_)
      {
@@ -218,10 +219,16 @@
 -                result = event.useItem != Event.Result.ALLOW;
 +                Item item = (p_73078_3_ != null ? p_73078_3_.getItem() : null);
 +                // try to use an item in hand before activating a block. Used for items such as IC2's wrench.
-+                if (item != null && item.onItemUseFirst(p_73078_3_, p_73078_1_, p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_7_, p_73078_8_, p_73078_9_, p_73078_10_))
++                if (item != null)
 +                {
-+                    if (p_73078_3_.stackSize <= 0) ForgeEventFactory.onPlayerDestroyItem(thisPlayerMP, p_73078_3_);
++                    CaptureBlock tCapture=p_73078_2_.mCapture.startCapture(thisPlayerMP,p_73078_3_);
++                    boolean tResult=item.onItemUseFirst(p_73078_3_,p_73078_1_,p_73078_2_,p_73078_4_,p_73078_5_,p_73078_6_,p_73078_7_,p_73078_8_,p_73078_9_,p_73078_10_);
++                    if(!tCapture.endCapture()) return false;
++
++                    if(tResult){
++                        if(p_73078_3_.stackSize<=0) ForgeEventFactory.onPlayerDestroyItem(thisPlayerMP,p_73078_3_);
 +                        return true;
++                    }
 +                }
              }
 -        }

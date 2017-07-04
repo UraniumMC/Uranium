@@ -59,6 +59,10 @@ public class CauldronConfig extends ConfigBase
     // Plug-in options
     public final BoolSetting remapPluginFile = new BoolSetting(this, "plugin-settings.default.remap-plugin-file", false, "Remap the plugin file (dev)");
 
+    // Block Monitor
+    public final BoolSetting modPacketPlace = new BoolSetting(this, "block-monitor.mod-packet-place", true, "monitor block place on mod packet");
+    public final BoolSetting modPacketInteract = new BoolSetting(this, "block-monitor.mod-packet-interact", false, "monitor block interact on mod packet");
+    
     /* ======================================================================== */
 
     public CauldronConfig(String fileName, String commandName)
@@ -100,6 +104,9 @@ public class CauldronConfig extends ConfigBase
         settings.put(userLogin.path, userLogin);
         settings.put(allowTntPunishment.path, allowTntPunishment);
         settings.put(maxPlayersVisible.path, maxPlayersVisible);
+        
+        settings.put(modPacketPlace.path,modPacketPlace);
+        settings.put(modPacketInteract.path,modPacketInteract);
         load();
     }
 
