@@ -1,13 +1,13 @@
-**[Join KCauldron's Discord!](https://discord.gg/0nuu0DLm3WJq1Z23)**
-# KCauldron
-### KCauldron - continuation of Cauldron minecraft server
-[![Donate][donate_img]][donate_url][![Download KCauldron][download_img]][download_url]
+**[加入KCauldronX交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
+# KCauldronX
+### KCauldronX - continuation of KCauldron minecraft server
+![Donate][donate_img] [![Download KCauldronX][download_img]][download_url]
 
-## Building KCauldron
+## Building KCauldronX
 * Ensure you are using Java JDK 8u101 or higher.
 * Checkout project
   * You can use IDE or clone from console:
-  `git clone https://gitlab.prok.pw/KCauldron/KCauldron.git`
+  `git clone https://git.xjboss.net/KC-RELOADED/KCauldronX.git`
 * Init submodules
   * Since this project is merger of two other we need both.
   `git submodule update --init --recursive`
@@ -32,13 +32,12 @@ If you're once checkout source - you not need to do it again
   * Remove all unnecessary plugins and mods
   * Reset all configs to default
   If bug present - mod compatibility issue
-* If you're using beta-release of KCauldron - check on latest stable
-  * All versions situated [there](https://repo.prok.pw/pw/prok/KCauldron/?C=M&O=D)
-* If bug still present - KCauldron issue
+* If you're using beta-release of KCauldronX - check on latest stable
+  * All versions situated [there](https://ci.xjboss.net/job/KCauldronX/)
+* If bug still present - KCauldronX issue
   * Make sure that similar issue not exists already
-  * Please fill [issue form](https://gitlab.prok.pw/Prototik/KCauldron/issues/new) else
+  * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/KCauldronX/issues/new) else
 
-[donate_url]: https://prok.pw/donate.html
 [donate_img]: https://prok.pw/donate.png
-[download_url]: https://prok.pw/downloads.html#pw.prok:KCauldron
+[download_url]: https://ci.xjboss.net/job/KCauldronX/
 [download_img]: https://prok.pw/download.png
