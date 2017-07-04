@@ -10,6 +10,7 @@ import cc.Location;
 import cc.capture.EntitySnapshot;
 import cc.capture.ItemSnapshot;
 import cc.capture.WorldCapture;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -127,6 +128,18 @@ public class CaptureBlock extends ACapture{
             }
             tResult=false;
         }else{
+            for(BlockSnapshot tSnapshot : this.mCapturedBlocks){
+                int tBlockX=tSnapshot.x;
+                int tBlockY=tSnapshot.y;
+                int tBlockZ=tSnapshot.z;
+                int tMetadata=this.mWorld.getBlockMetadata(tBlockX,tBlockY,tBlockZ);
+                Block tOldBlock=tSnapshot.replacedBlock;
+                Block tNewBlock=this.mWorld.getBlock(tBlockX,tBlockY,tBlockZ);
+                if(tNewBlock!=null&&!(tNewBlock.hasTileEntity(tMetadata))){
+                    tNewBlock.onBlockAdded(this.mWorld,tBlockX,tBlockY,tBlockZ);
+                }
+                this.mWorld.markAndNotifyBlock(tBlockX,tBlockY,tBlockZ,null,tOldBlock,tNewBlock,tSnapshot.flag);
+            }
             for(EntitySnapshot sSnapshot : this.mCapturedEntitys){
                 sSnapshot.apply();
             }
