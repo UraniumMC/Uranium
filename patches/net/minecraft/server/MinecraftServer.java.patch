@@ -741,13 +741,14 @@
                      worldserver.addWorldInfoToCrashReport(crashreport);
                      throw new ReportedException(crashreport);
                  }
-@@ -645,10 +978,12 @@
+@@ -645,10 +978,13 @@
                  FMLCommonHandler.instance().onPostWorldTick(worldserver);
                  this.theProfiler.endSection();
                  this.theProfiler.startSection("tracker");
 +                worldserver.timings.tracker.startTiming(); // Spigot
                  worldserver.getEntityTracker().updateTrackedEntities();
 +                worldserver.timings.tracker.stopTiming(); // Spigot
++                worldserver.mCapture.clearAllData();
                  this.theProfiler.endSection();
                  this.theProfiler.endSection();
 -            }
@@ -755,7 +756,7 @@
  
              worldTickTimes.get(id)[this.tickCounter % 100] = System.nanoTime() - j;
          }
-@@ -656,15 +991,21 @@
+@@ -656,15 +992,21 @@
          this.theProfiler.endStartSection("dim_unloading");
          DimensionManager.unloadWorlds(worldTickTimes);
          this.theProfiler.endStartSection("connection");
@@ -777,7 +778,7 @@
  
          this.theProfiler.endSection();
      }
-@@ -699,6 +1040,13 @@
+@@ -699,6 +1041,13 @@
  
      public WorldServer worldServerForDimension(int p_71218_1_)
      {
@@ -791,7 +792,7 @@
          WorldServer ret = DimensionManager.getWorld(p_71218_1_);
          if (ret == null)
          {
-@@ -784,13 +1132,14 @@
+@@ -784,13 +1133,14 @@
  
      public List getPossibleCompletions(ICommandSender p_71248_1_, String p_71248_2_)
      {
@@ -810,7 +811,7 @@
  
              if (list != null)
              {
-@@ -798,40 +1147,25 @@
+@@ -798,40 +1148,25 @@
  
                  while (iterator.hasNext())
                  {
@@ -859,7 +860,7 @@
      }
  
      public static MinecraftServer getServer()
-@@ -1034,7 +1368,7 @@
+@@ -1034,7 +1369,7 @@
  
      public boolean isServerInOnlineMode()
      {
@@ -868,7 +869,7 @@
      }
  
      public void setOnlineMode(boolean p_71229_1_)
-@@ -1124,7 +1458,7 @@
+@@ -1124,7 +1459,7 @@
  
      public NetworkSystem func_147137_ag()
      {
@@ -877,7 +878,7 @@
      }
  
      @SideOnly(Side.CLIENT)
-@@ -1259,8 +1593,11 @@
+@@ -1259,8 +1594,11 @@
      {
          Bootstrap.func_151354_b();
  
@@ -889,7 +890,7 @@
              boolean flag = true;
              String s = null;
              String s1 = ".";
-@@ -1356,16 +1693,34 @@
+@@ -1356,16 +1694,34 @@
              {
                  dedicatedserver.setGuiEnabled();
              }
@@ -930,7 +931,7 @@
          }
          catch (Exception exception)
          {
-@@ -1400,15 +1755,70 @@
+@@ -1400,15 +1756,70 @@
      @SideOnly(Side.SERVER)
      public String getPlugins()
      {
@@ -1006,7 +1007,7 @@
      }
  
      @SideOnly(Side.SERVER)
-@@ -1455,9 +1865,213 @@
+@@ -1455,9 +1866,213 @@
          return this.serverStopped;
      }
  
