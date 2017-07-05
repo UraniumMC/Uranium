@@ -24,7 +24,6 @@ public class ItemSnapshot{
     public boolean apply(){
         if(!this.mApply){
             this.mApply=true;
-            this.mPlayer.inventory.addItemStackToInventory(this.mItem);
 
             if(!this.mPlayer.inventory.addItemStackToInventory(this.mItem)){
                 this.mPlayer.worldObj.spawnEntityInWorld(
