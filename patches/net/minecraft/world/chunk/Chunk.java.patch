@@ -261,6 +261,24 @@
              this.worldObj.unloadEntities(this.entityLists[i]);
          }
          MinecraftForge.EVENT_BUS.post(new ChunkEvent.Unload(this));
+@@ -961,7 +1107,7 @@
+             {
+                 Entity entity1 = (Entity)list1.get(l);
+ 
+-                if (entity1 != p_76588_1_ && entity1.boundingBox.intersectsWith(p_76588_2_) && (p_76588_4_ == null || p_76588_4_.isEntityApplicable(entity1)))
++                if (!entity1.isDead && entity1 != p_76588_1_ && entity1.boundingBox.intersectsWith(p_76588_2_) && (p_76588_4_ == null || p_76588_4_.isEntityApplicable(entity1)))
+                 {
+                     p_76588_3_.add(entity1);
+                     Entity[] aentity = entity1.getParts();
+@@ -998,7 +1144,7 @@
+             {
+                 Entity entity = (Entity)list1.get(l);
+ 
+-                if (p_76618_1_.isAssignableFrom(entity.getClass()) && entity.boundingBox.intersectsWith(p_76618_2_) && (p_76618_4_ == null || p_76618_4_.isEntityApplicable(entity)))
++                if (!entity.isDead && p_76618_1_.isAssignableFrom(entity.getClass()) && entity.boundingBox.intersectsWith(p_76618_2_) && (p_76618_4_ == null || p_76618_4_.isEntityApplicable(entity)))
+                 {
+                     p_76618_3_.add(entity);
+                 }
 @@ -1015,7 +1161,7 @@
                  return true;
              }
