@@ -41,7 +41,7 @@ public class CaptureTree extends ACapture{
         this.markHandled();
 
         boolean tResult=true;
-        if(this.mCapturedBlocks.size()>0)
+        if(this.mCapturedBlocks.isEmpty())
             return true;
 
         TreeType tType=BlockSapling.treeType;
