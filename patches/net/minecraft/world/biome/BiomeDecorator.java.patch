@@ -23,6 +23,15 @@
      private static final String __OBFID = "CL_00000164";
  
      public BiomeDecorator()
+@@ -94,7 +103,7 @@
+     {
+         if (this.currentWorld != null)
+         {
+-            throw new RuntimeException("Already decorating!!");
++            return;
+         }
+         else
+         {
 @@ -194,7 +203,7 @@
          {
              k = this.chunk_X + this.randomGenerator.nextInt(16) + 8;
