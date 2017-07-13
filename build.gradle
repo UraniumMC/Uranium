@@ -296,34 +296,37 @@ publishing {
     }
 }
 
-tasks.generateProjectCauldron << {
-    def file = new File('eclipse/cauldron/build.gradle')
-    file.append('''
-repositories {
-    clear()
-    maven {
-        name 'yumc'
-        url 'http://repo.yumc.pw/content/groups/public/'
-    }
-    maven {
-        name 'forge'
-        url 'http://files.minecraftforge.net/maven'
-    }
-    maven {
-        name 'minecraft'
-        url 'https://libraries.minecraft.net/'
-    }
-    mavenCentral()
-}
-dependencies {
-''')
-    configurations.libraries.resolvedConfiguration.resolvedArtifacts.collect { it.moduleVersion.id }.each { module ->
-        if (['net.minecraft:server:', 'org.ow2.asm:asm-all'].findAll { (module as String).startsWith it }.size() > 0) {
-            return
+tasks.generateProjectCauldron {
+    doLast {
+        def file = new File('eclipse/cauldron/build.gradle')
+        file.append('''
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name 'yumc'
+            url 'http://repo.yumc.pw/content/groups/public/'
         }
-        file.append("    compile '${module}'\n")
+        maven {
+            name 'forge'
+            url 'http://files.minecraftforge.net/maven'
+        }
+        maven {
+            name 'minecraft'
+            url 'https://libraries.minecraft.net/'
+        }
+        
     }
-    file.append('}')
+    dependencies {
+    ''')
+        configurations.libraries.resolvedConfiguration.resolvedArtifacts.collect { it.moduleVersion.id }.each { module ->
+            if (['net.minecraft:server:', 'org.ow2.asm:asm-all'].findAll { (module as String).startsWith it }.size() > 0) {
+                return
+            }
+            file.append("    compile '${module}'\n")
+        }
+        file.append('}')
+    }
 }
 
 task resolveAllDependencies {
