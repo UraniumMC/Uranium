@@ -2507,17 +2507,32 @@
              }
              finally
              {
-@@ -1135,19 +2048,18 @@
+@@ -1128,26 +2041,26 @@
  
-                     if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
-                     {
+                     itemstack1 = this.playerEntity.inventory.getCurrentItem();
+ 
+-                    if (itemstack1 == null)
+-                    {
+-                        return;
++                    if(itemstack1!=null&&itemstack.getItem()==Items.writable_book
++                            &&itemstack.getItem()==itemstack1.getItem()
++                            &&itemstack.hasTagCompound()
++                            &&itemstack.getTagCompound().hasKey("author")
++                            &&itemstack.getTagCompound().hasKey("title")){
++                        ItemStack tNewItem=itemstack1.copy();
++                        tNewItem.setTagInfo("author",itemstack.getTagCompound().getTag("author"));
++                        tNewItem.setTagInfo("title",itemstack.getTagCompound().getTag("title"));
++                        CraftEventFactory.handleEditBookEvent(playerEntity,tNewItem);
+                     }
+ 
+-                    if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
+-                    {
 -                        itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));
 -                        itemstack1.setTagInfo("title", new NBTTagString(itemstack.getTagCompound().getString("title")));
 -                        itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
 -                        itemstack1.func_150996_a(Items.written_book);
-+                        CraftEventFactory.handleEditBookEvent(playerEntity, itemstack); // CraftBukkit
-                     }
- 
+-                    }
+-
                      return;
                  }
              }
@@ -2533,7 +2548,7 @@
              }
              finally
              {
-@@ -1174,9 +2086,12 @@
+@@ -1174,9 +2087,12 @@
                          ((ContainerMerchant)container).setCurrentRecipeIndex(i);
                      }
                  }
@@ -2547,7 +2562,7 @@
                  }
              }
              else if ("MC|AdvCdm".equals(p_147349_1_.func_149559_c()))
-@@ -1222,9 +2137,12 @@
+@@ -1222,9 +2138,12 @@
                              this.playerEntity.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", new Object[] {s1}));
                          }
                      }
@@ -2562,7 +2577,7 @@
                      }
                      finally
                      {
-@@ -1257,9 +2175,12 @@
+@@ -1257,9 +2176,12 @@
                              tileentitybeacon.markDirty();
                          }
                      }
@@ -2577,7 +2592,7 @@
                      }
                  }
              }
-@@ -1281,50 +2202,58 @@
+@@ -1281,50 +2203,58 @@
                      containerrepair.updateItemName("");
                  }
              }
