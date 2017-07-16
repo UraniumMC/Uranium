@@ -46,7 +46,17 @@
      private static final String __OBFID = "CL_00000043";
  
      private cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate;
-@@ -126,12 +135,14 @@
+@@ -95,6 +104,9 @@
+ 
+     public ItemStack splitStack(int p_77979_1_)
+     {
++        if(p_77979_1_<=0||p_77979_1_>this.stackSize)
++            return new ItemStack((Item)null,0,0);
++        
+         ItemStack itemstack = new ItemStack(this.field_151002_e, p_77979_1_, this.itemDamage);
+ 
+         if (this.stackTagCompound != null)
+@@ -126,12 +138,14 @@
      public boolean tryPlaceItemIntoWorld(EntityPlayer p_77943_1_, World p_77943_2_, int p_77943_3_, int p_77943_4_, int p_77943_5_, int p_77943_6_, float p_77943_7_, float p_77943_8_, float p_77943_9_)
      {
          if (!p_77943_2_.isRemote) return net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(this, p_77943_1_, p_77943_2_, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_);
@@ -62,7 +72,7 @@
  
          return flag;
      }
-@@ -143,7 +154,9 @@
+@@ -143,7 +157,9 @@
  
      public ItemStack useItemRightClick(World p_77957_1_, EntityPlayer p_77957_2_)
      {
@@ -73,7 +83,7 @@
      }
  
      public ItemStack onFoodEaten(World p_77950_1_, EntityPlayer p_77950_2_)
-@@ -227,8 +240,22 @@
+@@ -227,8 +243,22 @@
          return getItem().getMaxDamage(this);
      }
  
@@ -96,7 +106,7 @@
          if (!this.isItemStackDamageable())
          {
              return false;
-@@ -250,6 +277,23 @@
+@@ -250,6 +280,23 @@
  
                  p_96631_1_ -= k;
  
@@ -120,7 +130,7 @@
                  if (p_96631_1_ <= 0)
                  {
                      return false;
-@@ -267,7 +311,7 @@
+@@ -267,7 +314,7 @@
          {
              if (this.isItemStackDamageable())
              {
@@ -129,7 +139,7 @@
                  {
                      p_77972_2_.renderBrokenItemStack(this);
                      --this.stackSize;
-@@ -288,6 +332,12 @@
+@@ -288,6 +335,12 @@
                          this.stackSize = 0;
                      }
  
@@ -142,7 +152,7 @@
                      this.itemDamage = 0;
                  }
              }
-@@ -419,6 +469,7 @@
+@@ -419,6 +472,7 @@
  
      public void setTagCompound(NBTTagCompound p_77982_1_)
      {
@@ -150,7 +160,7 @@
          this.stackTagCompound = p_77982_1_;
      }
  
-@@ -768,4 +819,12 @@
+@@ -768,4 +822,12 @@
  
          return ichatcomponent;
      }
