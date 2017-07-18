@@ -1,29 +1,30 @@
 package org.spigotmc;
 
-import com.google.common.base.Throwables;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.google.common.base.Throwables;
+
+import gnu.trove.map.hash.TObjectIntHashMap;
+import net.minecraft.server.MinecraftServer;
 
 public class SpigotConfig
 {
 
-    private static final File CONFIG_FILE = new File( "spigot.yml" );
+    private static final File CONFIG_FILE = new File(MinecraftServer.serverConfigDir, "spigot.yml" );
     private static final String HEADER = "This is the main configuration file for Spigot.\n"
             + "As you can see, there's tons to configure. Some options may impact gameplay, so use\n"
             + "with caution, and make sure you know what each option does before configuring.\n"
