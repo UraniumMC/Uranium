@@ -21,6 +21,7 @@ public class DefaultUpdateCallback implements IVersionCheckCallback {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (hasPermission(player)) {
+            /*
             if (KCauldron.isLegacy()) {
                 player.sendMessage(ChatColor.YELLOW + "We're running on legacy version on KCauldron, please update your version");
             }            
@@ -30,6 +31,7 @@ public class DefaultUpdateCallback implements IVersionCheckCallback {
             if (mHasUpdate) {
                 sendUpdate(player);
             }
+            */
         }
     }
 
