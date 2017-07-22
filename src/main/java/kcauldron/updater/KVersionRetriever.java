@@ -14,7 +14,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 public class KVersionRetriever implements Runnable, UncaughtExceptionHandler {
     private static final boolean DEBUG;
     private static final KLog sLogger;
@@ -76,7 +75,7 @@ public class KVersionRetriever implements Runnable, UncaughtExceptionHandler {
             }
         }
     }
-
+    @Deprecated
     private void check() {
         try {
             HttpUriRequest request = RequestBuilder

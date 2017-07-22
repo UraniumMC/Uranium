@@ -38,8 +38,8 @@ public class KCauldronCommand extends Command {
         super(NAME);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("/%s check - Check to update\n", NAME));
-        builder.append(String.format("/%s update [version] - Update to specified or latest version\n", NAME));
+        //builder.append(String.format("/%s check - Check to update\n", NAME));
+        //builder.append(String.format("/%s update [version] - Update to specified or latest version\n", NAME));
         builder.append(String.format("/%s tps - Show tps statistics\n", NAME));
         builder.append(String.format("/%s restart - Restart server\n", NAME));
         builder.append(String.format("/%s dump - Dump statistics into kcauldron.dump file\n", NAME));
@@ -80,10 +80,14 @@ public class KCauldronCommand extends Command {
         if ("check".equals(action)) {
             if (!testPermission(sender, CHECK))
                 return true;
+            /*
             sender.sendMessage(ChatColor.GREEN + "Initiated version check...");
             KVersionRetriever.startServer(new CommandSenderUpdateCallback(sender), false);
+            */
         } else if ("update".equals(action)) {
+            /*
             KCauldronUpdater.initUpdate(sender, args.length > 1 ? args[1] : null);
+            */
         } else if ("tps".equals(action)) {
             if (!testPermission(sender, TPS))
                 return true;
