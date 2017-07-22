@@ -114,7 +114,7 @@ configurations {
 }
 
 dependencies {
-    bootstrap 'pw.prok:KBootstrap:0.2.+'
+    bootstrap 'pw.prok:KBootstrapX:0.2.+'
 
     libraries 'net.minecraft:launchwrapper:1.12@jar'
     libraries 'org.ow2.asm:asm-all:5.0.3'
