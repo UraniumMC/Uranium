@@ -29,7 +29,7 @@ public class KCauldron {
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
                 manifest.load(url.openStream());
-                String version = manifest.getProperty("KCauldron-Version");
+                String version = manifest.getProperty("KCauldronX-Version");
                 if (version != null) {
                     String path = url.getPath();
                     String jarFilePath = path.substring(path.indexOf(":") + 1,
@@ -38,11 +38,11 @@ public class KCauldron {
                     sServerLocation = new File(jarFilePath);
 
                     sCurrentVersion = version;
-                    sGroup = manifest.getProperty("KCauldron-Group");
-                    sBranch = manifest.getProperty("KCauldron-Branch");
-                    sChannel = manifest.getProperty("KCauldron-Channel");
-                    sLegacy = Boolean.parseBoolean(manifest.getProperty("KCauldron-Legacy"));
-                    sOfficial = Boolean.parseBoolean(manifest.getProperty("KCauldron-Official"));
+                    sGroup = manifest.getProperty("KCauldronX-Group");
+                    sBranch = manifest.getProperty("KCauldronX-Branch");
+                    sChannel = manifest.getProperty("KCauldronX-Channel");
+                    sLegacy = Boolean.parseBoolean(manifest.getProperty("KCauldronX-Legacy"));
+                    sOfficial = Boolean.parseBoolean(manifest.getProperty("KCauldronX-Official"));
                     break;
                 }
                 manifest.clear();
