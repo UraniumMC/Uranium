@@ -54,8 +54,10 @@ minecraft {
     mainClass = 'cpw.mods.fml.relauncher.ServerLaunchWrapper'
     tweakClass = 'cpw.mods.fml.common.launcher.FMLTweaker'
     installerVersion = "1.4"
-
     srgExtra "PK: org/bukkit/craftbukkit org/bukkit/craftbukkit/v1_7_R4"
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
 }
 group = 'pw.yumc'
 ext.buildInfoCached = null;
@@ -96,13 +98,12 @@ def gitInfo(String key) {
     }
     return key ? gitInfoCached[key] : gitInfoCached;
 }
-ext.sys= System.properties
 ext.mcVersion = "1.7.10"
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
-ext.build = sys.hasProperty('BUILD_NUMBER') ? sys.getProperty('BUILD_NUMBER') : "Unkonwn"
+ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
 ext.kcx_version = 1
 version = "${mcVersion}-${forgeVersion}-${kcx_version}.${build}"
-if (project.hasProperty('officialBuild')) println "Updated KCauldron version: ${version}"
+if (System.getenv('officialBuild')!=null) println "Updated KCauldron version: ${version}"
 
 launch4j {
     jreMinVersion = '1.7.0'
@@ -176,7 +177,7 @@ def generateManifest(boolean legacy = false) {
             'KCauldronX-Channel'     : project.name,
             'KCauldronX-Version'     : project.version,
             'KCauldronX-Legacy'      : legacy,
-            'KCauldronX-Official'    : sys.hasProperty('officialBuild'),
+            'KCauldronX-Official'    : System.getenv('officialBuild')!=null,
             'Implementation-Vendor' : 'Prototik',
             'Implementation-Title'  : project.name,
             'Implementation-Version': '1.7.10-R0.1-SNAPSHOT',
@@ -335,7 +336,4 @@ task resolveAllDependencies {
     doLast {
         configurations.each { it.resolve() }
     }
-}
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
 }
