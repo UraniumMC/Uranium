@@ -177,7 +177,7 @@ def generateManifest(boolean legacy = false) {
             'KCauldronX-Channel'     : project.name,
             'KCauldronX-Version'     : project.version,
             'KCauldronX-Legacy'      : legacy,
-            'KCauldronX-Official'    : System.getenv('officialBuild')!=null,
+            'KCauldronX-Official'    : System.getProperty('officialBuild')!=null,
             'Implementation-Vendor' : 'Prototik',
             'Implementation-Title'  : project.name,
             'Implementation-Version': '1.7.10-R0.1-SNAPSHOT',
