@@ -334,3 +334,6 @@ task resolveAllDependencies {
         configurations.each { it.resolve() }
     }
 }
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
