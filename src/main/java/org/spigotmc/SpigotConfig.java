@@ -43,7 +43,6 @@ public class SpigotConfig
     static Map<String, Command> commands;
     /*========================================================================*/
     private static Metrics metrics;
-    private static KCXStatistics yumc_statistics;
 
     public static void init()
     {
@@ -75,10 +74,6 @@ public class SpigotConfig
             {
                 Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start metrics service", ex );
             }
-        }
-        if(yumc_statistics==null){
-            yumc_statistics=new KCXStatistics();
-            yumc_statistics.start();
         }
     }
 
