@@ -27,6 +27,7 @@
  */
 package org.spigotmc;
 
+import kcauldron.KCauldron;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -343,10 +344,10 @@ public class Metrics {
      */
     private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
-        String pluginName = "Spigot";
+        String pluginName = "KCauldronX";
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = (Metrics.class.getPackage().getImplementationVersion() != null) ? Metrics.class.getPackage().getImplementationVersion() : "unknown";
-        String serverVersion = Bukkit.getVersion();
+        String serverVersion = KCauldron.getCurrentVersion();
         int playersOnline = Bukkit.getServer().getOnlinePlayers().size();
 
         // END server software specific section -- all code below does not use any code outside of this class / Java
