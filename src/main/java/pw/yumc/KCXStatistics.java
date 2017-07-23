@@ -19,10 +19,12 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import kcauldron.KCauldron;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -76,11 +78,6 @@ public class KCXStatistics {
      * 线程任务
      */
     private volatile Thread task = null;
-
-    /**
-     * 统计线程
-     */
-    private volatile StatisticsTimer timer = null;
 
     /**
      * 插件使用数据统计
@@ -195,9 +192,8 @@ public class KCXStatistics {
         if (task != null) {
             return true;
         }
-        timer = new StatisticsTimer();
         // 开启TPS统计线程
-        MinecraftForge.EVENT_BUS.register(timer);
+        //MinecraftForge.EVENT_BUS.register(timer);
         // 开启发送数据线程
         task = new Thread(new Runnable() {
             @Override
@@ -236,7 +232,7 @@ public class KCXStatistics {
         data.put("guid", guid);
         data.put("server_version", Bukkit.getVersion());
         data.put("server_port", Bukkit.getServer().getPort());
-        data.put("server_tps", timer.getAverageTPS());
+        data.put("server_tps", FMLCommonHandler.instance().getMinecraftServerInstance().recentTps[1]);
         data.put("plugin_version", KCauldron.getCurrentVersion());
         data.put("players_online", getOnlinePlayerNumber());
         data.put("os_name", System.getProperty("os.name"));
@@ -256,41 +252,5 @@ public class KCXStatistics {
         // 发送数据
         final JSONObject result = (JSONObject) JSONValue.parse(postData(url, jsondata));
         print("Plugin: " + pluginname + " Recover Data From CityCraft Data Center: " + result.get("info"));
-    }
-    public class StatisticsTimer implements Runnable {
-        private LinkedList<Double> history = new LinkedList();
-        private transient long lastPoll = System.nanoTime();
-        int t=0;
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public void onServerTick(TickEvent.ServerTickEvent event) {
-            if(++t==20){
-                t=0;
-                run();
-            }
-        }
-        /**
-         * @return 获得TPS
-         */
-        public double getAverageTPS() {
-            double avg = 0.0D;
-            for (Double f : history) {
-                avg += f;
-            }
-            return avg / history.size();
-        }
-
-        @Override
-        public void run() {
-            long startTime = System.nanoTime();
-            long timeSpent = (startTime - lastPoll) / 1000;
-            if (history.size() > 10) {
-                history.removeFirst();
-            }
-            double ttps = 2.0E7D / (timeSpent == 0 ? 1 : timeSpent);
-            if (ttps <= 21.0D) {
-                history.add(ttps);
-            }
-            lastPoll = startTime;
-        }
     }
 }
