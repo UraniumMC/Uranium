@@ -33,7 +33,7 @@ class InstallBundle extends DefaultTask {
         installLocation.deleteDir()
         installLocation.mkdirs()
         new File(installLocation, "README.txt").withWriter {
-            def String jarPath = 'bin/' << (project.group as String).replace('.', File.separator) << File.separator << project.name << File.separator << project.version << File.separator << project.name << '-' << project.version << '.jar'
+            def String jarPath = 'libraries' << File.separator << (project.group as String).replace('.', File.separator) << File.separator << project.name << File.separator << project.version << File.separator << project.name << '-' << project.version << '.jar'
 
             it << '''KCauldron installation guide
 
@@ -67,7 +67,8 @@ If you are not yet convinced and want to use bundles instead KBootstrap... Meh, 
                 classpath cp
                 main bootstrapMain
                 args '--serverDir', installLocation.canonicalPath,
-                        '--installServer', serverJar.canonicalFile
+                        '--installServer', serverJar.canonicalFile,
+                        '--binDir', 'libraries'
             }
             if (result.exitValue == 0) return
         }
