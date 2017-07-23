@@ -197,10 +197,7 @@ tasks.packageUniversal {
     manifest.attributes(generateManifest(true))
 }
 
-task jar(type: Jar, dependsOn: packageUniversal) {
-    destinationDir file("${buildDir}/distributions")
-    from zipTree(tasks.packageUniversal.archivePath)
-    manifest.attributes(generateManifest())
+task jar(dependsOn: packageUniversal) {
 }
 
 tasks.createChangelog.onlyIf { false }
@@ -218,6 +215,7 @@ task packageChangelog(type: CreateChangelog) {
     */
 }
 
+/*
 task bundleStub(type: Jar) {
     classifier = 'stub'
     manifest.attributes([
@@ -225,9 +223,10 @@ task bundleStub(type: Jar) {
             'Class-Path': "libraries/${project.group.replace('.', '/')}/${project.name}/${project.version}/${project.name}-${project.version}.jar"
     ])
 }
+*/
 
-task installBundle(type: InstallBundle, dependsOn: jar) {
-    serverJar tasks.jar.archivePath
+task installBundle(type: InstallBundle, dependsOn: packageUniversal) {
+    serverJar tasks.packageUniversal.archivePath
     bootstrapClasspath configurations.bootstrap
     bootstrapMain 'pw.prok.bootstrap.Main'
 }
@@ -235,14 +234,15 @@ task installBundle(type: InstallBundle, dependsOn: jar) {
 task packageBundle(type: Zip, dependsOn: installBundle) {
     classifier = 'bundle'
     from fileTree(installBundle.installLocation)
-    from bundleStub
-    rename bundleStub.archiveName, 'KCauldron.jar'
+    from packageUniversal
+    // from bundleStub
+    // rename bundleStub.archiveName, 'KCauldron.jar'
 }
 
-task signJars(type: Sign, dependsOn: [packageChangelog, packageBundle, jar, 'generatePomFileForMavenPublication']) {
+task signJars(type: Sign, dependsOn: [packageChangelog, packageBundle, packageUniversal, 'generatePomFileForMavenPublication']) {
     sign packageChangelog
     sign packageBundle
-    sign jar
+    sign packageUniversal
 }
 
 task signPom(type: Sign, dependsOn: 'generatePomFileForMavenPublication') {
@@ -320,6 +320,9 @@ tasks.generateProjectCauldron {
         }
         
     }
+
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
     dependencies {
     ''')
         configurations.libraries.resolvedConfiguration.resolvedArtifacts.collect { it.moduleVersion.id }.each { module ->
