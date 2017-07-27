@@ -140,7 +140,7 @@ dependencies {
     libraries 'net.sourceforge.argo:argo:2.25'
     libraries 'org.fusesource.jansi:jansi:1.8'
     libraries 'com.googlecode.json-simple:json-simple:1.1'
-    libraries 'org.xerial:sqlite-jdbc:3.18.0'
+    libraries 'org.xerial:sqlite-jdbc:3.7.2'
     libraries 'mysql:mysql-connector-java:5.1.42'
     libraries 'javax.persistence:persistence-api:1.0.2'
     libraries 'net.minecraft:server:1.7.10'
