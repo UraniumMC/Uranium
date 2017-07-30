@@ -14,7 +14,7 @@ import cpw.mods.fml.common.FMLLog;
 
 public class KCauldron {
     public static final ThreadGroup sKCauldronThreadGroup = new ThreadGroup("KCauldron");
-
+    public static final String name="KCauldronX";
     private static boolean sManifestParsed = false;
 
     private static void parseManifest() {

@@ -1,14 +1,13 @@
-package org.bstats;
+package kcauldronx;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import cpw.mods.fml.common.FMLCommonHandler;
+import kcauldron.KCauldron;
 import org.json.simple.JSONArray;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -62,26 +61,33 @@ public class BMetrics {
 
     // The uuid of the server
     private static String serverUUID;
-
-    // The plugin
-    private final JavaPlugin plugin;
-
     // A list with all custom charts
     private final List<CustomChart> charts = new ArrayList<>();
 
+    /**
+     * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
+     *
+     * @return the File object for the config file
+     */
+    public File getConfigFile() {
+        // I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
+        // is to abuse the plugin object we already have
+        // plugin.getDataFolder() => base/plugins/PluginA/
+        // pluginsFolder => base/plugins/
+        // The base is not necessarily relative to the startup directory.
+        // File pluginsFolder = plugin.getDataFolder().getParentFile();
+
+        // return => base/plugins/PluginMetrics/config.yml
+        return new File(new File((File) net.minecraft.server.MinecraftServer.getServer().options.valueOf("plugins"), "PluginMetrics"), "config.yml");
+    }
     /**
      * Class constructor.
      *
      * @param plugin The plugin which stats should be submitted.
      */
-    public BMetrics(JavaPlugin plugin) {
-        if (plugin == null) {
-            throw new IllegalArgumentException("Plugin cannot be null!");
-        }
-        this.plugin = plugin;
-
+    public BMetrics() {
         // Get the config file
-        File bStatsFolder = new File(plugin.getDataFolder().getParentFile(), "bStats");
+        File bStatsFolder = new File(getConfigFile(), "bStats");
         File configFile = new File(bStatsFolder, "config.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
@@ -111,21 +117,8 @@ public class BMetrics {
         serverUUID = config.getString("serverUuid");
         logFailedRequests = config.getBoolean("logFailedRequests", false);
         if (config.getBoolean("enabled", true)) {
-            boolean found = false;
-            // Search for all other bStats Metrics classes to see if we are the first one
-            for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
-                try {
-                    service.getField("B_STATS_VERSION"); // Our identifier :)
-                    found = true; // We aren't the first
-                    break;
-                } catch (NoSuchFieldException ignored) { }
-            }
-            // Register our service
-            Bukkit.getServicesManager().register(BMetrics.class, this, plugin, ServicePriority.Normal);
-            if (!found) {
-                // We are the first!
-                startSubmitting();
-            }
+            Bukkit.getServicesManager().getKnownServices().add(BMetrics.class);
+            startSubmitting();
         }
     }
 
@@ -149,13 +142,9 @@ public class BMetrics {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!plugin.isEnabled()) { // Plugin was disabled
-                    timer.cancel();
-                    return;
-                }
                 // Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
                 // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
-                Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                FMLCommonHandler.instance().getMinecraftServerInstance().processQueue.add(new Runnable() {
                     @Override
                     public void run() {
                         submitData();
@@ -177,8 +166,8 @@ public class BMetrics {
     public JSONObject getPluginData() {
         JSONObject data = new JSONObject();
 
-        String pluginName = plugin.getDescription().getName();
-        String pluginVersion = plugin.getDescription().getVersion();
+        String pluginName = KCauldron.name;
+        String pluginVersion = KCauldron.getCurrentVersion();
 
         data.put("pluginName", pluginName); // Append the name of the plugin
         data.put("pluginVersion", pluginVersion); // Append the version of the plugin
@@ -203,17 +192,7 @@ public class BMetrics {
      */
     private JSONObject getServerData() {
         // Minecraft specific data
-        int playerAmount;
-        try {
-            // Around MC 1.8 the return type was changed to a collection from an array,
-            // This fixes java.lang.NoSuchMethodError: org.bukkit.Bukkit.getOnlinePlayers()Ljava/util/Collection;
-            Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
-            playerAmount = onlinePlayersMethod.getReturnType().equals(Collection.class)
-                    ? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
-                    : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
-        } catch (Exception e) {
-            playerAmount = Bukkit.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
-        }
+        int playerAmount=Bukkit.getServer().getOnlinePlayers().size();
         int onlineMode = Bukkit.getOnlineMode() ? 1 : 0;
         String bukkitVersion = org.bukkit.Bukkit.getVersion();
         bukkitVersion = bukkitVersion.substring(bukkitVersion.indexOf("MC: ") + 4, bukkitVersion.length() - 1);
@@ -247,23 +226,8 @@ public class BMetrics {
      */
     private void submitData() {
         final JSONObject data = getServerData();
-
         JSONArray pluginData = new JSONArray();
-        // Search for all other bStats Metrics classes to get their plugin data
-        for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
-            try {
-                service.getField("B_STATS_VERSION"); // Our identifier :)
-
-                for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
-                    try {
-                        pluginData.add(provider.getService().getMethod("getPluginData").invoke(provider.getProvider()));
-                    } catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) { }
-                }
-            } catch (NoSuchFieldException ignored) { }
-        }
-
         data.put("plugins", pluginData);
-
         // Create a new thread for the connection to the bStats server
         new Thread(new Runnable() {
             @Override
@@ -272,10 +236,6 @@ public class BMetrics {
                     // Send the data
                     sendData(data);
                 } catch (Exception e) {
-                    // Something went wrong! :(
-                    if (logFailedRequests) {
-                        plugin.getLogger().log(Level.WARNING, "Could not submit plugin stats of " + plugin.getName(), e);
-                    }
                 }
             }
         }).start();

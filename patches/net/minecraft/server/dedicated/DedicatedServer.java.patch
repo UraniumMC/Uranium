@@ -8,7 +8,16 @@
  import cpw.mods.fml.relauncher.Side;
  import cpw.mods.fml.relauncher.SideOnly;
  import java.io.BufferedReader;
-@@ -34,9 +35,24 @@
+@@ -14,6 +15,8 @@
+ import java.util.List;
+ import java.util.Random;
+ import java.util.concurrent.Callable;
++
++import kcauldronx.YUMCStatistics;
+ import net.minecraft.command.ICommandSender;
+ import net.minecraft.command.ServerCommand;
+ import net.minecraft.crash.CrashReport;
+@@ -34,9 +37,23 @@
  import net.minecraft.world.World;
  import net.minecraft.world.WorldSettings;
  import net.minecraft.world.WorldType;
@@ -27,13 +36,12 @@
 +import org.bukkit.craftbukkit.SpigotTimings; // Spigot
 +import org.bukkit.event.player.PlayerLoginEvent;
 +import org.bukkit.event.server.ServerCommandEvent;
-+import pw.yumc.KCXStatistics;
 +// CraftBukkit end
 +
  @SideOnly(Side.SERVER)
  public class DedicatedServer extends MinecraftServer implements IServer
  {
-@@ -44,18 +60,21 @@
+@@ -44,18 +61,21 @@
      public final List pendingCommandList = Collections.synchronizedList(new ArrayList());
      private RConThreadQuery theRConThreadQuery;
      private RConThreadMain theRConThreadMain;
@@ -47,7 +55,7 @@
      private static final String __OBFID = "CL_00001784";
 -
 -    public DedicatedServer(File p_i1508_1_)
-+    private KCXStatistics yumc_statistics;
++    private YUMCStatistics yumc_statistics;
 +    // CraftBukkit start - Signature changed
 +    public DedicatedServer(joptsimple.OptionSet options)
      {
@@ -60,7 +68,7 @@
          {
              private static final String __OBFID = "CL_00001787";
              {
-@@ -82,31 +101,77 @@
+@@ -82,31 +102,77 @@
          };
      }
  
@@ -145,7 +153,7 @@
          field_155771_h.info("Starting minecraft server version 1.7.10");
  
          if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L)
-@@ -117,7 +182,7 @@
+@@ -117,7 +183,7 @@
          FMLCommonHandler.instance().onServerStart(this);
  
          field_155771_h.info("Loading properties");
@@ -154,7 +162,7 @@
          this.field_154332_n = new ServerEula(new File("eula.txt"));
  
          if (!this.field_154332_n.func_154346_a())
-@@ -172,6 +237,18 @@
+@@ -172,6 +238,18 @@
                  this.setServerPort(this.settings.getIntProperty("server-port", 25565));
              }
  
@@ -173,7 +181,7 @@
              field_155771_h.info("Generating keypair");
              this.setKeyPair(CryptManager.createNewKeyPair());
              field_155771_h.info("Starting Minecraft server on " + (this.getServerHostname().length() == 0 ? "*" : this.getServerHostname()) + ":" + this.getServerPort());
-@@ -180,7 +257,7 @@
+@@ -180,7 +258,7 @@
              {
                  this.func_147137_ag().addLanEndpoint(inetaddress, this.getServerPort());
              }
@@ -182,7 +190,7 @@
              {
                  field_155771_h.warn("**** FAILED TO BIND TO PORT!");
                  field_155771_h.warn("The exception was: {}", new Object[] {ioexception.toString()});
-@@ -196,10 +273,17 @@
+@@ -196,10 +274,17 @@
                  field_155771_h.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
              }
  
@@ -202,7 +210,7 @@
  
              if (!PreYggdrasilConverter.func_152714_a(this.settings))
              {
-@@ -208,7 +292,8 @@
+@@ -208,7 +293,8 @@
              else
              {
                  FMLCommonHandler.instance().onServerStarted();
@@ -212,7 +220,7 @@
                  long j = System.nanoTime();
  
                  if (this.getFolderName() == null)
-@@ -274,11 +359,40 @@
+@@ -274,11 +360,40 @@
                      this.theRConThreadMain.startThread();
                  }
  
@@ -234,7 +242,7 @@
 +                FakePlayer.fakePlayers=null;
 +                FakePlayer.BukkitInited=true;
 +                    //Yumc Statistcs start
-+                    yumc_statistics=new KCXStatistics();
++                    yumc_statistics=new YUMCStatistics();
 +                    yumc_statistics.start();
 +                    //Yumc Statistcs end
 +                // KCauldronX end
@@ -253,7 +261,7 @@
      public boolean canStructuresSpawn()
      {
          return this.canSpawnStructures;
-@@ -364,11 +478,19 @@
+@@ -364,11 +479,19 @@
  
      public void executePendingCommands()
      {

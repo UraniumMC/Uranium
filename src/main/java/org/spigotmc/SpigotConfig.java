@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import kcauldronx.BMetrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -20,7 +21,6 @@ import com.google.common.base.Throwables;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.server.MinecraftServer;
-import pw.yumc.KCXStatistics;
 
 public class SpigotConfig
 {
@@ -43,6 +43,7 @@ public class SpigotConfig
     static Map<String, Command> commands;
     /*========================================================================*/
     private static Metrics metrics;
+    private static BMetrics bstats;
 
     public static void init()
     {
@@ -73,6 +74,17 @@ public class SpigotConfig
             } catch ( IOException ex )
             {
                 Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start metrics service", ex );
+            }
+        }
+        if ( bstats == null )
+        {
+            try
+            {
+                bstats = new BMetrics();
+                bstats.start();
+            } catch ( IOException ex )
+            {
+                Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start bstats metrics service", ex );
             }
         }
     }

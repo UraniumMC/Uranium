@@ -28,6 +28,7 @@
 package org.spigotmc;
 
 import kcauldron.KCauldron;
+import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -336,7 +337,7 @@ public class Metrics {
         // File pluginsFolder = plugin.getDataFolder().getParentFile();
 
         // return => base/plugins/PluginMetrics/config.yml
-        return new File(new File((File) net.minecraft.server.MinecraftServer.getServer().options.valueOf("plugins"), "PluginMetrics"), "config.yml");
+        return new File(new File((File) MinecraftServer.getServer().options.valueOf("plugins"), "PluginMetrics"), "config.yml");
     }
 
     /**
@@ -344,7 +345,7 @@ public class Metrics {
      */
     private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
-        String pluginName = "KCauldronX";
+        String pluginName = KCauldron.name;
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = (Metrics.class.getPackage().getImplementationVersion() != null) ? Metrics.class.getPackage().getImplementationVersion() : "unknown";
         String serverVersion = KCauldron.getCurrentVersion();
