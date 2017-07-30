@@ -62,7 +62,7 @@ public class BMetrics {
     // The uuid of the server
     private static String serverUUID;
     // A list with all custom charts
-    private final List<CustomChart> charts = new ArrayList<>();
+    private final List<CustomChart> charts = new ArrayList();
 
     /**
      * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
