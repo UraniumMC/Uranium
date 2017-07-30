@@ -210,16 +210,6 @@ public class KCXStatistics {
         task.start();
         return true;
     }
-
-    /**
-     * 获得在线玩家人数
-     *
-     * @return 在线玩家人数
-     */
-    private int getOnlinePlayerNumber() {
-        return Bukkit.getOnlinePlayers().size();
-    }
-
     /**
      * 发送服务器数据到统计网页
      */
@@ -234,7 +224,7 @@ public class KCXStatistics {
         data.put("server_port", Bukkit.getServer().getPort());
         data.put("server_tps", FMLCommonHandler.instance().getMinecraftServerInstance().recentTps[1]);
         data.put("plugin_version", KCauldron.getCurrentVersion());
-        data.put("players_online", getOnlinePlayerNumber());
+        data.put("players_online", Bukkit.getServer().getOnlinePlayers().size());
         data.put("os_name", System.getProperty("os.name"));
         data.put("os_arch", tmposarch.equalsIgnoreCase("amd64") ? "x86_64" : tmposarch);
         data.put("os_version", System.getProperty("os.version"));
