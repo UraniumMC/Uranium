@@ -78,14 +78,7 @@ public class SpigotConfig
         }
         if ( bstats == null )
         {
-            try
-            {
-                bstats = new BMetrics();
-                bstats.start();
-            } catch ( IOException ex )
-            {
-                Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start bstats metrics service", ex );
-            }
+            bstats = new BMetrics();
         }
     }
 
