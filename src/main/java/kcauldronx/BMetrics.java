@@ -117,7 +117,6 @@ public class BMetrics {
         serverUUID = config.getString("serverUuid");
         logFailedRequests = config.getBoolean("logFailedRequests", false);
         if (config.getBoolean("enabled", true)) {
-            Bukkit.getServicesManager().getKnownServices().add(BMetrics.class);
             startSubmitting();
         }
     }
