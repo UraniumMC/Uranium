@@ -1,7 +1,7 @@
 /*
  * Copyright 2011-2015 喵♂呜. All rights reserved.
  */
-package pw.yumc;
+package kcauldronx;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,7 +43,7 @@ import org.json.simple.JSONValue;
  * @since 2015年12月14日 下午1:36:42
  * @author 喵♂呜
  */
-public class KCXStatistics {
+public class YUMCStatistics {
     /**
      * 统计系统版本
      */
@@ -85,7 +85,7 @@ public class KCXStatistics {
      * @throws IOException
      *             IO异常
      */
-    public KCXStatistics() {
+    public YUMCStatistics() {
         try {
             if (!configfile.exists()) {
                 configfile.getParentFile().mkdirs();
@@ -179,7 +179,7 @@ public class KCXStatistics {
      */
     public void print(final String msg) {
         if (debug) {
-            System.out.println("[KCXStatistics] " + msg);
+            System.out.println("[YUMCStatistics] " + msg);
         }
     }
 
@@ -210,22 +210,12 @@ public class KCXStatistics {
         task.start();
         return true;
     }
-
-    /**
-     * 获得在线玩家人数
-     *
-     * @return 在线玩家人数
-     */
-    private int getOnlinePlayerNumber() {
-        return Bukkit.getOnlinePlayers().size();
-    }
-
     /**
      * 发送服务器数据到统计网页
      */
     private void postPlugin() throws IOException {
         // 服务器数据获取
-        final String pluginname = "KCauldronX";
+        final String pluginname = KCauldron.name;
         final String tmposarch = System.getProperty("os.arch");
 
         final Map<String, Object> data = new HashMap();
@@ -234,7 +224,7 @@ public class KCXStatistics {
         data.put("server_port", Bukkit.getServer().getPort());
         data.put("server_tps", FMLCommonHandler.instance().getMinecraftServerInstance().recentTps[1]);
         data.put("plugin_version", KCauldron.getCurrentVersion());
-        data.put("players_online", getOnlinePlayerNumber());
+        data.put("players_online", Bukkit.getServer().getOnlinePlayers().size());
         data.put("os_name", System.getProperty("os.name"));
         data.put("os_arch", tmposarch.equalsIgnoreCase("amd64") ? "x86_64" : tmposarch);
         data.put("os_version", System.getProperty("os.version"));
