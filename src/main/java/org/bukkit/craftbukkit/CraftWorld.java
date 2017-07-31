@@ -112,6 +112,7 @@ import cc.capture.type.CaptureTree;
 import cpw.mods.fml.common.registry.EntityRegistry; // Cauldron
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.util.BlockSnapshot;
 
 public class CraftWorld implements World {
@@ -194,18 +195,12 @@ public class CraftWorld implements World {
     }
 
     public Chunk[] getLoadedChunks() {
-        // KCauldron start
-        final kcauldron.ChunkManager chunkManager = world.theChunkProviderServer.chunkManager;
-        final org.bukkit.Chunk[] craftChunks = new CraftChunk[chunkManager.size()];
-        chunkManager.forEach(new cern.colt.function.ObjectProcedure() {
-            int i = 0;
-            @Override
-            public boolean apply(Object arg) {
-                craftChunks[i++] = ((net.minecraft.world.chunk.Chunk) arg).bukkitChunk;
-                return true;
-            }            
-        });
-        // KCauldron end
+        List tLoadedChunk = world.theChunkProviderServer.loadedChunks;
+        final org.bukkit.Chunk[] craftChunks = new CraftChunk[tLoadedChunk.size()];
+        int i = 0;
+        for(Object sObj : tLoadedChunk){
+            craftChunks[i++]=((net.minecraft.world.chunk.Chunk) sObj).bukkitChunk;
+        }
         return craftChunks;
     }
 
@@ -322,7 +317,7 @@ public class CraftWorld implements World {
         }
 
         world.theChunkProviderServer.chunksToUnload.remove(x, z);
-        net.minecraft.world.chunk.Chunk chunk = world.theChunkProviderServer.chunkManager.getChunk(x, z);
+        net.minecraft.world.chunk.Chunk chunk = world.theChunkProviderServer.getChunkIfLoaded(x,z);
 
         if (chunk == null) {
             world.timings.syncChunkLoadTimer.startTiming(); // Spigot
@@ -336,7 +331,7 @@ public class CraftWorld implements World {
 
     private void chunkLoadPostProcess(net.minecraft.world.chunk.Chunk chunk, int x, int z) {
         if (chunk != null) {
-            world.theChunkProviderServer.chunkManager.putChunk(chunk, x, z); // KCauldron
+            world.theChunkProviderServer.loadedChunkHashMap.add(ChunkCoordIntPair.chunkXZ2Int(x, z),chunk);
             world.theChunkProviderServer.loadedChunks.add(chunk); // Cauldron - vanilla compatibility
 
             chunk.onChunkLoad();
@@ -1450,25 +1445,22 @@ public class CraftWorld implements World {
         }
 
         final net.minecraft.world.gen.ChunkProviderServer cps = world.theChunkProviderServer;
-        cps.chunkManager.forEach(new cern.colt.function.ObjectProcedure() {
-            @Override
-            public boolean apply(Object arg) {
-                net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) arg;
-                // If in use, skip it
-                if (isChunkInUse(chunk.xPosition, chunk.zPosition)) {
-                    return true;
-                }
-
-                // Already unloading?
-                if (cps.chunksToUnload.contains(chunk.xPosition, chunk.zPosition)) {
-                    return true;
-                }
-
-                // Add unload request
-                cps.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
-                return true;
+        List tLoadedChunk = world.theChunkProviderServer.loadedChunks;
+        for(Object sObj : tLoadedChunk){
+            net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk)sObj;
+            // If in use, skip it
+            if (isChunkInUse(chunk.xPosition, chunk.zPosition)) {
+                continue;
             }
-        });
+
+            // Already unloading?
+            if (cps.chunksToUnload.contains(chunk.xPosition, chunk.zPosition)) {
+                continue;
+            }
+
+            // Add unload request
+            cps.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+        }
     }
 
     // Spigot start
