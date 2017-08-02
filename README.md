@@ -1,7 +1,7 @@
 **[加入KCauldronX交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
 # KCauldronX
 ### KCauldronX - continuation of KCauldron minecraft server
-![Donate][donate_img] [![Download KCauldronX][download_img]][download_url]
+![Donate][donate_img] [![Download KCauldronX][download_img]][download_url] [![Build Status](https://ci.xjboss.net/job/KCauldronX/badge/icon)](https://ci.xjboss.net/job/KCauldronX/)
 
 ## Building KCauldronX
 * Ensure you are using Java JDK 8u101 or higher.
@@ -38,6 +38,7 @@ If you're once checkout source - you not need to do it again
   * Make sure that similar issue not exists already
   * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/KCauldronX/issues/new) else
 
-[donate_img]: https://prok.pw/donate.png
+[donate_img]: https://
 [download_url]: https://ci.xjboss.net/job/KCauldronX/
-[download_img]: https://prok.pw/download.png
+[download_img]: https://
+[build_status]: https://ci.xjboss.net/job/KCauldronX/badge/icon
