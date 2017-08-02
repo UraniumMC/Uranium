@@ -1,8 +1,11 @@
 **[加入KCauldronX交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
 # KCauldronX
 ### KCauldronX - continuation of KCauldron minecraft server
-![Donate][donate_img] [![Download KCauldronX][download_img]][download_url] [![Build Status](https://ci.xjboss.net/job/KCauldronX/badge/icon)](https://ci.xjboss.net/job/KCauldronX/)
+[![Build Status][build_status]](https://ci.xjboss.net/job/KCauldronX/) [![Download KCauldronX][download_img]][download_url] 
 
+[![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+
+![donate][donate_img] 1PFBV7gFBEqG1hcYhR9CvrvQhENczsRgHg
 ## Building KCauldronX
 * Ensure you are using Java JDK 8u101 or higher.
 * Checkout project
@@ -38,7 +41,11 @@ If you're once checkout source - you not need to do it again
   * Make sure that similar issue not exists already
   * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/KCauldronX/issues/new) else
 
-[donate_img]: https://
+[donate_img]: https://git.xjboss.net/static/donate-Bitcoin.svg
 [download_url]: https://ci.xjboss.net/job/KCauldronX/
-[download_img]: https://
+[download_img]: https://git.xjboss.net/static/download-latest.svg
 [build_status]: https://ci.xjboss.net/job/KCauldronX/badge/icon
+[bStats]: https://git.xjboss.net/static/bStats-KCX.svg
+[bStats_link]: https://bstats.org/plugin/bukkit/KCauldronX
+[yumc_Stats]: https://git.xjboss.net/static/yumc-KCX.svg
+[yumc_Stats_link]: http://www.yumc.pw/Home/Statistics/Plugin.html?name=KCauldronX
