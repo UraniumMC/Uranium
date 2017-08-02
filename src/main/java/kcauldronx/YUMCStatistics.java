@@ -14,10 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -77,7 +74,7 @@ public class YUMCStatistics {
     /**
      * 线程任务
      */
-    private volatile Thread task = null;
+    private volatile TimerTask task = null;
 
     /**
      * 插件使用数据统计
@@ -195,7 +192,7 @@ public class YUMCStatistics {
         // 开启TPS统计线程
         //MinecraftForge.EVENT_BUS.register(timer);
         // 开启发送数据线程
-        task = new Thread(new Runnable() {
+        task=(new TimerTask() {
             @Override
             public void run() {
                 try {
@@ -207,7 +204,7 @@ public class YUMCStatistics {
                 }
             }
         });
-        task.start();
+        new Timer().scheduleAtFixedRate(task,1000*60*5,1000*60*30);
         return true;
     }
     /**

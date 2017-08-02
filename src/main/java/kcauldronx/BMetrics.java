@@ -226,6 +226,7 @@ public class BMetrics {
     private void submitData() {
         final JSONObject data = getServerData();
         JSONArray pluginData = new JSONArray();
+        pluginData.add(getPluginData());
         data.put("plugins", pluginData);
         // Create a new thread for the connection to the bStats server
         new Thread(new Runnable() {
