@@ -963,7 +963,7 @@
                  }
                  catch (Throwable throwable1)
                  {
-@@ -1916,30 +2420,84 @@
+@@ -1916,30 +2420,87 @@
                  {
                      this.getChunkFromChunkCoords(j, l).removeEntity(entity);
                  }
@@ -1040,7 +1040,10 @@
 +            }
 +
 +            if (tileentity.hasWorldObj() && CauldronHooks.canTileEntityTick(tileentity, this)
-+                    && this.blockExists(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord))
++                    && (MinecraftServer.cauldronConfig.tickTEOnlyChunkActive.getValue()?this.isActiveBlockCoord(tileentity.xCoord,tileentity.zCoord):
++                            this.blockExists(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord)
++                            )
++                    )
 +            {
                  try
                  {
@@ -1055,7 +1058,7 @@
                      crashreport = CrashReport.makeCrashReport(throwable, "Ticking block entity");
                      crashreportcategory = crashreport.makeCategory("Block entity being ticked");
                      tileentity.func_145828_a(crashreportcategory);
-@@ -1955,23 +2513,13 @@
+@@ -1955,23 +2516,13 @@
                      }
                  }
              }
@@ -1084,7 +1087,7 @@
          if (!this.field_147483_b.isEmpty())
          {
              for (Object tile : field_147483_b)
-@@ -1981,6 +2529,7 @@
+@@ -1981,6 +2532,7 @@
              this.loadedTileEntityList.removeAll(this.field_147483_b);
              this.field_147483_b.clear();
          }
@@ -1092,7 +1095,7 @@
  
          this.field_147481_N = false;
  
-@@ -2016,17 +2565,23 @@
+@@ -2016,17 +2568,23 @@
              this.addedTileEntityList.clear();
          }
  
@@ -1119,7 +1122,7 @@
      }
  
      public void updateEntity(Entity p_72870_1_)
-@@ -2036,21 +2591,41 @@
+@@ -2036,21 +2594,41 @@
  
      public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
      {
@@ -1163,7 +1166,7 @@
              p_72866_1_.lastTickPosX = p_72866_1_.posX;
              p_72866_1_.lastTickPosY = p_72866_1_.posY;
              p_72866_1_.lastTickPosZ = p_72866_1_.posZ;
-@@ -2134,6 +2709,7 @@
+@@ -2134,6 +2712,7 @@
                      p_72866_1_.riddenByEntity = null;
                  }
              }
@@ -1171,7 +1174,7 @@
          }
      }
  
-@@ -2570,7 +3146,7 @@
+@@ -2570,7 +3149,7 @@
              return;
          }
  
@@ -1180,7 +1183,7 @@
          {
              if (this.field_147481_N)
              {
-@@ -2612,6 +3188,9 @@
+@@ -2612,6 +3191,9 @@
  
      public void func_147457_a(TileEntity p_147457_1_)
      {
@@ -1190,7 +1193,7 @@
          this.field_147483_b.add(p_147457_1_);
      }
  
-@@ -2718,7 +3297,15 @@
+@@ -2718,7 +3300,15 @@
  
                      if (i <= 0)
                      {
@@ -1207,7 +1210,7 @@
                      }
                  }
  
-@@ -2754,7 +3341,15 @@
+@@ -2754,7 +3344,15 @@
  
                      if (j <= 0)
                      {
@@ -1224,7 +1227,7 @@
                      }
                  }
  
-@@ -2777,8 +3372,41 @@
+@@ -2777,8 +3375,41 @@
      protected void setActivePlayerChunksAndCheckLight()
      {
          this.activeChunkSet.clear();
@@ -1267,7 +1270,7 @@
          int i;
          EntityPlayer entityplayer;
          int j;
-@@ -2788,17 +3416,28 @@
+@@ -2788,17 +3419,28 @@
          for (i = 0; i < this.playerEntities.size(); ++i)
          {
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
@@ -1302,7 +1305,7 @@
          }
  
          this.theProfiler.endSection();
-@@ -2810,7 +3449,7 @@
+@@ -2810,7 +3452,7 @@
  
          this.theProfiler.startSection("playerCheckLight");
  
@@ -1311,7 +1314,7 @@
          {
              i = this.rand.nextInt(this.playerEntities.size());
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
-@@ -3034,9 +3673,9 @@
+@@ -3034,9 +3676,9 @@
          }
      }
  
@@ -1323,7 +1326,7 @@
          {
              return false;
          }
-@@ -3166,6 +3805,16 @@
+@@ -3166,6 +3808,16 @@
                  }
              }
  
@@ -1340,7 +1343,7 @@
              this.theProfiler.endSection();
              return true;
          }
-@@ -3284,8 +3933,21 @@
+@@ -3284,8 +3936,21 @@
          {
              Entity entity = (Entity)this.loadedEntityList.get(j);
  
@@ -1363,7 +1366,7 @@
                  ++i;
              }
          }
-@@ -3298,6 +3960,7 @@
+@@ -3298,6 +3963,7 @@
          for (int i = 0; i < p_72868_1_.size(); ++i)
          {
              Entity entity = (Entity)p_72868_1_.get(i);
@@ -1371,7 +1374,7 @@
              if (!MinecraftForge.EVENT_BUS.post(new EntityJoinWorldEvent(entity, this)))
              {
                  loadedEntityList.add(entity);
-@@ -3314,8 +3977,17 @@
+@@ -3314,8 +3980,17 @@
      public boolean canPlaceEntityOnSide(Block p_147472_1_, int p_147472_2_, int p_147472_3_, int p_147472_4_, boolean p_147472_5_, int p_147472_6_, Entity p_147472_7_, ItemStack p_147472_8_)
      {
          Block block1 = this.getBlock(p_147472_2_, p_147472_3_, p_147472_4_);
@@ -1390,7 +1393,7 @@
      }
  
      public PathEntity getPathEntityToEntity(Entity p_72865_1_, Entity p_72865_2_, float p_72865_3_, boolean p_72865_4_, boolean p_72865_5_, boolean p_72865_6_, boolean p_72865_7_)
-@@ -3464,6 +4136,12 @@
+@@ -3464,6 +4139,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1403,7 +1406,7 @@
              double d5 = entityplayer1.getDistanceSq(p_72977_1_, p_72977_3_, p_72977_5_);
  
              if ((p_72977_7_ < 0.0D || d5 < p_72977_7_ * p_72977_7_) && (d4 == -1.0D || d5 < d4))
-@@ -3489,7 +4167,12 @@
+@@ -3489,7 +4170,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1417,7 +1420,7 @@
              if (!entityplayer1.capabilities.disableDamage && entityplayer1.isEntityAlive())
              {
                  double d5 = entityplayer1.getDistanceSq(p_72846_1_, p_72846_3_, p_72846_5_);
-@@ -3660,6 +4343,18 @@
+@@ -3660,6 +4346,18 @@
  
      public void updateAllPlayersSleepingFlag() {}
  
@@ -1436,7 +1439,7 @@
      public float getWeightedThunderStrength(float p_72819_1_)
      {
          return (this.prevThunderingStrength + (this.thunderingStrength - this.prevThunderingStrength) * p_72819_1_) * this.getRainStrength(p_72819_1_);
-@@ -3932,8 +4627,8 @@
+@@ -3932,8 +4630,8 @@
       */
      public void addTileEntity(TileEntity entity)
      {
@@ -1447,7 +1450,7 @@
          {
              dest.add(entity);
          }
-@@ -4029,4 +4724,122 @@
+@@ -4029,4 +4727,122 @@
          }
          return count;
      }

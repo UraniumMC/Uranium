@@ -24,8 +24,6 @@ import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 
 public class CaptureBlock extends ACapture{
 
-    /** 是否为还原模式 */
-    public boolean mRestoring=false;
     /** 当前物品 */
     public ItemStack mUseItem=null;
     /** 当前物品所在的快捷栏位置,如果为-1表示不存在,或者不是从背包取出的物品 */
@@ -117,10 +115,10 @@ public class CaptureBlock extends ACapture{
             }
             if(!this.mCapturedBlocks.isEmpty()){
                 for(int i=this.mCapturedBlocks.size();i>0;){
-                    this.mRestoring=true;
+                    this.mWorld.restoringBlockSnapshots=true;
                     BlockSnapshot tSnapshot=this.mCapturedBlocks.get(--i);
                     tSnapshot.restore(true,false);
-                    this.mRestoring=false;
+                    this.mWorld.restoringBlockSnapshots=false;
                 }
             }
             for(EntitySnapshot sSnapshot : this.mCapturedEntitys){
