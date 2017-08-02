@@ -1,9 +1,7 @@
 **[加入KCauldronX交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
 # KCauldronX
 ### KCauldronX - continuation of KCauldron minecraft server
-[![Build Status][build_status]](https://ci.xjboss.net/job/KCauldronX/) [![Download KCauldronX][download_img]][download_url] 
-
-[![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+[![Build Status][build_status]](https://ci.xjboss.net/job/KCauldronX/) [![Download KCauldronX][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
 
 ![donate][donate_img] 1PFBV7gFBEqG1hcYhR9CvrvQhENczsRgHg
 ## Building KCauldronX
