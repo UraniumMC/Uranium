@@ -42,7 +42,7 @@ If you're once checkout source - you not need to do it again
   * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/KCauldronX/issues/new) else
 
 [donate_img]: https://git.xjboss.net/static/donate-Bitcoin.svg
-[download_url]: https://ci.xjboss.net/job/KCauldronX/
+[download_url]: https://pan.baidu.com/s/1i4DHUHR#list/path=/KCauldronX/%23lastSuccessfulBuild
 [download_img]: https://git.xjboss.net/static/download-latest.svg
 [build_status]: https://ci.xjboss.net/job/KCauldronX/badge/icon
 [bStats]: https://git.xjboss.net/static/bStats-KCX.svg
