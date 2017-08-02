@@ -189,8 +189,6 @@ public class YUMCStatistics {
         if (task != null) {
             return true;
         }
-        // 开启TPS统计线程
-        //MinecraftForge.EVENT_BUS.register(timer);
         // 开启发送数据线程
         task=(new TimerTask() {
             @Override
