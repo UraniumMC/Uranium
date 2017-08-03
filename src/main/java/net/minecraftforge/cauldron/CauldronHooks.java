@@ -297,12 +297,7 @@ public class CauldronHooks
                 return false;
             }
     
-            // Skip tick interval
-            if (teCache.tickInterval > 0 && (world.getWorldInfo().getWorldTotalTime() % teCache.tickInterval == 0L))
-            {
-                return true;
-            }
-            return false;
+            return teCache.tickInterval==1||(teCache.tickInterval>0&&(world.rand.nextInt(teCache.tickInterval)==0)); // rand skip tick
         }
         return true;
     }
@@ -318,11 +313,7 @@ public class CauldronHooks
                 entityCache.put(pEntity.getClass(),eCache);
             }
 
-            // Skip tick interval
-            if(eCache.tickInterval>0&&(world.getWorldInfo().getWorldTotalTime()%eCache.tickInterval==0L)){
-                return true;
-            }
-            return false;
+            return eCache.tickInterval==1||(eCache.tickInterval>0&&(world.rand.nextInt(eCache.tickInterval)==0)); // rand skip tick
         }
         return true;
     }
