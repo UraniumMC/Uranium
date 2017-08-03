@@ -15,11 +15,12 @@ import net.minecraftforge.cauldron.configuration.Setting;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
-
+import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.ImmutableList;
 
@@ -62,13 +63,23 @@ public class CauldronCommand extends Command
         }
         if ((args.length == 1) && "reload".equalsIgnoreCase(args[0]))
         {
-            MinecraftServer.getServer().cauldronConfig.load();
-            for (int i = 0; i < MinecraftServer.getServer().worlds.size(); i++)
-            {
-                MinecraftServer.getServer().worlds.get(i).cauldronConfig.init(); // reload world configs
+            if(args.length==1){
+                MinecraftServer.getServer().cauldronConfig.load();
+                for (int i = 0; i < MinecraftServer.getServer().worlds.size(); i++)
+                {
+                    MinecraftServer.getServer().worlds.get(i).cauldronConfig.init(); // reload world configs
+                }
+                sender.sendMessage(ChatColor.GREEN + "Config file reloaded");
+                return true;
+            }else if(args[1].equalsIgnoreCase("bukkit")){
+                Bukkit.getServer().reload();
+                sender.sendMessage(ChatColor.GREEN + "Bukkit Config file reloaded");
+                return true;
+            }else if(args[1].equalsIgnoreCase("spigot")){
+                SpigotConfig.init();
+                sender.sendMessage(ChatColor.GREEN + "Spigot Config file reloaded");
+                return true;
             }
-            sender.sendMessage(ChatColor.GREEN + "Config file reloaded");
-            return true;
         }
         if (args.length < 2)
         {
