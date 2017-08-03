@@ -46,7 +46,6 @@ public class CauldronConfig extends ConfigBase
     public final IntSetting largeBoundingBoxLogSize = new IntSetting(this, "settings.entity-bounding-box-max-size", 1000, "Max size of an entity's bounding box before removing it (either being too large or bugged and 'moving' too fast)");
     public final IntSetting entityMaxSpeed = new IntSetting(this, "settings.entity-max-speed", 100, "Square of the max speed of an entity before removing it");
     public final BoolSetting removeErroringBlocks=new BoolSetting(this,"setting.remove-erroring-blocks",true,"Set this to true to remove any Blocks that throws an error in its update method instead of closing the server and reporting a crash log.");
-    public final BoolSetting tickTEOnlyChunkActive=new BoolSetting(this,"setting.tick-tileentity-only-chunk-active",false,"Set this to true,only if the chunk is active, tileentity can be tick.");
 
     // Debug settings
     public final BoolSetting enableThreadContentionMonitoring = new BoolSetting(this, "debug.thread-contention-monitoring", false, "Set true to enable Java's thread contention monitoring for thread dumps");
@@ -111,7 +110,6 @@ public class CauldronConfig extends ConfigBase
         settings.put(modPacketInteract.path,modPacketInteract);
         
         settings.put(removeErroringBlocks.path,removeErroringBlocks);
-        settings.put(tickTEOnlyChunkActive.path,tickTEOnlyChunkActive);
         
         load();
     }
