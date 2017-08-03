@@ -94,7 +94,7 @@
      {
 +        // PaperSpigot start - Asynchronous lighting updates
 +        Chunk chunk = this.getChunkIfLoaded(p_73241_1_,p_73241_2_);
-+        if (chunk != null && chunk.worldObj.spigotConfig.useAsyncLighting && (chunk.pendingLightUpdates.get() > 0 || chunk.worldObj.getTotalWorldTime() - chunk.lightUpdateTime < 20)) {
++        if (chunk == null) {
 +            return;
 +        }
 +        // PaperSpigot end
