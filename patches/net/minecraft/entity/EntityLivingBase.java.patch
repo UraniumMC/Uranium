@@ -420,10 +420,10 @@
 -            p_70665_2_ = Math.max(p_70665_2_ - this.getAbsorptionAmount(), 0.0F);
 -            this.setAbsorptionAmount(this.getAbsorptionAmount() - (f1 - p_70665_2_));
 +            final boolean human = this instanceof EntityPlayer;
-+            float originalDamage = f;
 +            // Cauldron start - apply forge damage hook
 +            f = ForgeHooks.onLivingHurt(this, damagesource, f);
 +            if (f < 0) return true;
++            float originalDamage = f;
 +            // Cauldron end
 +            Function<Double, Double> hardHat = new Function<Double, Double>() {
 +                @Override
