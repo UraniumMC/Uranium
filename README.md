@@ -33,9 +33,9 @@ If you're once checkout source - you not need to do it again
   * Remove all unnecessary plugins and mods
   * Reset all configs to default
   If bug present - mod compatibility issue
-* If you're using beta-release of KCauldronX - check on latest stable
+* If you're using beta-release of Uranium - check on latest stable
   * All versions situated [there](https://ci.xjboss.net/job/Uranium)
-* If bug still present - KCauldronX issue
+* If bug still present - Uranium issue
   * Make sure that similar issue not exists already
   * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/Uranium/issues/new) else
 
@@ -43,7 +43,7 @@ If you're once checkout source - you not need to do it again
 [download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
 [download_img]: https://git.xjboss.net/static/download-latest.svg
 [build_status]: https://ci.xjboss.net/job/Uranium/badge/icon
-[bStats]: https://git.xjboss.net/static/bStats-KCX.svg
+[bStats]: https://git.xjboss.net/static/bStats-Uranium.svg
 [bStats_link]: https://bstats.org/plugin/bukkit/Uranium
-[yumc_Stats]: https://git.xjboss.net/static/yumc-KCX.svg
+[yumc_Stats]: https://git.xjboss.net/static/yumc-UM.svg
 [yumc_Stats_link]: http://www.yumc.pw/Home/Statistics/Plugin.html?name=Uranium

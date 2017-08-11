@@ -44,7 +44,7 @@ public enum ChunkGenerator {
     }
 
     public void chunkGeneratorCycle() {
-        int max = MinecraftServer.kcauldronConfig.commonMaxChunkGenPerTick.getValue();
+        int max = MinecraftServer.uraniumConfig.commonMaxChunkGenPerTick.getValue();
         lock.writeLock().lock();
         try {
             for (int i = 0; i < max && internalGenerate(); i++)

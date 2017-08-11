@@ -93,7 +93,7 @@ public class UraniumUpdater implements Runnable, IVersionCheckCallback {
 
     @Override
     public void run() {
-        if (!MinecraftServer.kcauldronConfig.updatecheckerQuiet.getValue()) {
+        if (!MinecraftServer.uraniumConfig.updatecheckerQuiet.getValue()) {
             mSender.sendMessage(ChatColor.DARK_PURPLE
                     + "Retrieving latest KBootstrap version...");
         }
@@ -107,7 +107,7 @@ public class UraniumUpdater implements Runnable, IVersionCheckCallback {
 
     @Override
     public void newVersion(String kbootstrapVersion) {
-        boolean quiet = MinecraftServer.kcauldronConfig.updatecheckerQuiet
+        boolean quiet = MinecraftServer.uraniumConfig.updatecheckerQuiet
                 .getValue();
         try {
             if (!quiet) {
@@ -136,7 +136,7 @@ public class UraniumUpdater implements Runnable, IVersionCheckCallback {
             command.add(Uranium.getServerHome().getCanonicalPath());
             command.add("--installKCauldron");
             command.add(String.format("%s:%s:%s", Uranium.getGroup(), Uranium.getChannel(), mVersion));
-            final String[] symlinks = MinecraftServer.kcauldronConfig.updatecheckerSymlinks
+            final String[] symlinks = MinecraftServer.uraniumConfig.updatecheckerSymlinks
                     .getValue().trim().split(File.pathSeparator);
             for (String symlink : symlinks) {
                 command.add("--serverSymlinks");

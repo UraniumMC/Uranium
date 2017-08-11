@@ -176,7 +176,7 @@
 +                catch (AbstractMethodError e)
 +                {} finally {
 +                    if (sourceInventory == null)
-+                        sourceInventory = new kcauldron.CraftInventoryWrapper(p_145892_1_);
++                        sourceInventory = new cc.uraniummc.CraftInventoryWrapper(p_145892_1_);
 +                }
 +                // Cauldron end
 +            }

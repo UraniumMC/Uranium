@@ -81,7 +81,7 @@
              this.entityIdMap = new IntHashMap();
          }
 +        
-+        if (this.blockUpdatesTracker == null) this.blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
++        if (this.blockUpdatesTracker == null) this.blockUpdatesTracker = new cc.uraniummc.BlockUpdatesTracker(this);
  
          if (this.pendingTickListEntriesHashSet == null)
          {
@@ -121,7 +121,7 @@
 +            this.entityIdMap = new IntHashMap();
 +        }
 +        
-+        if (this.blockUpdatesTracker == null) this.blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
++        if (this.blockUpdatesTracker == null) this.blockUpdatesTracker = new cc.uraniummc.BlockUpdatesTracker(this);
 +
 +        if (this.pendingTickListEntriesHashSet == null)
 +        {
@@ -413,7 +413,7 @@
      {
 -        NextTickListEntry nextticklistentry = new NextTickListEntry(p_147477_1_, p_147477_2_, p_147477_3_, p_147477_4_);
 -        return this.pendingTickListEntriesThisTick.contains(nextticklistentry);
-+        for (kcauldron.BlockUpdateEntry entry : (Iterable<kcauldron.BlockUpdateEntry>) pendingTickListEntriesThisTick) if (entry.x == p_147477_1_ && entry.y == p_147477_2_ && entry.z == p_147477_3_ && entry.block == p_147477_4_) return true;
++        for (cc.uraniummc.BlockUpdateEntry entry : (Iterable<cc.uraniummc.BlockUpdateEntry>) pendingTickListEntriesThisTick) if (entry.x == p_147477_1_ && entry.y == p_147477_2_ && entry.z == p_147477_3_ && entry.block == p_147477_4_) return true;
 +        return false;
      }
  
@@ -542,7 +542,7 @@
  
              this.theProfiler.startSection("cleaning");
 -            NextTickListEntry nextticklistentry;
-+            kcauldron.BlockUpdateEntry nextticklistentry;
++            cc.uraniummc.BlockUpdateEntry nextticklistentry;
  
              for (int j = 0; j < i; ++j)
              {
@@ -567,7 +567,7 @@
              while (iterator.hasNext())
              {
 -                nextticklistentry = (NextTickListEntry)iterator.next();
-+                nextticklistentry = (kcauldron.BlockUpdateEntry)iterator.next();
++                nextticklistentry = (cc.uraniummc.BlockUpdateEntry)iterator.next();
                  iterator.remove();
                  //Keeping here as a note for future when it may be restored.
                  //boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4));
@@ -645,7 +645,7 @@
              while (iterator.hasNext())
              {
 -                NextTickListEntry nextticklistentry = (NextTickListEntry)iterator.next();
-+                kcauldron.BlockUpdateEntry nextticklistentry = (kcauldron.BlockUpdateEntry)iterator.next();
++                cc.uraniummc.BlockUpdateEntry nextticklistentry = (cc.uraniummc.BlockUpdateEntry)iterator.next();
  
 -                if (nextticklistentry.xCoord >= i && nextticklistentry.xCoord < j && nextticklistentry.zCoord >= k && nextticklistentry.zCoord < l)
 +                if (nextticklistentry.x >= i && nextticklistentry.x < j && nextticklistentry.z >= k && nextticklistentry.z < l)
@@ -748,7 +748,7 @@
              this.entityIdMap = new IntHashMap();
          }
 +        
-+        if (blockUpdatesTracker == null) blockUpdatesTracker = new kcauldron.BlockUpdatesTracker(this);
++        if (blockUpdatesTracker == null) blockUpdatesTracker = new cc.uraniummc.BlockUpdatesTracker(this);
  
          if (this.pendingTickListEntriesHashSet == null)
          {
@@ -952,5 +952,5 @@
 +    // CraftBukkit end
 +    
 +    // KCauldron start
-+    public kcauldron.BlockUpdatesTracker blockUpdatesTracker;
++    public cc.uraniummc.BlockUpdatesTracker blockUpdatesTracker;
  }

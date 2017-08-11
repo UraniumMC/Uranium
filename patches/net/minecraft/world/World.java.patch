@@ -971,7 +971,7 @@
 -                this.loadedEntityList.remove(i--);
 +                if (this.tickPosition < this.loadedEntityList.size()) // KCauldron
 +                this.loadedEntityList.remove(this.tickPosition--); // CraftBukkit - Use field for loop variable
-+                else kcauldron.KLog.get().warning("Entity removal desync! " + entity); // KCauldron
++                else cc.uraniummc.ULog.get().warning("Entity removal desync! " + entity); // KCauldron
                  this.onEntityRemoved(entity);
              }
  
@@ -986,7 +986,7 @@
 -
 -        while (iterator.hasNext())
 +        // CraftBukkit start - From below, clean up tile entities before ticking them
-+        if (!this.field_147483_b.isEmpty() && !kcauldron.KCauldronConfig.tileEntityListRecreation)
++        if (!this.field_147483_b.isEmpty() && !cc.uraniummc.UraniumConfig.tileEntityListRecreation)
          {
 -            TileEntity tileentity = (TileEntity)iterator.next();
 +            for (Object tile : field_147483_b)
@@ -1000,7 +1000,7 @@
  
 -            if (!tileentity.isInvalid() && tileentity.hasWorldObj() && this.blockExists(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord))
 +        // KCauldron start
-+        if (kcauldron.KCauldronConfig.tileEntityListRecreation) {
++        if (cc.uraniummc.UraniumConfig.tileEntityListRecreation) {
 +            List<TileEntity> newEntityList = new ArrayList<TileEntity>();
 +            final int length = loadedTileEntityList.size();
 +            for (int tileIndex = 0; tileIndex < length; tileIndex++) {
@@ -1184,7 +1184,7 @@
  
      public void func_147457_a(TileEntity p_147457_1_)
      {
-+        if (kcauldron.KCauldronConfig.tileEntityListRecreation) {
++        if (cc.uraniummc.UraniumConfig.tileEntityListRecreation) {
 +            p_147457_1_.dead = true; return;
 +        }
          this.field_147483_b.add(p_147457_1_);

@@ -8,7 +8,7 @@
 +import org.bukkit.Server;
 +import org.bukkit.craftbukkit.util.LongHash;
 +
-+class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChunk, net.minecraft.world.chunk.Chunk, kcauldron.ChunkCallback, RuntimeException> {
++class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChunk, net.minecraft.world.chunk.Chunk, cc.uraniummc.ChunkCallback, RuntimeException> {
      private final AtomicInteger threadNumber = new AtomicInteger(1);
  
      // async stuff
@@ -52,7 +52,7 @@
  
 -    public void callStage3(QueuedChunk queuedChunk, net.minecraft.world.chunk.Chunk chunk, Runnable runnable) throws RuntimeException {
 -        runnable.run();
-+    public void callStage3(QueuedChunk queuedChunk, net.minecraft.world.chunk.Chunk chunk, kcauldron.ChunkCallback callback) throws RuntimeException {
++    public void callStage3(QueuedChunk queuedChunk, net.minecraft.world.chunk.Chunk chunk, cc.uraniummc.ChunkCallback callback) throws RuntimeException {
 +        callback.onChunkLoaded(chunk);
      }
  

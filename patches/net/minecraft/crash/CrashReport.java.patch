@@ -13,7 +13,7 @@
  import java.util.List;
  import java.util.concurrent.Callable;
 +
-+import kcauldron.KCauldron;
++import cc.uraniummc.Uranium;
  import net.minecraft.util.ReportedException;
  import net.minecraft.world.gen.layer.IntCache;
 +
@@ -34,7 +34,7 @@
 +        this.theReportCategory.addCrashSectionCallable("KCauldron Version", new Callable<String>() {
 +            @Override
 +            public String call() throws Exception {
-+                return String.format("%s:%s:%s %s", KCauldron.getGroup(), KCauldron.getChannel(), KCauldron.getCurrentVersion(), KCauldron.isOfficial() ? "Official" : "UNOFFICIAL DON'T REPORT THIS CRASH");
++                return String.format("%s:%s:%s %s", Uranium.getGroup(), Uranium.getChannel(), Uranium.getCurrentVersion(), Uranium.isOfficial() ? "Official" : "UNOFFICIAL DON'T REPORT THIS CRASH");
 +            }
 +        });
 +        this.theReportCategory.addCrashSectionCallable("Plugins", new Callable<String>() {

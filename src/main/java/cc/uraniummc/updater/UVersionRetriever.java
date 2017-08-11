@@ -29,7 +29,7 @@ public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
 
     public static void init(MinecraftServer server) {
         sServer = server;
-        if (MinecraftServer.kcauldronConfig.updatecheckerEnable.getValue()) {
+        if (MinecraftServer.uraniumConfig.updatecheckerEnable.getValue()) {
             startServer(DefaultUpdateCallback.INSTANCE, true);
         }
     }

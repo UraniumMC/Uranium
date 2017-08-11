@@ -5,7 +5,7 @@
      static final int PLAYERS_PER_THREAD = 50;
  
 -    private static final AsynchronousExecutor<QueuedChunk, net.minecraft.world.chunk.Chunk, Runnable, RuntimeException> instance = new AsynchronousExecutor<QueuedChunk, net.minecraft.world.chunk.Chunk, Runnable, RuntimeException>(new ChunkIOProvider(), BASE_THREADS);
-+    private static final AsynchronousExecutor<QueuedChunk, net.minecraft.world.chunk.Chunk, kcauldron.ChunkCallback, RuntimeException> instance = new AsynchronousExecutor<QueuedChunk, net.minecraft.world.chunk.Chunk, kcauldron.ChunkCallback, RuntimeException>(new ChunkIOProvider(), BASE_THREADS); // KCauldron
++    private static final AsynchronousExecutor<QueuedChunk, net.minecraft.world.chunk.Chunk, cc.uraniummc.ChunkCallback, RuntimeException> instance = new AsynchronousExecutor<QueuedChunk, net.minecraft.world.chunk.Chunk, cc.uraniummc.ChunkCallback, RuntimeException>(new ChunkIOProvider(), BASE_THREADS); // KCauldron
  
      public static net.minecraft.world.chunk.Chunk syncChunkLoad(net.minecraft.world.World world, net.minecraft.world.chunk.storage.AnvilChunkLoader loader, net.minecraft.world.gen.ChunkProviderServer provider, int x, int z) {
          return instance.getSkipQueue(new QueuedChunk(x, z, loader, world, provider));
@@ -35,11 +35,11 @@
 +    // KCauldron start
 +    public static void queueChunkLoad(net.minecraft.world.World world,
 +            net.minecraft.world.chunk.storage.AnvilChunkLoader loader,
-+            net.minecraft.world.gen.ChunkProviderServer provider, int x, int z, kcauldron.ChunkCallback runnable) {
++            net.minecraft.world.gen.ChunkProviderServer provider, int x, int z, cc.uraniummc.ChunkCallback runnable) {
 +        instance.add(new QueuedChunk(x, z, loader, world, provider), runnable);
 +    }
 +
-+    public static final class RunnableCallback implements kcauldron.ChunkCallback {
++    public static final class RunnableCallback implements cc.uraniummc.ChunkCallback {
 +        private final Runnable runnable;
 +
 +        public RunnableCallback(Runnable runnable) {

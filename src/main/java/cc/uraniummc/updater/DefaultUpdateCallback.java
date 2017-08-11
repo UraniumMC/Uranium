@@ -71,7 +71,7 @@ public class DefaultUpdateCallback implements IVersionCheckCallback {
             }
         }
         mHasUpdate = true;
-        if (MinecraftServer.kcauldronConfig.updatecheckerAutoinstall.getValue()
+        if (MinecraftServer.uraniumConfig.updatecheckerAutoinstall.getValue()
                 && !mNewVersion.equals(Uranium.sNewServerVersion)
                 && !Uranium.sUpdateInProgress) {
             Bukkit.getConsoleSender().sendMessage("Triggering auto update");

@@ -147,7 +147,7 @@
              while (iterator.hasNext())
              {
 -                NextTickListEntry nextticklistentry = (NextTickListEntry)iterator.next();
-+                kcauldron.BlockUpdateEntry nextticklistentry = (kcauldron.BlockUpdateEntry)iterator.next();
++                cc.uraniummc.BlockUpdateEntry nextticklistentry = (cc.uraniummc.BlockUpdateEntry)iterator.next();
                  NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 -                nbttagcompound2.setInteger("i", Block.getIdFromBlock(nextticklistentry.func_151351_a()));
 -                nbttagcompound2.setInteger("x", nextticklistentry.xCoord);
@@ -252,7 +252,7 @@
                  {
                      NBTTagCompound nbttagcompound5 = nbttaglist3.getCompoundTagAt(j1);
 -                    p_75823_1_.func_147446_b(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), Block.getBlockById(nbttagcompound5.getInteger("i")), nbttagcompound5.getInteger("t"), nbttagcompound5.getInteger("p"));
-+                    kcauldron.BlockUpdateEntry entry = ((net.minecraft.world.WorldServer) p_75823_1_).blockUpdatesTracker.allocateEntry(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), nbttagcompound5.getInteger("p"), nbttagcompound5.getInteger("t"), Block.getBlockById(nbttagcompound5.getInteger("i")));
++                    cc.uraniummc.BlockUpdateEntry entry = ((net.minecraft.world.WorldServer) p_75823_1_).blockUpdatesTracker.allocateEntry(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), nbttagcompound5.getInteger("p"), nbttagcompound5.getInteger("t"), Block.getBlockById(nbttagcompound5.getInteger("i")));
 +                    chunk.blockUpdates.add(entry);
                  }
              }
