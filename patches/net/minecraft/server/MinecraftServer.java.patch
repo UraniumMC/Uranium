@@ -64,7 +64,7 @@
 +import jline.console.ConsoleReader;
 +import joptsimple.OptionParser;
 +import joptsimple.OptionSet;
-+import cc.uraniummc.KCauldronConfig;
++import cc.uraniummc.UraniumConfig;
  import net.minecraft.command.ICommandManager;
  import net.minecraft.command.ICommandSender;
 +import net.minecraft.command.ServerCommand;
@@ -174,7 +174,7 @@
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
 +        this.primaryThread = new Thread(this, "Server thread"); // CraftBukkit
-+        uraniumConfig = new KCauldronConfig();
++        uraniumConfig = new UraniumConfig();
 +        cauldronConfig = new CauldronConfig("cauldron.yml", "cauldron");
 +        tileEntityConfig = new TileEntityConfig("tileentities.yml", "cauldron_te");
 +        entityConfig = new EntityConfig("entities.yml", "cauldron_e");
@@ -195,7 +195,7 @@
 +        this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
 +        this.field_152365_W = this.field_152364_T.createProfileRepository();
 +        // Cauldron start
-+        uraniumConfig = new KCauldronConfig();
++        uraniumConfig = new UraniumConfig();
 +        cauldronConfig = new CauldronConfig("cauldron.yml", "cauldron");
 +        tileEntityConfig = new TileEntityConfig("tileentities.yml", "cauldron_te");
 +        entityConfig = new EntityConfig("entities.yml", "cauldron_e");

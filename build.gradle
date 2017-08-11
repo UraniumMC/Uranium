@@ -101,8 +101,8 @@ def gitInfo(String key) {
 ext.mcVersion = "1.7.10"
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
-ext.kcx_version = 1
-version = "${mcVersion}-${forgeVersion}-${kcx_version}.${build}"
+ext.uranium_version = 2
+version = "${mcVersion}-${forgeVersion}-${uranium_version}.${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 
 launch4j {
