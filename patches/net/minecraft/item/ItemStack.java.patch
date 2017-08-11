@@ -18,7 +18,7 @@
 +import com.google.common.collect.HashMultimap;
 +import com.google.common.collect.Multimap;
 +
-+import cc.capture.type.CaptureBlock;
++import cc.uraniummc.capture.type.CaptureBlock;
 +import cpw.mods.fml.relauncher.Side;
 +import cpw.mods.fml.relauncher.SideOnly;
  import net.minecraft.block.Block;

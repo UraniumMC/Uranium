@@ -1,7 +1,7 @@
 [submodule "bukkit"]
 	path = bukkit
-	url = https://git.xjboss.net/KC-RELOADED/KCauldron-Bukkit.git
+	url = https://git.xjboss.net/UraniumDev/KCauldron-Bukkit.git
 [submodule "forge"]
 	path = forge
-	url = https://git.xjboss.net/KC-RELOADED/MinecraftForge.git
+	url = https://git.xjboss.net/UraniumDev/MinecraftForge.git
 	branch = 1.7.10

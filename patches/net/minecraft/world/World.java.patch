@@ -31,9 +31,9 @@
 +
 +import com.google.common.collect.ImmutableSetMultimap;
 +
-+import cc.capture.WorldCapture;
-+import cc.capture.type.CaptureBlock;
-+import cc.capture.type.CaptureTree;
++import cc.uraniummc.capture.WorldCapture;
++import cc.uraniummc.capture.type.CaptureBlock;
++import cc.uraniummc.capture.type.CaptureTree;
 +import cpw.mods.fml.common.FMLLog;
 +import cpw.mods.fml.relauncher.Side;
 +import cpw.mods.fml.relauncher.SideOnly;
