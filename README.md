@@ -1,7 +1,7 @@
-**[加入Uranium交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
+**[加入Uranium官方钦定交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
 # Uranium
 ### Uranium - continuation of KCauldron minecraft server
-[![Build Status][build_status]](https://ci.xjboss.net/job/Uranium) [![Download KCauldronX][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+[![Build Status][build_status]](https://ci.xjboss.net/job/Uranium) [![Download Uranium][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
 
 ![donate][donate_img] 1PFBV7gFBEqG1hcYhR9CvrvQhENczsRgHg
 ## Building KCauldronX
@@ -40,7 +40,7 @@ If you're once checkout source - you not need to do it again
   * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/Uranium/issues/new) else
 
 [donate_img]: https://git.xjboss.net/static/donate-Bitcoin.svg
-[download_url]: https://pan.baidu.com/s/1i4DHUHR#list/path=/Uranium/%23lastSuccessfulBuild
+[download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
 [download_img]: https://git.xjboss.net/static/download-latest.svg
 [build_status]: https://ci.xjboss.net/job/Uranium/badge/icon
 [bStats]: https://git.xjboss.net/static/bStats-KCX.svg
