@@ -176,7 +176,7 @@
          {
 +            // KCauldron start
 +            if (runnable != null) {
-+                kcauldron.ChunkGenerator.INSTANCE.queueChunkGeneration(this, par1, par2, new net.minecraftforge.common.chunkio.ChunkIOExecutor.RunnableCallback(runnable));
++                cc.uraniummc.ChunkGenerator.INSTANCE.queueChunkGeneration(this, par1, par2, new net.minecraftforge.common.chunkio.ChunkIOExecutor.RunnableCallback(runnable));
 +                return null;
 +            }
 +            // KCauldron end
@@ -544,7 +544,7 @@
 +    // KCauldron start
 +    private final java.util.concurrent.locks.Lock generatorLock = new java.util.concurrent.locks.ReentrantLock();
 +    
-+    public boolean loadAsync(int x, int z, boolean generateOnRequest, kcauldron.ChunkCallback callback) {
++    public boolean loadAsync(int x, int z, boolean generateOnRequest, cc.uraniummc.ChunkCallback callback) {
 +        Chunk chunk = getChunkIfLoaded(x, z);
 +        if (chunk != null) {
 +            callback.onChunkLoaded(chunk);
@@ -559,9 +559,9 @@
 +        return true;
 +    }
 +
-+    public void loadAsync(int x, int z, kcauldron.ChunkCallback callback) {
++    public void loadAsync(int x, int z, cc.uraniummc.ChunkCallback callback) {
 +        if (!loadAsync(x, z, false, callback))
-+            kcauldron.ChunkGenerator.INSTANCE.queueChunkGeneration(this, x, z, callback);
++            cc.uraniummc.ChunkGenerator.INSTANCE.queueChunkGeneration(this, x, z, callback);
 +    }
 +    // KCauldron end
  }

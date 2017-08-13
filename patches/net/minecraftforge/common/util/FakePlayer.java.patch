@@ -1,6 +1,9 @@
 --- ../src-base/minecraft/net/minecraftforge/common/util/FakePlayer.java
 +++ ../src-work/minecraft/net/minecraftforge/common/util/FakePlayer.java
-@@ -3,9 +3,12 @@
+@@ -1,11 +1,15 @@
+ package net.minecraftforge.common.util;
+ 
++import cc.uraniummc.ULog;
  import com.mojang.authlib.GameProfile;
  
  import cpw.mods.fml.common.FMLCommonHandler;
@@ -13,7 +16,7 @@
  import net.minecraft.server.management.ItemInWorldManager;
  import net.minecraft.stats.StatBase;
  import net.minecraft.util.ChunkCoordinates;
-@@ -13,15 +16,58 @@
+@@ -13,15 +17,58 @@
  import net.minecraft.util.IChatComponent;
  import net.minecraft.world.World;
  import net.minecraft.world.WorldServer;
@@ -64,7 +67,7 @@
 +                        Bukkit.getPluginManager().callEvent(prelogin1);
 +                        PlayerLoginEvent login = new PlayerLoginEvent(getBukkitEntity(), "localhost", InetAddress.getLoopbackAddress());
 +                        Bukkit.getPluginManager().callEvent(login);
-+                        FMLLog.info("%s","[KCauldronX] Fakeplayer "+getCommandSenderName()+" ("+getUniqueID()+") joined server");
++                        ULog.get().info("%s","Fakeplayer "+getCommandSenderName()+" ("+getUniqueID()+") joined server");
 +                    }
 +                });
 +            }

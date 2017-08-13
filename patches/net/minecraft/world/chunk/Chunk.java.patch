@@ -391,5 +391,5 @@
 +    }
 +    
 +    // KCauldron hold block updates into each chunk individually
-+    public final java.util.Set<kcauldron.BlockUpdateEntry> blockUpdates = new java.util.TreeSet<kcauldron.BlockUpdateEntry>();
++    public final java.util.Set<cc.uraniummc.BlockUpdateEntry> blockUpdates = new java.util.TreeSet<cc.uraniummc.BlockUpdateEntry>();
  }

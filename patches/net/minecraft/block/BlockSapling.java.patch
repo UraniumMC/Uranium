@@ -10,7 +10,7 @@
 +
 +import org.bukkit.TreeType;
 +
-+import cc.capture.type.CaptureTree;
++import cc.uraniummc.capture.type.CaptureTree;
 +import cpw.mods.fml.relauncher.Side;
 +import cpw.mods.fml.relauncher.SideOnly;
  import net.minecraft.client.renderer.texture.IIconRegister;

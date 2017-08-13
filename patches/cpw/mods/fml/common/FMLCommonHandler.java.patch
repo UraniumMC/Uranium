@@ -15,7 +15,7 @@
      public void onPostServerTick()
      {
          bus().post(new TickEvent.ServerTickEvent(Phase.END));
-+        kcauldron.ChunkGenerator.INSTANCE.chunkGeneratorCycle(); // KCauldron
++        cc.uraniummc.ChunkGenerator.INSTANCE.chunkGeneratorCycle(); // KCauldron
      }
  
      /**
@@ -23,7 +23,7 @@
      {
          Loader.instance().serverStarted();
          sidedDelegate.allowLogins();
-+        kcauldron.updater.KVersionRetriever.init(MinecraftServer.getServer());
++        cc.uraniummc.updater.UVersionRetriever.init(MinecraftServer.getServer());
      }
  
      public void handleServerStopping()

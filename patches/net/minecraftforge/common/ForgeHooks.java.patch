@@ -19,8 +19,8 @@
  import java.util.regex.Matcher;
  import java.util.regex.Pattern;
  
-+import cc.capture.type.CaptureBlock;
-+import cc.capture.type.CaptureTree;
++import cc.uraniummc.capture.type.CaptureBlock;
++import cc.uraniummc.capture.type.CaptureTree;
  import cpw.mods.fml.common.eventhandler.Event;
  import cpw.mods.fml.relauncher.ReflectionHelper;
  import net.minecraft.block.Block;

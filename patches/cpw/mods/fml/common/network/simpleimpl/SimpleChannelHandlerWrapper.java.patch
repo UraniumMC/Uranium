@@ -8,7 +8,7 @@
 -
  import com.google.common.base.Preconditions;
  
-+import cc.capture.type.CaptureBlock;
++import cc.uraniummc.capture.type.CaptureBlock;
  import cpw.mods.fml.common.FMLLog;
  import cpw.mods.fml.common.network.FMLOutboundHandler;
  import cpw.mods.fml.common.network.NetworkRegistry;

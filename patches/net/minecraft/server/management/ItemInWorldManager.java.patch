@@ -29,7 +29,7 @@
 +import org.bukkit.event.block.Action;
 +import org.bukkit.event.player.PlayerInteractEvent;
 +
-+import cc.capture.type.CaptureBlock;
++import cc.uraniummc.capture.type.CaptureBlock;
 +// CraftBukkit end
 +// Cauldron start
 +import net.minecraft.inventory.ContainerPlayer;

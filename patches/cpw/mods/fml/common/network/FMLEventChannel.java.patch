@@ -10,7 +10,7 @@
 -import net.minecraft.entity.player.EntityPlayerMP;
 -import net.minecraft.network.NetHandlerPlayServer;
 +
-+import cc.capture.type.CaptureBlock;
++import cc.uraniummc.capture.type.CaptureBlock;
  import cpw.mods.fml.common.FMLCommonHandler;
  import cpw.mods.fml.common.eventhandler.EventBus;
  import cpw.mods.fml.common.eventhandler.SubscribeEvent;

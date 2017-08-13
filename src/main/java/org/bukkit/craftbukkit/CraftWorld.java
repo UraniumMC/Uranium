@@ -108,7 +108,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.util.Vector;
 
-import cc.capture.type.CaptureTree;
+import cc.uraniummc.capture.type.CaptureTree;
 import cpw.mods.fml.common.registry.EntityRegistry; // Cauldron
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;

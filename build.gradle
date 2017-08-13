@@ -1,7 +1,7 @@
 import groovy.json.JsonSlurper
-import kcauldron.CreateChangelog
-import kcauldron.InstallBundle
-import kcauldron.VersionParser
+import cc.uraniummc.CreateChangelog
+import cc.uraniummc.InstallBundle
+import cc.uraniummc.VersionParser
 
 buildscript {
     repositories {
@@ -59,7 +59,7 @@ minecraft {
         options.encoding = "UTF-8"
     }
 }
-group = 'pw.yumc'
+group = 'cc.uraniummc'
 ext.buildInfoCached = null;
 
 def buildInfo(String key) {
@@ -101,9 +101,9 @@ def gitInfo(String key) {
 ext.mcVersion = "1.7.10"
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
-ext.kcx_version = 1
-version = "${mcVersion}-${forgeVersion}-${kcx_version}.${build}"
-if (System.getenv('officialBuild')!=null) println "Updated KCauldron version: ${version}"
+ext.uranium_version = 2
+version = "${mcVersion}-${forgeVersion}-${uranium_version}.${build}"
+if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 
 launch4j {
     jreMinVersion = '1.7.0'
@@ -171,13 +171,13 @@ def generateClasspath(boolean legacy = false) {
 
 def generateManifest(boolean legacy = false) {
     [
-            'KCauldronX-Git-Branch'  : gitInfo('branch'),
-            'KCauldronX-Git-Hash'    : gitInfo('fullHash'),
-            'KCauldronX-Group'       : project.group,
-            'KCauldronX-Channel'     : project.name,
-            'KCauldronX-Version'     : project.version,
-            'KCauldronX-Legacy'      : legacy,
-            'KCauldronX-Official'    : System.getProperty('officialBuild')!=null,
+            'Uranium-Git-Branch'  : gitInfo('branch'),
+            'Uranium-Git-Hash'    : gitInfo('fullHash'),
+            'Uranium-Group'       : project.group,
+            'Uranium-Channel'     : project.name,
+            'Uranium-Version'     : project.version,
+            'Uranium-Legacy'      : legacy,
+            'Uranium-Official'    : System.getProperty('officialBuild')!=null,
             'Implementation-Vendor' : 'Prototik',
             'Implementation-Title'  : project.name,
             'Implementation-Version': '1.7.10-R0.1-SNAPSHOT',
@@ -236,7 +236,7 @@ task packageBundle(type: Zip, dependsOn: installBundle) {
     from fileTree(installBundle.installLocation)
     from packageUniversal
     // from bundleStub
-    // rename bundleStub.archiveName, 'KCauldron.jar'
+    // rename bundleStub.archiveName, 'Uranium.jar'
 }
 
 task signJars(type: Sign, dependsOn: [packageChangelog, packageBundle, packageUniversal, 'generatePomFileForMavenPublication']) {
