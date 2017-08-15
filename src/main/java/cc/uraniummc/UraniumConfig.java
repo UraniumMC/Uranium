@@ -74,7 +74,7 @@ public class UraniumConfig extends ConfigBase {
 
     @Override
     protected void addCommands() {
-        commands.put(commandName, new UraniumCommand());
+        commands.put(commandName, new UraniumCommand(commandName));
     }
 
     @Override

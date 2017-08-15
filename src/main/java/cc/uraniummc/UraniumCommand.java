@@ -24,16 +24,16 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
 public class UraniumCommand extends Command {
-    public static final String NAME = "ur";
+    public static String NAME = "um";
     public static final String CHECK = NAME + ".check";
     public static final String UPDATE = NAME + ".update";
     public static final String TPS = NAME + ".tps";
     public static final String RESTART = NAME + ".restart";
     public static final String DUMP = NAME + ".dump";
 
-    public UraniumCommand() {
+    public UraniumCommand(String name) {
         super(NAME);
-
+        NAME=name;
         StringBuilder builder = new StringBuilder();
         //builder.append(String.format("/%s check - Check to update\n", NAME));
         //builder.append(String.format("/%s update [version] - Update to specified or latest version\n", NAME));
