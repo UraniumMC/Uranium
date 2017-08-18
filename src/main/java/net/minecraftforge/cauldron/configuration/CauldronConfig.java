@@ -64,6 +64,9 @@ public class CauldronConfig extends ConfigBase
     public final BoolSetting modPacketPlace = new BoolSetting(this, "block-monitor.mod-packet-place", true, "monitor block place on mod packet");
     public final BoolSetting modPacketInteract = new BoolSetting(this, "block-monitor.mod-packet-interact", false, "monitor block interact on mod packet");
     
+    //player chunk load 
+    public final IntSetting playerChunkLoadDelay = new IntSetting(this, "player-chunk.load-delay", 0, "delay(tick) to load player chunk.");
+
     /* ======================================================================== */
 
     public CauldronConfig(String fileName, String commandName)
@@ -105,12 +108,14 @@ public class CauldronConfig extends ConfigBase
         settings.put(userLogin.path, userLogin);
         settings.put(allowTntPunishment.path, allowTntPunishment);
         settings.put(maxPlayersVisible.path, maxPlayersVisible);
-        
+
         settings.put(modPacketPlace.path,modPacketPlace);
         settings.put(modPacketInteract.path,modPacketInteract);
-        
+
         settings.put(removeErroringBlocks.path,removeErroringBlocks);
-        
+
+        settings.put(playerChunkLoadDelay.path,playerChunkLoadDelay);
+
         load();
     }
 
