@@ -157,6 +157,15 @@
      public PluginDescriptionFile getPluginDescription(File file) throws InvalidDescriptionException {
          Validate.notNull(file, "File cannot be null");
  
+@@ -232,7 +270,7 @@
+         Set<Method> methods;
+         try {
+             Method[] publicMethods = listener.getClass().getMethods();
+-            methods = new HashSet<Method>(publicMethods.length, Float.MAX_VALUE);
++            methods = new HashSet<Method>(publicMethods.length);
+             for (Method method : publicMethods) {
+                 methods.add(method);
+             }
 @@ -283,13 +321,19 @@
                  }
              }
