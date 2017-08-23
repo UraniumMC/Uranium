@@ -673,7 +673,7 @@
          // do not drop any items while restoring blocksnapshots. Prevents dupes
 -        if (!this.isRemote && (p_72838_1_ == null || (p_72838_1_ instanceof net.minecraft.entity.item.EntityItem && this.restoringBlockSnapshots))) return false;
 +        if(!this.isRemote){
-+            if(p_72838_1_ instanceof net.minecraft.entity.item.EntityItem&&this.restoringBlockSnapshots)
++            if(this.restoringBlockSnapshots)
 +                return false;
 +            if(this.mCapture.isCapture()&&!(p_72838_1_ instanceof EntityPlayerMP)){
 +                this.mCapture.addCaptureEntity(this,p_72838_1_,spawnReason);
