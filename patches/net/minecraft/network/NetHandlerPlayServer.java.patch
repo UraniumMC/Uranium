@@ -8,7 +8,14 @@
  import net.minecraft.block.material.Material;
  import net.minecraft.command.server.CommandBlockLogic;
  import net.minecraft.crash.CrashReport;
-@@ -32,6 +33,7 @@
+@@ -26,12 +27,14 @@
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.entity.player.InventoryPlayer;
+ import net.minecraft.entity.projectile.EntityArrow;
++import net.minecraft.event.HoverEvent;
+ import net.minecraft.init.Items;
+ import net.minecraft.inventory.Container;
+ import net.minecraft.inventory.ContainerBeacon;
  import net.minecraft.inventory.ContainerMerchant;
  import net.minecraft.inventory.ContainerRepair;
  import net.minecraft.inventory.Slot;
@@ -16,7 +23,7 @@
  import net.minecraft.item.ItemEditableBook;
  import net.minecraft.item.ItemStack;
  import net.minecraft.item.ItemWritableBook;
-@@ -61,6 +63,7 @@
+@@ -61,6 +64,7 @@
  import net.minecraft.network.play.server.S00PacketKeepAlive;
  import net.minecraft.network.play.server.S02PacketChat;
  import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -24,7 +31,7 @@
  import net.minecraft.network.play.server.S23PacketBlockChange;
  import net.minecraft.network.play.server.S2FPacketSetSlot;
  import net.minecraft.network.play.server.S32PacketConfirmTransaction;
-@@ -81,22 +84,78 @@
+@@ -81,22 +85,78 @@
  import net.minecraft.util.IChatComponent;
  import net.minecraft.util.IntHashMap;
  import net.minecraft.util.ReportedException;
@@ -108,7 +115,7 @@
      public final NetworkManager netManager;
      private final MinecraftServer serverController;
      public EntityPlayerMP playerEntity;
-@@ -105,571 +164,730 @@
+@@ -105,571 +165,730 @@
      private boolean field_147366_g;
      private int field_147378_h;
      private long field_147379_i;
@@ -1179,7 +1186,7 @@
                      return p_147359_1_.getClass().getCanonicalName();
                  }
              });
-@@ -677,22 +895,33 @@
+@@ -677,22 +896,33 @@
          }
      }
  
@@ -1223,7 +1230,7 @@
          {
              ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.cannotSend", new Object[0]);
              chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-@@ -708,156 +937,457 @@
+@@ -708,156 +938,478 @@
              {
                  if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i)))
                  {
@@ -1464,7 +1471,28 @@
 +                return;
 +            }
 +        }catch(org.bukkit.command.CommandException ex){
-+            player.sendMessage(org.bukkit.ChatColor.RED+"An internal error occurred while attempting to perform this command");
++            if(MinecraftServer.uraniumConfig.allowShowCommandThrowableOnClient.getValue()) {
++                StringBuilder td = new StringBuilder();
++                td.append("Exception in your command ").append(" ").append(ex.getClass().getName()).append(": ").append(ex.getLocalizedMessage()).append("\n");
++                for (StackTraceElement ste : ex.getStackTrace()) {
++                    td.append(" at ").append(ste.toString()).append("\n");
++                }
++                Throwable cause=ex;
++                while ((cause=cause.getCause())!=null){
++                    td.append("Cause by ");
++                    td.append(cause.getClass().getClass().getName()).append(":").append(cause.getLocalizedMessage()).append("\n");
++                    for (StackTraceElement ste : cause.getStackTrace()) {
++                        td.append(" at ").append(ste.toString()).append("\n");
++                    }
++                }
++                td.deleteCharAt(td.length() - 1);
++                ChatComponentText text=new ChatComponentText("An internal error occurred while attempting to perform this command");
++                text.getChatStyle().setColor(EnumChatFormatting.RED);
++                text.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(td.toString())));
++                player.getHandle().playerNetServerHandler.sendPacket(new S02PacketChat(text));
++            }else {
++                player.sendMessage(org.bukkit.ChatColor.RED + "An internal error occurred while attempting to perform this command");
++            }
 +            java.util.logging.Logger.getLogger(NetHandlerPlayServer.class.getName()).log(java.util.logging.Level.SEVERE,null,ex);
 +            org.bukkit.craftbukkit.SpigotTimings.playerCommandTimer.stopTiming(); // Spigot
 +            return;
@@ -1769,7 +1797,7 @@
                  }
  
                  break;
-@@ -869,117 +1399,484 @@
+@@ -869,117 +1421,484 @@
          }
      }
  
@@ -2324,7 +2352,7 @@
                      return;
                  }
              }
-@@ -987,79 +1884,95 @@
+@@ -987,79 +1906,95 @@
              int i;
              int j;
  
@@ -2466,7 +2494,7 @@
          this.playerEntity.func_147100_a(p_147352_1_);
      }
  
-@@ -1068,7 +1981,6 @@
+@@ -1068,7 +2003,6 @@
          PacketBuffer packetbuffer;
          ItemStack itemstack;
          ItemStack itemstack1;
@@ -2474,7 +2502,7 @@
          if ("MC|BEdit".equals(p_147349_1_.func_149559_c()))
          {
              packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
-@@ -1089,20 +2001,21 @@
+@@ -1089,20 +2023,21 @@
  
                  itemstack1 = this.playerEntity.inventory.getCurrentItem();
  
@@ -2507,7 +2535,7 @@
              }
              finally
              {
-@@ -1128,26 +2041,26 @@
+@@ -1128,26 +2063,26 @@
  
                      itemstack1 = this.playerEntity.inventory.getCurrentItem();
  
@@ -2548,7 +2576,7 @@
              }
              finally
              {
-@@ -1174,9 +2087,12 @@
+@@ -1174,9 +2109,12 @@
                          ((ContainerMerchant)container).setCurrentRecipeIndex(i);
                      }
                  }
@@ -2562,7 +2590,7 @@
                  }
              }
              else if ("MC|AdvCdm".equals(p_147349_1_.func_149559_c()))
-@@ -1222,9 +2138,12 @@
+@@ -1222,9 +2160,12 @@
                              this.playerEntity.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", new Object[] {s1}));
                          }
                      }
@@ -2577,7 +2605,7 @@
                      }
                      finally
                      {
-@@ -1257,9 +2176,12 @@
+@@ -1257,9 +2198,12 @@
                              tileentitybeacon.markDirty();
                          }
                      }
@@ -2592,7 +2620,7 @@
                      }
                  }
              }
-@@ -1281,50 +2203,58 @@
+@@ -1281,50 +2225,58 @@
                      containerrepair.updateItemName("");
                  }
              }
