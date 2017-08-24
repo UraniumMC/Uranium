@@ -72,7 +72,7 @@
          {
              this.func_147326_c();
          }
-@@ -81,24 +89,54 @@
+@@ -81,24 +89,65 @@
          }
      }
  
@@ -85,7 +85,18 @@
 +            uuid = field_147333_a.spoofedUUID;
 +        } else
 +        {
-+            uuid = UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + this.field_147337_i.getName() ).getBytes( Charsets.UTF_8 ) );
++            final String name;
++            switch (MinecraftServer.uraniumConfig.uuidMode.getValue()){
++                case 1:
++                    name=field_147337_i.getName().toLowerCase();
++                    break;
++                case 2:
++                    name=field_147337_i.getName().toUpperCase();
++                    break;
++                default:
++                    name=field_147337_i.getName();
++            }
++            uuid = UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + name ).getBytes( Charsets.UTF_8 ) );
 +        }
 +
 +        this.field_147337_i = new GameProfile( uuid, this.field_147337_i.getName() );
@@ -131,7 +142,7 @@
          }
      }
  
-@@ -114,29 +152,33 @@
+@@ -114,29 +163,33 @@
  
      public void onConnectionStateTransition(EnumConnectionState p_147232_1_, EnumConnectionState p_147232_2_)
      {
@@ -170,7 +181,7 @@
          PrivateKey privatekey = this.field_147327_f.getKeyPair().getPrivate();
  
          if (!Arrays.equals(this.field_147330_e, p_147315_1_.func_149299_b(privatekey)))
-@@ -145,54 +187,12 @@
+@@ -145,63 +198,64 @@
          }
          else
          {
@@ -228,7 +239,21 @@
          }
      }
  
-@@ -202,6 +202,38 @@
+     protected GameProfile func_152506_a(GameProfile p_152506_1_)
+     {
+-        UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + p_152506_1_.getName()).getBytes(Charsets.UTF_8));
++        final String name;
++        switch (MinecraftServer.uraniumConfig.uuidMode.getValue()){
++            case 1:
++                name=p_152506_1_.getName().toLowerCase();
++                break;
++            case 2:
++                name=p_152506_1_.getName().toUpperCase();
++                break;
++            default:
++                name=p_152506_1_.getName();
++        }
++        UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" +name).getBytes(Charsets.UTF_8));
          return new GameProfile(uuid, p_152506_1_.getName());
      }
  

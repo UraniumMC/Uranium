@@ -169,11 +169,16 @@
      public MinecraftServer(File p_i45281_1_, Proxy p_i45281_2_)
      {
          this.field_152366_X = new PlayerProfileCache(this, field_152367_a);
-@@ -149,10 +207,72 @@
+@@ -149,10 +207,81 @@
          this.field_152364_T = new YggdrasilAuthenticationService(p_i45281_2_, UUID.randomUUID().toString());
          this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
          this.field_152365_W = this.field_152364_T.createProfileRepository();
 +        this.primaryThread = new Thread(this, "Server thread"); // CraftBukkit
++
++        File kcauldronFile=new File(MinecraftServer.serverConfigDir,"kcauldron.yml");
++        if(kcauldronFile.exists()){
++            kcauldronFile.renameTo(new File(MinecraftServer.serverConfigDir,"uranium.yml"));
++        }
 +        uraniumConfig = new UraniumConfig();
 +        cauldronConfig = new CauldronConfig("cauldron.yml", "cauldron");
 +        tileEntityConfig = new TileEntityConfig("tileentities.yml", "cauldron_te");
@@ -195,6 +200,10 @@
 +        this.field_147143_S = this.field_152364_T.createMinecraftSessionService();
 +        this.field_152365_W = this.field_152364_T.createProfileRepository();
 +        // Cauldron start
++        File kcauldronFile=new File(MinecraftServer.serverConfigDir,"kcauldron.yml");
++        if(kcauldronFile.exists()){
++            kcauldronFile.renameTo(new File(MinecraftServer.serverConfigDir,"uranium.yml"));
++        }
 +        uraniumConfig = new UraniumConfig();
 +        cauldronConfig = new CauldronConfig("cauldron.yml", "cauldron");
 +        tileEntityConfig = new TileEntityConfig("tileentities.yml", "cauldron_te");
@@ -243,7 +252,7 @@
      protected void convertMapIfNeeded(String p_71237_1_)
      {
          if (this.getActiveAnvilConverter().isOldMapFormat(p_71237_1_))
-@@ -172,6 +292,7 @@
+@@ -172,6 +301,7 @@
                          MinecraftServer.logger.info("Converting... " + p_73718_1_ + "%");
                      }
                  }
@@ -251,7 +260,7 @@
                  @SideOnly(Side.CLIENT)
                  public void resetProgressAndMessage(String p_73721_1_) {}
                  @SideOnly(Side.CLIENT)
-@@ -195,10 +316,17 @@
+@@ -195,10 +325,17 @@
  
      protected void loadAllWorlds(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_)
      {
@@ -271,7 +280,7 @@
          WorldSettings worldsettings;
  
          if (worldinfo == null)
-@@ -215,11 +343,79 @@
+@@ -215,11 +352,79 @@
          {
              worldsettings.enableBonusChest();
          }
@@ -354,7 +363,7 @@
              world.addWorldAccess(new WorldManager(this, world));
  
              if (!this.isSinglePlayer())
-@@ -227,12 +423,14 @@
+@@ -227,12 +432,14 @@
                  world.getWorldInfo().setGameType(this.getGameType());
              }
  
@@ -372,7 +381,7 @@
      }
  
      protected void initialWorldChunkLoad()
-@@ -244,9 +442,12 @@
+@@ -244,9 +451,12 @@
          int i = 0;
          this.setUserMessage("menu.generatingTerrain");
          byte b0 = 0;
@@ -385,7 +394,7 @@
          long j = getSystemTimeMillis();
  
          for (int k = -192; k <= 192 && this.isServerRunning(); k += 16)
-@@ -265,7 +466,8 @@
+@@ -265,7 +475,8 @@
                  worldserver.theChunkProviderServer.loadChunk(chunkcoordinates.posX + k >> 4, chunkcoordinates.posZ + l >> 4);
              }
          }
@@ -395,7 +404,7 @@
          this.clearCurrentTask();
      }
  
-@@ -292,19 +494,17 @@
+@@ -292,19 +503,17 @@
      {
          this.currentTask = null;
          this.percentDone = 0;
@@ -420,7 +429,7 @@
  
                  if (worldserver != null)
                  {
-@@ -313,25 +513,41 @@
+@@ -313,25 +522,41 @@
                          logger.info("Saving chunks for level \'" + worldserver.getWorldInfo().getWorldName() + "\'/" + worldserver.provider.getDimensionName());
                      }
  
@@ -467,7 +476,7 @@
              if (this.func_147137_ag() != null)
              {
                  this.func_147137_ag().terminateEndpoints();
-@@ -347,7 +563,14 @@
+@@ -347,7 +572,14 @@
              if (this.worldServers != null)
              {
                  logger.info("Saving worlds");
@@ -483,7 +492,7 @@
  
                  for (int i = 0; i < this.worldServers.length; ++i)
                  {
-@@ -380,6 +603,13 @@
+@@ -380,6 +612,13 @@
          this.serverRunning = false;
      }
  
@@ -497,7 +506,7 @@
      public void run()
      {
          try
-@@ -392,45 +622,41 @@
+@@ -392,45 +631,41 @@
                  this.field_147147_p.func_151315_a(new ChatComponentText(this.motd));
                  this.field_147147_p.func_151321_a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.10", 5));
                  this.func_147138_a(this.field_147147_p);
@@ -564,7 +573,7 @@
                  FMLCommonHandler.instance().handleServerStopping();
                  FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
              }
-@@ -448,6 +674,14 @@
+@@ -448,6 +683,14 @@
          catch (Throwable throwable1)
          {
              logger.error("Encountered an unexpected exception", throwable1);
@@ -579,7 +588,7 @@
              CrashReport crashreport = null;
  
              if (throwable1 instanceof ReportedException)
-@@ -477,6 +711,7 @@
+@@ -477,6 +720,7 @@
          {
              try
              {
@@ -587,7 +596,7 @@
                  this.stopServer();
                  this.serverStopped = true;
              }
-@@ -486,6 +721,16 @@
+@@ -486,6 +730,16 @@
              }
              finally
              {
@@ -604,7 +613,7 @@
                  FMLCommonHandler.instance().handleServerStopped();
                  this.serverStopped = true;
                  this.systemExitNow();
-@@ -532,8 +777,11 @@
+@@ -532,8 +786,11 @@
  
      public void tick()
      {
@@ -616,7 +625,7 @@
          ++this.tickCounter;
  
          if (this.startProfiling)
-@@ -562,12 +810,21 @@
+@@ -562,12 +819,21 @@
              this.field_147147_p.func_151318_b().func_151330_a(agameprofile);
          }
  
@@ -640,7 +649,7 @@
          }
  
          this.theProfiler.startSection("tallying");
-@@ -575,25 +832,57 @@
+@@ -575,25 +841,57 @@
          this.theProfiler.endSection();
          this.theProfiler.startSection("snooper");
  
@@ -700,7 +709,7 @@
          int i;
  
          Integer[] ids = DimensionManager.getIDs(this.tickCounter % 200 == 0);
-@@ -602,19 +891,21 @@
+@@ -602,19 +900,21 @@
              int id = ids[x];
              long j = System.nanoTime();
  
@@ -725,7 +734,7 @@
  
                  this.theProfiler.startSection("tick");
                  FMLCommonHandler.instance().onPreWorldTick(worldserver);
-@@ -622,22 +913,46 @@
+@@ -622,22 +922,46 @@
  
                  try
                  {
@@ -774,7 +783,7 @@
                      worldserver.addWorldInfoToCrashReport(crashreport);
                      throw new ReportedException(crashreport);
                  }
-@@ -645,10 +960,13 @@
+@@ -645,10 +969,13 @@
                  FMLCommonHandler.instance().onPostWorldTick(worldserver);
                  this.theProfiler.endSection();
                  this.theProfiler.startSection("tracker");
@@ -789,7 +798,7 @@
  
              worldTickTimes.get(id)[this.tickCounter % 100] = System.nanoTime() - j;
          }
-@@ -656,15 +974,21 @@
+@@ -656,15 +983,21 @@
          this.theProfiler.endStartSection("dim_unloading");
          DimensionManager.unloadWorlds(worldTickTimes);
          this.theProfiler.endStartSection("connection");
@@ -811,7 +820,7 @@
  
          this.theProfiler.endSection();
      }
-@@ -699,6 +1023,13 @@
+@@ -699,6 +1032,13 @@
  
      public WorldServer worldServerForDimension(int p_71218_1_)
      {
@@ -825,7 +834,7 @@
          WorldServer ret = DimensionManager.getWorld(p_71218_1_);
          if (ret == null)
          {
-@@ -784,13 +1115,14 @@
+@@ -784,13 +1124,14 @@
  
      public List getPossibleCompletions(ICommandSender p_71248_1_, String p_71248_2_)
      {
@@ -844,7 +853,7 @@
  
              if (list != null)
              {
-@@ -798,40 +1130,25 @@
+@@ -798,40 +1139,25 @@
  
                  while (iterator.hasNext())
                  {
@@ -893,7 +902,7 @@
      }
  
      public static MinecraftServer getServer()
-@@ -1034,7 +1351,7 @@
+@@ -1034,7 +1360,7 @@
  
      public boolean isServerInOnlineMode()
      {
@@ -902,7 +911,7 @@
      }
  
      public void setOnlineMode(boolean p_71229_1_)
-@@ -1124,7 +1441,7 @@
+@@ -1124,7 +1450,7 @@
  
      public NetworkSystem func_147137_ag()
      {
@@ -911,7 +920,7 @@
      }
  
      @SideOnly(Side.CLIENT)
-@@ -1259,8 +1576,11 @@
+@@ -1259,8 +1585,11 @@
      {
          Bootstrap.func_151354_b();
  
@@ -923,7 +932,7 @@
              boolean flag = true;
              String s = null;
              String s1 = ".";
-@@ -1356,16 +1676,34 @@
+@@ -1356,16 +1685,34 @@
              {
                  dedicatedserver.setGuiEnabled();
              }
@@ -964,7 +973,7 @@
          }
          catch (Exception exception)
          {
-@@ -1400,15 +1738,70 @@
+@@ -1400,15 +1747,70 @@
      @SideOnly(Side.SERVER)
      public String getPlugins()
      {
@@ -1040,7 +1049,7 @@
      }
  
      @SideOnly(Side.SERVER)
-@@ -1455,9 +1848,222 @@
+@@ -1455,9 +1857,222 @@
          return this.serverStopped;
      }
  
