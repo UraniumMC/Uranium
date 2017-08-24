@@ -40,11 +40,23 @@ public class UraniumConfig extends ConfigBase {
             "common.maxChunkGenPerTick", 1, "How many chunks generate during tick");
 
     public BoolSetting experimentalTileEntityListRecreation = new BoolSetting(this,
-            "experimental.tileEntityListRecreation", false, "EXPERIMENTAL! Recreate list of TE each tick.");    
+            "experimental.tileEntityListRecreation", false, "EXPERIMENTAL! Recreate list of TE each tick.");
+    /**
+     * by xjboss<br>
+     * force using offline uuid when using bungee
+     */
+    public BoolSetting forceuseOfflineUUID=new BoolSetting(this,"uuid.forceUseOfflineUUID",true,"Force use offline uuid when using bungeecord or fake online mode");
+    /**
+     * by xjboss<br>
+     * offline uuid mode
+     */
+    public IntSetting uuidMode=new IntSetting(this,"uuid.mode",0,"Offline UUID Mode 0 is normal mode 1 is lowercase mode 2 is upcase mode");
+    public BoolSetting usingCustomOnlineModeServer=new BoolSetting(this,"onlinemode.usingCustomServer",false,"Using custom online mode server like netease \"\u6211\u7684\u4e16\u754c\"");
+    public StringSetting customOnlineModeServer =new StringSetting(this,"onlinmode.customServer","https://sessionserver.mojang.com/session/minecraft/join","Custom online mode server URL");
     public static boolean tileEntityListRecreation;
     
     public UraniumConfig() {
-        super("kcauldron.yml", "kc");
+        super("uranium.yml", "um");
         register(commandEnable);
         register(updatecheckerEnable);
         register(updatecheckerSymlinks);
@@ -58,6 +70,8 @@ public class UraniumConfig extends ConfigBase {
         register(commonFastLeavesDecayMinTickTime);
         register(commonFastLeavesDecayMaxTickTime);
         register(experimentalTileEntityListRecreation);
+        register(forceuseOfflineUUID);
+        register(uuidMode);
         load();
     }
 
