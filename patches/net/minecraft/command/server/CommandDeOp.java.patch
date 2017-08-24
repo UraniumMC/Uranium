@@ -1,0 +1,22 @@
+--- ../src-base/minecraft/net/minecraft/command/server/CommandDeOp.java
++++ ../src-work/minecraft/net/minecraft/command/server/CommandDeOp.java
+@@ -7,6 +7,8 @@
+ import net.minecraft.command.ICommandSender;
+ import net.minecraft.command.WrongUsageException;
+ import net.minecraft.server.MinecraftServer;
++import org.bukkit.ChatColor;
++import org.bukkit.entity.Player;
+ 
+ public class CommandDeOp extends CommandBase
+ {
+@@ -29,6 +31,10 @@
+ 
+     public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
+     {
++        if(MinecraftServer.uraniumConfig.onlyConsoleOP.getValue()&&p_71515_1_ instanceof Player){
++            ((Player) p_71515_1_).sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is in error.");
++            return;
++        }
+         if (p_71515_2_.length == 1 && p_71515_2_[0].length() > 0)
+         {
+             MinecraftServer minecraftserver = MinecraftServer.getServer();

@@ -53,6 +53,7 @@ public class UraniumConfig extends ConfigBase {
     public IntSetting uuidMode=new IntSetting(this,"uuid.mode",0,"Offline UUID Mode 0 is normal mode 1 is lowercase mode 2 is upcase mode");
     public BoolSetting usingCustomOnlineModeServer=new BoolSetting(this,"onlinemode.usingCustomServer",false,"Using custom online mode server like netease \"\u6211\u7684\u4e16\u754c\"");
     public StringSetting customOnlineModeServer =new StringSetting(this,"onlinemode.customServer","https://sessionserver.mojang.com/session/minecraft/join","Custom online mode server URL");
+    public BoolSetting onlyConsoleOP=new BoolSetting(this,"op.onlyConsole",false,"only allow console using op command");
     public static boolean tileEntityListRecreation;
     
     public UraniumConfig() {
@@ -74,6 +75,7 @@ public class UraniumConfig extends ConfigBase {
         register(uuidMode);
         register(usingCustomOnlineModeServer);
         register(customOnlineModeServer);
+        register(onlyConsoleOP);
         load();
     }
 
