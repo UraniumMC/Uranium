@@ -1230,7 +1230,7 @@
          {
              ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.cannotSend", new Object[0]);
              chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-@@ -708,156 +938,478 @@
+@@ -708,156 +938,475 @@
              {
                  if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i)))
                  {
@@ -1473,14 +1473,11 @@
 +        }catch(org.bukkit.command.CommandException ex){
 +            if(MinecraftServer.uraniumConfig.allowShowCommandThrowableOnClient.getValue()) {
 +                StringBuilder td = new StringBuilder();
-+                td.append("Exception in your command ").append(" ").append(ex.getClass().getName()).append(": ").append(ex.getLocalizedMessage()).append("\n");
-+                for (StackTraceElement ste : ex.getStackTrace()) {
-+                    td.append(" at ").append(ste.toString()).append("\n");
-+                }
++                td.append("Exception in your command ").append(ex.getClass().getName()).append(": ").append(ex.getLocalizedMessage()).append("\n");
 +                Throwable cause=ex;
 +                while ((cause=cause.getCause())!=null){
 +                    td.append("Cause by ");
-+                    td.append(cause.getClass().getClass().getName()).append(":").append(cause.getLocalizedMessage()).append("\n");
++                    td.append(cause.getClass().getName()).append(":").append(cause.getLocalizedMessage()).append("\n");
 +                    for (StackTraceElement ste : cause.getStackTrace()) {
 +                        td.append(" at ").append(ste.toString()).append("\n");
 +                    }
@@ -1797,7 +1794,7 @@
                  }
  
                  break;
-@@ -869,117 +1421,484 @@
+@@ -869,117 +1418,484 @@
          }
      }
  
@@ -2352,7 +2349,7 @@
                      return;
                  }
              }
-@@ -987,79 +1906,95 @@
+@@ -987,79 +1903,95 @@
              int i;
              int j;
  
@@ -2494,7 +2491,7 @@
          this.playerEntity.func_147100_a(p_147352_1_);
      }
  
-@@ -1068,7 +2003,6 @@
+@@ -1068,7 +2000,6 @@
          PacketBuffer packetbuffer;
          ItemStack itemstack;
          ItemStack itemstack1;
@@ -2502,7 +2499,7 @@
          if ("MC|BEdit".equals(p_147349_1_.func_149559_c()))
          {
              packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
-@@ -1089,20 +2023,21 @@
+@@ -1089,20 +2020,21 @@
  
                  itemstack1 = this.playerEntity.inventory.getCurrentItem();
  
@@ -2535,7 +2532,7 @@
              }
              finally
              {
-@@ -1128,26 +2063,26 @@
+@@ -1128,26 +2060,26 @@
  
                      itemstack1 = this.playerEntity.inventory.getCurrentItem();
  
@@ -2576,7 +2573,7 @@
              }
              finally
              {
-@@ -1174,9 +2109,12 @@
+@@ -1174,9 +2106,12 @@
                          ((ContainerMerchant)container).setCurrentRecipeIndex(i);
                      }
                  }
@@ -2590,7 +2587,7 @@
                  }
              }
              else if ("MC|AdvCdm".equals(p_147349_1_.func_149559_c()))
-@@ -1222,9 +2160,12 @@
+@@ -1222,9 +2157,12 @@
                              this.playerEntity.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", new Object[] {s1}));
                          }
                      }
@@ -2605,7 +2602,7 @@
                      }
                      finally
                      {
-@@ -1257,9 +2198,12 @@
+@@ -1257,9 +2195,12 @@
                              tileentitybeacon.markDirty();
                          }
                      }
@@ -2620,7 +2617,7 @@
                      }
                  }
              }
-@@ -1281,50 +2225,58 @@
+@@ -1281,50 +2222,58 @@
                      containerrepair.updateItemName("");
                  }
              }
