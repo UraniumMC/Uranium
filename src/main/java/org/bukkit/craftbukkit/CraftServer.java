@@ -1306,10 +1306,21 @@ public final class CraftServer implements Server {
             if (result == null) {
             // Spigot start
             GameProfile profile = null;
-            if (MinecraftServer.getServer().isServerInOnlineMode() || org.spigotmc.SpigotConfig.bungee) {
+            if ((MinecraftServer.getServer().isServerInOnlineMode()&&!MinecraftServer.uraniumConfig.forceuseOfflineUUID.getValue()) || (org.spigotmc.SpigotConfig.bungee&&!MinecraftServer.uraniumConfig.forceuseOfflineUUID.getValue())) {
                 profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
             }
             if (profile == null) {
+                final String uname;
+                switch (MinecraftServer.uraniumConfig.uuidMode.getValue()){
+                    case 1:
+                        uname=name.toLowerCase();
+                        break;
+                    case 2:
+                        uname=name.toUpperCase();
+                        break;
+                    default:
+                        uname=name;
+                }
                 // Make an OfflinePlayer using an offline mode UUID since the name has no profile
                 result = getOfflinePlayer(new GameProfile(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)), name));
             } else {
