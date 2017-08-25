@@ -55,6 +55,7 @@ public class UraniumConfig extends ConfigBase {
     public StringSetting customOnlineModeServer =new StringSetting(this,"onlinemode.customServer","https://sessionserver.mojang.com/session/minecraft/join","Custom online mode server URL");
     public BoolSetting onlyConsoleOP=new BoolSetting(this,"op.onlyConsole",false,"Only allow console using op command");
     public BoolSetting allowShowCommandThrowableOnClient =new BoolSetting(this,"command.allowShowCommandThrowableOnClient",true,"Allow show throwable information on client.");
+    public BoolSetting enableGuava17=new BoolSetting(this,"experimental.guava17",false,"EXPERIMENTAL! Using guava17 to replace guava 10 in com.google.common package");
     public static boolean tileEntityListRecreation;
     
     public UraniumConfig() {
@@ -78,6 +79,7 @@ public class UraniumConfig extends ConfigBase {
         register(customOnlineModeServer);
         register(onlyConsoleOP);
         register(allowShowCommandThrowableOnClient);
+        register(enableGuava17);
         load();
     }
 
