@@ -22,7 +22,7 @@ import org.bukkit.ChatColor;
 public class WatchdogThread extends Thread
 {
 
-    private static WatchdogThread instance;
+    public static WatchdogThread instance;
     private final long timeoutTime;
     private final long warningTime;
     private final boolean restart;

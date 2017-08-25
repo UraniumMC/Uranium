@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.network.play.server.S33PacketUpdateSign;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 
 import org.apache.commons.lang.Validate;
@@ -62,6 +63,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scoreboard.Scoreboard;
+import org.spigotmc.WatchdogThread;
 
 @DelegateDeserialization(CraftOfflinePlayer.class)
 public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -242,9 +244,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void kickPlayer(String message) {
-        if (Thread.currentThread() != net.minecraft.server.MinecraftServer.getServer().primaryThread) throw new IllegalStateException("Asynchronous player kick!"); // Spigot
+        //Uranium----Watch dog thread check by xjboss
+        Thread T=Thread.currentThread();
+        if(T!= MinecraftServer.getServer().primaryThread&&T!= WatchdogThread.instance){
+            //spigot
+            throw new IllegalStateException("Asynchronous player kick!");
+        }
         if (getHandle().playerNetServerHandler == null) return;
-
         getHandle().playerNetServerHandler.kickPlayerFromServer(message == null ? "" : message);
     }
 
