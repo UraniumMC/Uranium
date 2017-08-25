@@ -148,7 +148,7 @@ dependencies {
     libraries 'org.apache.httpcomponents:httpclient:4.4.1'
     libraries 'colt:colt:1.2.0'
     libraries 'java3d:vecmath:1.3.1'
-    libraries 'org.jetbrains.kotlin:kotlin-runtime:1.2-M2'
+    libraries 'org.jetbrains.kotlin:kotlin-runtime:1.1.4-2'
 }
 
 packageUniversal {
