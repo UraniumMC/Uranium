@@ -45,7 +45,7 @@ public class UraniumConfig extends ConfigBase {
      * by xjboss<br>
      * force using offline uuid when using bungee
      */
-    public BoolSetting forceuseOfflineUUID=new BoolSetting(this,"uuid.forceUseOfflineUUID",true,"Force use offline uuid when using bungeecord or fake online mode");
+    public BoolSetting forceuseOfflineUUID=new BoolSetting(this,"uuid.forceUseOfflineUUID",false,"Force use offline uuid when using bungeecord or fake online mode");
     /**
      * by xjboss<br>
      * offline uuid mode
