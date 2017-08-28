@@ -104,7 +104,7 @@
              }
          }
  
-@@ -589,9 +639,10 @@
+@@ -589,13 +639,14 @@
  
              if (!this.worldObj.isRemote)
              {
@@ -116,6 +116,11 @@
              extendedblockstorage.func_150818_a(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_4_);
              extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // This line duplicates the one below, so breakBlock fires with valid worldstate
  
+-            if (!this.worldObj.isRemote)
++            if (!this.worldObj.isRemote && !this.worldObj.restoringBlockSnapshots)
+             {
+                 block1.breakBlock(this.worldObj, l1, p_150807_2_, i2, block1, k1);
+                 // After breakBlock a phantom TE might have been created with incorrect meta. This attempts to kill that phantom TE so the normal one can be create properly later
 @@ -777,8 +828,20 @@
  
          if (i != this.xPosition || j != this.zPosition)

@@ -39,15 +39,19 @@ public abstract class ACapture{
         this.mAgaistBlock=this.mWorldCapture.mWorld.getBlock(pPosX,pPosY,pPosZ);
     }
 
-    public void addCapturedBlock(World pWorld,int pPosX,int pPosY,int pPosZ){
-        this.addCapturedBlock(pWorld,pPosX,pPosY,pPosZ,3);
+    protected BlockSnapshot addCapturedBlock(World pWorld,int pPosX,int pPosY,int pPosZ){
+        return this.addCapturedBlock(pWorld,pPosX,pPosY,pPosZ,3);
     }
 
-    public void addCapturedBlock(World pWorld,int pPosX,int pPosY,int pPosZ,int pFlag){
-        if(!this.mEnable) return;
+    protected BlockSnapshot addCapturedBlock(World pWorld,int pPosX,int pPosY,int pPosZ,int pFlag){
+        return this.addCapturedBlock(BlockSnapshot.getBlockSnapshot(pWorld,pPosX,pPosY,pPosZ,pFlag));
+    }
 
-        BlockSnapshot tSnapshot=BlockSnapshot.getBlockSnapshot(pWorld,pPosX,pPosY,pPosZ,pFlag);
-        this.mCapturedBlocks.add(tSnapshot);
+    protected BlockSnapshot addCapturedBlock(BlockSnapshot pSnapshot){
+        if(!this.mEnable) return pSnapshot;
+
+        this.mCapturedBlocks.add(pSnapshot);
+        return pSnapshot;
     }
 
     public void disableCapture(){
