@@ -160,7 +160,20 @@
          this.stackTagCompound = p_77982_1_;
      }
  
-@@ -768,4 +822,12 @@
+@@ -667,6 +721,12 @@
+         NBTTagCompound nbttagcompound = new NBTTagCompound();
+         nbttagcompound.setShort("id", (short)p_77966_1_.effectId);
+         nbttagcompound.setShort("lvl", (short)((byte)p_77966_2_));
++        for(int i=nbttaglist.tagCount()-1;i>=0;i--){
++            NBTTagCompound tTag=nbttaglist.getCompoundTagAt(i);
++            if(tTag.getShort("id")==(short)p_77966_1_.effectId){
++                nbttaglist.removeTag(i);
++            }
++        }
+         nbttaglist.appendTag(nbttagcompound);
+     }
+ 
+@@ -768,4 +828,12 @@
  
          return ichatcomponent;
      }
