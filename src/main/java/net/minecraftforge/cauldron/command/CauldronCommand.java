@@ -61,7 +61,7 @@ public class CauldronCommand extends Command
             sender.sendMessage(ChatColor.GREEN + "Config file saved");
             return true;
         }
-        if ((args.length == 1) && "reload".equalsIgnoreCase(args[0]))
+        if ((args.length == 1||args.length == 2) && "reload".equalsIgnoreCase(args[0]))
         {
             if(args.length==1){
                 MinecraftServer.getServer().cauldronConfig.load();
@@ -78,6 +78,9 @@ public class CauldronCommand extends Command
             }else if(args[1].equalsIgnoreCase("spigot")){
                 SpigotConfig.init();
                 sender.sendMessage(ChatColor.GREEN + "Spigot Config file reloaded");
+                return true;
+            }else{
+                sender.sendMessage(ChatColor.GREEN + "§creload unknow model");
                 return true;
             }
         }
