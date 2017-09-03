@@ -1,4 +1,4 @@
-package cc.uraniummc;
+package cc.uraniummc.command;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
+import cc.uraniummc.Uranium;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;

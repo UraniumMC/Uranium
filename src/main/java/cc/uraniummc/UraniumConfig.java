@@ -1,5 +1,6 @@
 package cc.uraniummc;
 
+import cc.uraniummc.command.UraniumCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import net.minecraft.server.MinecraftServer;

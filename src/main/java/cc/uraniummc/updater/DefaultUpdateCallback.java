@@ -1,7 +1,7 @@
 package cc.uraniummc.updater;
 
 import cc.uraniummc.Uranium;
-import cc.uraniummc.UraniumCommand;
+import cc.uraniummc.command.UraniumCommand;
 import cc.uraniummc.updater.UVersionRetriever.IVersionCheckCallback;
 import net.minecraft.server.MinecraftServer;
 
