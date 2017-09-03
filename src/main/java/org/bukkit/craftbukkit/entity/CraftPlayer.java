@@ -1,5 +1,6 @@
 package org.bukkit.craftbukkit.entity;
 
+import cc.uraniummc.packet.S45PacketTitle;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.MapMaker;
 
@@ -1347,4 +1348,33 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return spigot;
     }
     // Spigot end
+
+    // Uranium start
+    @Override
+    public void sendTitle(String title, String subtitle) {
+        sendTitle(title, subtitle, 10, 70, 20);
+    }
+
+    @Override
+    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        if (title != null) {
+            S45PacketTitle packetTitle = new S45PacketTitle(S45PacketTitle.Type.TITLE, CraftChatMessage.fromString(title)[0]);
+            getHandle().playerNetServerHandler.sendPacket(packetTitle);
+        }
+
+        if (subtitle != null) {
+            S45PacketTitle packetSubtitle = new S45PacketTitle(S45PacketTitle.Type.SUBTITLE, CraftChatMessage.fromString(subtitle)[0]);
+            getHandle().playerNetServerHandler.sendPacket(packetSubtitle);
+        }
+
+        S45PacketTitle times = new S45PacketTitle(fadeIn, stay, fadeOut);
+        getHandle().playerNetServerHandler.sendPacket(times);
+    }
+
+    @Override
+    public void resetTitle() {
+        S45PacketTitle packetReset = new S45PacketTitle(S45PacketTitle.Type.RESET, null);
+        getHandle().playerNetServerHandler.sendPacket(packetReset);
+    }
+    // Uranium end
 }
