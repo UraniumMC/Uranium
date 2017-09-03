@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import cc.uraniummc.command.CommandTitle;
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
@@ -399,6 +400,7 @@ public final class CraftServer implements Server {
         commandMap.register("minecraft", new VanillaCommandWrapper(new net.minecraft.command.server.CommandTeleport(), "/tp [player] <target>\n/tp [player] <x> <y> <z>"));
         commandMap.register("minecraft", new VanillaCommandWrapper(new net.minecraft.command.server.CommandMessage(), "/tell <playername> <message>"));
         commandMap.register("minecraft", new VanillaCommandWrapper(new net.minecraft.command.server.CommandMessageRaw(), "/tellraw <playername> <raw message>"));
+        commandMap.register("minecraft",new VanillaCommandWrapper(new CommandTitle(),"/title <player> <title|subtitle|clear|reset|times> ..."));
         commandMap.register("minecraft", new VanillaCommandWrapper(new net.minecraft.command.server.CommandTestFor(), "/testfor <playername | selector> [dataTag]"));
         commandMap.register("minecraft", new VanillaCommandWrapper(new net.minecraft.command.server.CommandTestForBlock(), "/testforblock <x> <y> <z> <tilename> [datavalue] [dataTag]"));
         commandMap.register("minecraft", new VanillaCommandWrapper(new net.minecraft.command.CommandTime(), "/time set <value>\n/time add <value>"));
