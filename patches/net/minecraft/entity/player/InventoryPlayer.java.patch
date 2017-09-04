@@ -99,21 +99,23 @@
      public int getFirstEmptyStack()
      {
          for (int i = 0; i < this.mainInventory.length; ++i)
-@@ -350,6 +424,13 @@
+@@ -350,6 +424,15 @@
      {
          if (p_70441_1_ != null && p_70441_1_.stackSize != 0 && p_70441_1_.getItem() != null)
          {
 +            CaptureBlock tBlockCapture=player.worldObj.mCapture.getLastBlockCapture();
 +            if(tBlockCapture!=null&&tBlockCapture.mEnable){
 +                tBlockCapture.addCaptureItem(player,ItemStack.copyItemStack(p_70441_1_));
++                p_70441_1_.stackSize=0;
 +                return true;
 +            }else if(player.worldObj.restoringBlockSnapshots){
++                p_70441_1_.stackSize=0;
 +                return true;
 +            }
              try
              {
                  int i;
-@@ -430,25 +511,24 @@
+@@ -430,25 +513,24 @@
  
          if (aitemstack[p_70298_1_] != null)
          {
@@ -147,7 +149,7 @@
          }
          else
          {
-@@ -658,7 +738,7 @@
+@@ -658,7 +740,7 @@
              if (this.mainInventory[i] != null)
              {
                  this.player.func_146097_a(this.mainInventory[i], true, false);
@@ -156,7 +158,7 @@
              }
          }
  
-@@ -667,7 +747,7 @@
+@@ -667,7 +749,7 @@
              if (this.armorInventory[i] != null)
              {
                  this.player.func_146097_a(this.armorInventory[i], true, false);
