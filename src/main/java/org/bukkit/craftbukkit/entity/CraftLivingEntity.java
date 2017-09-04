@@ -113,7 +113,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         return getEyeHeight();
     }
 
-    private List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance, int maxLength) {
+    private List<Block> getLineOfSight(HashSet<Integer> transparent, int maxDistance, int maxLength) {
         if (maxDistance > 120) {
             maxDistance = 120;
         }
@@ -131,7 +131,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
                     break;
                 }
             } else {
-                if (!transparent.contains((byte) id)) {
+                if (!transparent.contains(id)) {
                     break;
                 }
             }
@@ -139,41 +139,30 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         return blocks;
     }
 
+    private List<Block> getLineOfSight2(HashSet<Byte> transparent, int maxDistance, int maxLength) {
+        HashSet<Integer> newtransparent=new HashSet();
+        for(Byte id:transparent){
+            newtransparent.add(id.intValue());
+        }
+        return getLineOfSight(newtransparent,maxDistance,maxLength);
+    }
+    private List<Block> getLineOfSight(Set<Material> transparent, int maxDistance, int maxLength) {
+        HashSet<Integer> newtransparent=new HashSet();
+        for(Material mate:transparent){
+            newtransparent.add(mate.getId());
+        }
+        return getLineOfSight(newtransparent,maxDistance,maxLength);
+    }
     public List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance) {
-        return getLineOfSight(transparent, maxDistance, 0);
+        return getLineOfSight2(transparent, maxDistance, 0);
     }
     @Override
     public List<Block> getLineOfSight(Set<Material> transparent, int maxDistance) {
         return getLineOfSight(transparent, maxDistance, 0);
     }
 
-    private List<Block> getLineOfSight(Set<Material> transparent, int maxDistance, int maxLength) {
-        if (maxDistance > 120) {
-            maxDistance = 120;
-        }
-        ArrayList<Block> blocks = new ArrayList<Block>();
-        Iterator<Block> itr = new BlockIterator(this, maxDistance);
-        while (itr.hasNext()) {
-            Block block = itr.next();
-            blocks.add(block);
-            if (maxLength != 0 && blocks.size() > maxLength) {
-                blocks.remove(0);
-            }
-            Material material = block.getType();
-            if (transparent == null) {
-                if (!material.equals(Material.AIR)) {
-                    break;
-                }
-            } else {
-                if (!transparent.contains(material)) {
-                    break;
-                }
-            }
-        }
-        return blocks;
-    }
     public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance) {
-        List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
+        List<Block> blocks = getLineOfSight2(transparent, maxDistance, 1);
         return blocks.get(0);
     }
     public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
@@ -181,7 +170,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         return blocks.get(0);
     }
     public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance) {
-        return getLineOfSight(transparent, maxDistance, 2);
+        return getLineOfSight2(transparent, maxDistance, 2);
     }
 
     @Deprecated
