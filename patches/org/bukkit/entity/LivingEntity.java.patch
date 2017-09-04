@@ -1,29 +1,14 @@
 --- ../src-base/minecraft/org/bukkit/entity/LivingEntity.java
 +++ ../src-work/minecraft/org/bukkit/entity/LivingEntity.java
-@@ -73,6 +73,22 @@
+@@ -71,6 +71,7 @@
+      *     sight
+      * @deprecated Magic value
       */
++    @Deprecated
      public List<Block> getLineOfSight(Set<Material> transparent, int maxDistance);
      /**
-+     * Gets all blocks along the living entity's line of sight.
-+     * <p>
-+     * This list contains all blocks from the living entity's eye position to
-+     * target inclusive.
-+     *
-+     * @param transparent HashSet containing all transparent block IDs (set to
-+     *     null for only air)
-+     * @param maxDistance this is the maximum distance to scan (may be limited
-+     *     by server by at least 100 blocks, no less)
-+     * @return list containing all blocks along the living entity's line of
-+     *     sight
-+     * @deprecated Magic value
-+     */
-+    @Deprecated
-+    public List<Block> getLineOfSight(Set<Material> transparent, int maxDistance);
-+    /**
       * Gets the block that the living entity has targeted.
-      *
-      * @param transparent HashSet containing all transparent block IDs (set to
-@@ -84,8 +100,17 @@
+@@ -84,8 +85,17 @@
       */
      @Deprecated
      public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance);
