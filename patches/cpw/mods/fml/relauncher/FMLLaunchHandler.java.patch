@@ -1,0 +1,16 @@
+--- ../src-base/minecraft/cpw/mods/fml/relauncher/FMLLaunchHandler.java
++++ ../src-work/minecraft/cpw/mods/fml/relauncher/FMLLaunchHandler.java
+@@ -56,6 +56,13 @@
+         this.minecraftHome = tweaker.getGameDir();
+         this.classLoader.addClassLoaderExclusion("cpw.mods.fml.relauncher.");
+         this.classLoader.addClassLoaderExclusion("net.minecraftforge.classloading.");
++        this.classLoader.addClassLoaderExclusion("jdk.nashorn.");
++        for(String sExClazz: System.getProperty("ClassLoaderExclusionClasses","").split(";")){
++            String tFormated=sExClazz.trim();
++            if(!tFormated.isEmpty()){
++                this.classLoader.addClassLoaderExclusion(sExClazz);
++            }
++        }
+         this.classLoader.addTransformerExclusion("cpw.mods.fml.common.asm.transformers.deobf.");
+         this.classLoader.addTransformerExclusion("cpw.mods.fml.common.patcher.");
+     }
