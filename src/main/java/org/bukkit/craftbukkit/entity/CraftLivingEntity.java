@@ -411,47 +411,6 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         return super.teleport(location, cause);
     }
 
-    public void setCustomName(String name) {
-        if (!(getHandle() instanceof net.minecraft.entity.EntityLiving)) {
-            return;
-        }
-
-        if (name == null) {
-            name = "";
-        }
-
-        // Names cannot be more than 64 characters due to DataWatcher limitations
-        if (name.length() > 64) {
-            name = name.substring(0, 64);
-        }
-
-        ((net.minecraft.entity.EntityLiving) getHandle()).setCustomNameTag(name);
-    }
-
-    public String getCustomName() {
-        if (!(getHandle() instanceof net.minecraft.entity.EntityLiving)) {
-            return null;
-        }
-
-        String name = ((net.minecraft.entity.EntityLiving) getHandle()).getCustomNameTag();
-
-        if (name == null || name.length() == 0) {
-            return null;
-        }
-
-        return name;
-    }
-
-    public void setCustomNameVisible(boolean flag) {
-        if (getHandle() instanceof net.minecraft.entity.EntityLiving) {
-            ((net.minecraft.entity.EntityLiving) getHandle()).setAlwaysRenderNameTag(flag);
-        }
-    }
-
-    public boolean isCustomNameVisible() {
-        return getHandle() instanceof net.minecraft.entity.EntityLiving && ((net.minecraft.entity.EntityLiving) getHandle()).getAlwaysRenderNameTag();
-    }
-
     public boolean isLeashed() {
         if (!(getHandle() instanceof net.minecraft.entity.EntityLiving)) {
             return false;
