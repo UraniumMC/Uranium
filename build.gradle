@@ -102,11 +102,15 @@ def gitInfo(String key) {
 ext.mcVersion = "1.7.10"
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
-ext.branch = System.getenv('GIT_BRANCH') ? System.getenv('GIT_BRANCH').split("/")[1] : getCurrentGitBranch()
+ext.branch = System.getenv('GIT_BRANCH') ? getJenkinsGitBranch() : getCurrentGitBranch()
 ext.uranium_version = 3
 version = "${branch}-${uranium_version}-B${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
-
+def getJenkinsGitBranch(){
+    def branch=System.getenv('GIT_BRANCH').split("/")[1];
+    if (gitBranch.equals("master")) return "stable";
+    return branch;
+}
 def getCurrentGitBranch() {
     def gitBranch = "unoffical"
     try {
