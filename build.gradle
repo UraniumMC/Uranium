@@ -326,7 +326,7 @@ tasks.generateProjectCauldron {
     doFirst{
         def main=tasks.generateProjectCauldron;
         main.addSource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/java"))
-        main.addResource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/resource"))
+        main.addResource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/resources"))
     }
     doLast {
         def file = new File('eclipse/cauldron/build.gradle')
@@ -361,6 +361,14 @@ tasks.generateProjectCauldron {
         }
         file.append("compile 'org.projectlombok:lombok:1.16.18'\n")
         file.append('}')
+    }
+}
+
+tasks.packageUniversal {
+
+    doFirst{
+        def main=tasks.packageUniversal;
+        main.from(new DelayedFile((Project)main.project,"UraniumPlus/src/main/resources"))
     }
 }
 
