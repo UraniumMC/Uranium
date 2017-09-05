@@ -1,0 +1,25 @@
+--- ../src-base/minecraft/net/minecraft/network/play/server/S02PacketChat.java
++++ ../src-work/minecraft/net/minecraft/network/play/server/S02PacketChat.java
+@@ -3,6 +3,8 @@
+ import cpw.mods.fml.relauncher.Side;
+ import cpw.mods.fml.relauncher.SideOnly;
+ import java.io.IOException;
++
++import lombok.Getter;
+ import net.minecraft.network.INetHandler;
+ import net.minecraft.network.Packet;
+ import net.minecraft.network.PacketBuffer;
+@@ -14,10 +16,12 @@
+     private IChatComponent field_148919_a;
+     private boolean field_148918_b;
+     private static final String __OBFID = "CL_00001289";
+-
++    @Getter
++    private byte type;
+     public S02PacketChat()
+     {
+         this.field_148918_b = true;
++        this.type=1;
+     }
+ 
+     public S02PacketChat(IChatComponent p_i45179_1_)

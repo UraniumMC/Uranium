@@ -2,6 +2,7 @@ import groovy.json.JsonSlurper
 import cc.uraniummc.CreateChangelog
 import cc.uraniummc.InstallBundle
 import cc.uraniummc.VersionParser
+import net.minecraftforge.gradle.delayed.DelayedFile;
 
 buildscript {
     repositories {
@@ -300,7 +301,13 @@ publishing {
     }
 }
 */
+
 tasks.generateProjectCauldron {
+    doFirst{
+        def main=tasks.generateProjectCauldron;
+        main.addSource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/java"))
+        main.addResource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/resource"))
+    }
     doLast {
         def file = new File('eclipse/cauldron/build.gradle')
         file.append('''
@@ -332,6 +339,7 @@ tasks.generateProjectCauldron {
             }
             file.append("    compile '${module}'\n")
         }
+        file.append("compile 'org.projectlombok:lombok:1.16.18'\n")
         file.append('}')
     }
 }

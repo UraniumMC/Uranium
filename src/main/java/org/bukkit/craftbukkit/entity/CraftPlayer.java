@@ -1,8 +1,8 @@
 package org.bukkit.craftbukkit.entity;
 
+import cc.uraniummc.UraniumPlusCommon;
 import cc.uraniummc.packet.S45PacketTitle;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.MapMaker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -1359,22 +1359,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         if (title != null) {
             S45PacketTitle packetTitle = new S45PacketTitle(S45PacketTitle.Type.TITLE, CraftChatMessage.fromString(title)[0]);
-            getHandle().playerNetServerHandler.sendPacket(packetTitle);
+            UraniumPlusCommon.getChancel().sendTo(packetTitle,getHandle());
         }
 
         if (subtitle != null) {
             S45PacketTitle packetSubtitle = new S45PacketTitle(S45PacketTitle.Type.SUBTITLE, CraftChatMessage.fromString(subtitle)[0]);
-            getHandle().playerNetServerHandler.sendPacket(packetSubtitle);
+            UraniumPlusCommon.getChancel().sendTo(packetSubtitle,getHandle());
         }
 
         S45PacketTitle times = new S45PacketTitle(fadeIn, stay, fadeOut);
-        getHandle().playerNetServerHandler.sendPacket(times);
+        UraniumPlusCommon.getChancel().sendTo(times,getHandle());
     }
 
     @Override
     public void resetTitle() {
         S45PacketTitle packetReset = new S45PacketTitle(S45PacketTitle.Type.RESET, null);
-        getHandle().playerNetServerHandler.sendPacket(packetReset);
+        UraniumPlusCommon.getChancel().sendTo(packetReset,getHandle());
     }
     // Uranium end
 }

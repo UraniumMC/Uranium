@@ -1,0 +1,11 @@
+--- ../src-base/minecraft/net/minecraft/util/StringTranslate.java
++++ ../src-work/minecraft/net/minecraft/util/StringTranslate.java
+@@ -31,6 +31,8 @@
+         InputStream inputstream = StringTranslate.class.getResourceAsStream("/assets/minecraft/lang/en_US.lang");
+         languageList = Maps.newHashMap();
+         inject(this, inputstream);
++        inputstream = StringTranslate.class.getResourceAsStream("/assets/uraniumplus/lang/en_US.lang");
++        inject(this, inputstream);
+     }
+ 
+     public static void inject(InputStream inputstream)

@@ -5,3 +5,6 @@
 	path = forge
 	url = https://git.xjboss.net/UraniumDev/MinecraftForge.git
 	branch = 1.7.10
+[submodule "UraniumPlus"]
+	path = UraniumPlus
+	url = https://git.xjboss.net/UraniumDev/UraniumPlus.git
