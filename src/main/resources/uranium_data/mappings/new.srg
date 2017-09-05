@@ -1,0 +1,3 @@
+# Mapping by xjboss
+CL: net/minecraft/server/PacketPlayOutTitle cc/uraniummc/packet/S45PacketTitle
+CL: net/minecraft/server/PacketPlayOutTitle$EnumTitleAction cc/uraniummc/packet/S45PacketTitle$Type

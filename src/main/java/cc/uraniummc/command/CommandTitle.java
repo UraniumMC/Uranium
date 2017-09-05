@@ -21,14 +21,7 @@ public class CommandTitle extends CommandBase
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private final String[] alltypes;
     public CommandTitle() {
-        alltypes=new String[S45PacketTitle.Type.getNames().length+1];
-        int i=0;
-        for(String name:S45PacketTitle.Type.getNames()){
-            alltypes[i++]=name;
-        }
-        alltypes[i++]="actionbar";
     }
 
     /**
@@ -80,22 +73,6 @@ public class CommandTitle extends CommandBase
             }
 
             EntityPlayerMP entityplayermp = getPlayer(sender, args[0]);
-            if("actionbar".equals(args[1])){
-                String s = func_82360_a(sender,args, 2);
-                IChatComponent ichatcomponent;
-
-                try
-                {
-                    ichatcomponent = IChatComponent.Serializer.func_150699_a(s);
-                }
-                catch (JsonParseException jsonparseexception)
-                {
-                    Throwable throwable = ExceptionUtils.getRootCause(jsonparseexception);
-                    throw new SyntaxErrorException("commands.tellraw.jsonException", new Object[] {throwable == null ? "" : throwable.getMessage()});
-                }
-                PacketChatWithType chatWithType=new PacketChatWithType(ichatcomponent,(byte)2);
-                UraniumPlusCommon.getChancel().sendTo(chatWithType,entityplayermp);
-            }
             S45PacketTitle.Type s45packettitle$type = S45PacketTitle.Type.byName(args[1]);
 
             if (s45packettitle$type != S45PacketTitle.Type.CLEAR && s45packettitle$type != S45PacketTitle.Type.RESET)
@@ -155,7 +132,7 @@ public class CommandTitle extends CommandBase
 
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args)
     {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames()) : (args.length == 2 ? getListOfStringsMatchingLastWord(args,alltypes) : null);
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames()) : (args.length == 2 ? getListOfStringsMatchingLastWord(args,S45PacketTitle.Type.getNames()) : null);
     }
 
     /**
