@@ -10,6 +10,8 @@ import net.minecraftforge.cauldron.configuration.IntSetting;
 import net.minecraftforge.cauldron.configuration.Setting;
 import net.minecraftforge.cauldron.configuration.StringSetting;
 
+import java.util.ArrayList;
+
 public class UraniumConfig extends ConfigBase {
     public BoolSetting commandEnable = new BoolSetting(this, "command.enable",
             true, "Enable Uranium command");
@@ -100,6 +102,14 @@ public class UraniumConfig extends ConfigBase {
         commands.put(commandName, new UraniumCommand(commandName));
     }
 
+    private void addd(String path,Object obj){
+        config.addDefault(path,obj);
+    }
+    private void setExtraDefault(){
+        addd("plugin-settings.PermissionsEx.remap-guava17-ver","*^(1.23|2)");
+        addd("plugin-settings.WorldGuard.remap-guava17-ver","*^(\\d[6-9]|\\d\\d+)");
+        addd("plugin-settings.LuckPerms.remap-guava17",true);
+    }
     @Override
     protected void load() {
         try {
@@ -114,6 +124,7 @@ public class UraniumConfig extends ConfigBase {
                 settings.get(toggle.path).setValue(
                         config.getString(toggle.path));
             }
+            setExtraDefault();
             config.options().header(header);
             config.options().copyDefaults(true);
             save();

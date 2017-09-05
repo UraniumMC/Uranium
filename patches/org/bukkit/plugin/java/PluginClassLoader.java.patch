@@ -1,9 +1,10 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,5 +1,23 @@
+@@ -1,5 +1,24 @@
  package org.bukkit.plugin.java;
  
 +// Cauldron start
++import cc.uraniummc.UraniumConfig;
 +import net.md_5.specialsource.provider.ClassLoaderProvider;
 +import net.md_5.specialsource.transformer.MavenShade;
 +//import org.bouncycastle.util.io.Streams;
@@ -24,7 +25,15 @@
  import java.io.File;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -15,16 +33,40 @@
+@@ -7,6 +26,7 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ import java.util.Set;
++import java.util.regex.Pattern;
+ 
+ import org.apache.commons.lang.Validate;
+ import org.bukkit.plugin.InvalidPluginException;
+@@ -15,16 +35,83 @@
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
   */
@@ -59,16 +68,59 @@
 +    private static final int F_REMAP_OBC172     = 1 << 10;
 +    private static final int F_REMAP_OBC179     = 1 << 11;
 +    private static final int F_REMAP_OBC1710    = 1 << 12;
++    private static final int F_REMAP_GUAVA17    = 1 << 13;
 +    private static final int F_REMAP_NMSPRE_MASK= 0xffff0000;  // "unversioned" NMS plugin version
 +
 +    // This trick bypasses Maven Shade's package rewriting when using String literals [same trick in jline]
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
 +    // Cauldron end
-+
++    // Uranium start
++    public boolean checkVer(String pTargetVer){
++        char sign=pTargetVer.charAt(0);
++        String ver=description.getVersion()!=null?description.getVersion():"";
++        double ven;
++        try{
++            ven=Double.valueOf(ver);
++        }catch (NumberFormatException e){
++            ven=0;
++        }
++        String cver_info=pTargetVer.substring(1);
++        double cven;
++        try{
++            cven=Double.valueOf(cver_info);
++        }catch (NumberFormatException e){
++            cven=0;
++        }
++        boolean equal=false;
++        switch (sign){
++            case '>':
++            case '<':
++                if(pTargetVer.charAt(1)=='=')equal=true;
++                cver_info=cver_info.substring(1);
++                break;
++        }
++        switch (sign){
++            case '=':
++                return ver.equals(cver_info);
++            case '-':
++                return ver.startsWith(cver_info);
++            case '+':
++                return ver.endsWith(cver_info);
++            case '>':
++                return equal?ven>=cven:ven>cven;
++            case '<':
++                return equal?ven<=cven:ven<cven;
++            case '*':
++                return Pattern.compile(cver_info).matcher(ver).find();
++            default:
++                return ver.equals(pTargetVer);
++        }
++    }
++    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +76,113 @@
+@@ -34,6 +121,121 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -96,7 +148,6 @@
 +        boolean reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-field", true);
 +        boolean reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-class", true);
 +        boolean allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-allow-future", false);
-+
 +        // plugin-specific overrides
 +        useCustomClassLoader = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".custom-class-loader", useCustomClassLoader, false);
 +        debug = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".debug", debug, false);
@@ -117,7 +168,14 @@
 +        reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-field", reflectFields, false);
 +        reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-class", reflectClass, false);
 +        allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-allow-future", allowFuture, false);
-+
++        // Uranium start
++        boolean remapGuava17= MinecraftServer.uraniumConfig.enableGuava17.getValue();
++        String remap_guava17_ver=MinecraftServer.uraniumConfig.getString("plugin-settings."+pluginName+".remap-guava17-ver",null);
++        remapGuava17 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings." + pluginName + ".remap-guava17", remapGuava17, false);
++        if(remap_guava17_ver!=null&&!remapGuava17) {
++            remapGuava17 = checkVer(remap_guava17_ver);
++        }
++        // Uranium end
 +        if (debug) {
 +            System.out.println("PluginClassLoader debugging enabled for "+pluginName);
 +        }
@@ -150,6 +208,8 @@
 +        if (remapOBC152) flags |= F_REMAP_OBC152;
 +        if (remapOBCPre) flags |= F_REMAP_OBCPRE;
 +        if (globalInherit) flags |= F_GLOBAL_INHERIT;
++        //Uranium guava 17 support
++        if (remapGuava17) flags |= F_REMAP_GUAVA17;
 +
 +        remapFlags = flags; // used in findClass0
 +        JarMapping jarMapping = getJarMapping(flags);
@@ -182,7 +242,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +207,305 @@
+@@ -58,34 +260,305 @@
      }
  
      @Override
@@ -226,12 +286,12 @@
 +                    new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/"+obfVersion+"/cb2pkgmcp.srg"))),
 +                    new MavenShade(relocations),
 +                    null, false);
-+
++            //Uranium start
 +            jarMapping.loadMappings(
 +                    new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("uranium_data/mappings/new.srg"))),
 +                    new MavenShade(relocations),
 +                    null, false);
-+
++            //Uranium end
 +            jarMapping.loadMappings(
 +                    new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/"+obfVersion+"/obf2pkgmcp.srg"))),
 +                    null, // no version relocation for obf
@@ -246,22 +306,22 @@
 +                    new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/"+obfVersion+"/cb2numpkg.srg"))),
 +                    new MavenShade(relocations),
 +                    null, false);
- 
--        if (result == null) {
--            if (checkGlobal) {
--                result = loader.getClassByName(name);
++            //Uranium start
 +            jarMapping.loadMappings(
 +                    new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("uranium_data/mappings/new.srg"))),
 +                    new MavenShade(relocations),
 +                    null, false);
-+
++            //Uranium end
 +            if (obfVersion.equals("v1_7_R4")) {
 +                jarMapping.loadMappings(
 +                        new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/"+obfVersion+"/obf2numpkg.srg"))),
 +                        null, // no version relocation for obf
 +                        null, false);
-             }
++            }
  
+-        if (result == null) {
+-            if (checkGlobal) {
+-                result = loader.getClassByName(name);
 +            // resolve naming conflict in FML/CB
 +            jarMapping.methods.put("net/minecraft/server/"+obfVersion+"/PlayerConnection/getPlayer ()Lorg/bukkit/craftbukkit/"+getNativeVersion()+"/entity/CraftPlayer;", "getPlayerB");
 +        }
@@ -275,10 +335,10 @@
 +        if (jarMapping != null) {
 +            if (debug) {
 +                System.out.println("Mapping reused for "+Integer.toHexString(flags));
-+            }
+             }
 +            return jarMapping;
 +        }
-+
+ 
 +        jarMapping = new JarMapping();
 +        try {
 +
@@ -286,7 +346,7 @@
 +            // To resolve this conflict, remap plugin usages to Guava 10 in a separate package
 +            // Most plugins should keep this enabled, unless they want a newer Guava
 +            // Uranium using guava17 when config enable
-+            if(!MinecraftServer.uraniumConfig.enableGuava17.getValue()) {
++            if((flags & F_REMAP_GUAVA17)==0) {
 +                jarMapping.packages.put("com/google/common", "guava10/com/google/common");
 +            }else{
 +                jarMapping.packages.put("com/google/common", "guava17/com/google/common");
