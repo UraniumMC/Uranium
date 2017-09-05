@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import cc.uraniummc.Uranium;
 import cc.uraniummc.command.CommandTitle;
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
@@ -200,7 +201,7 @@ public final class CraftServer implements Server {
                 return player.getBukkitEntity();
             }
         }));
-        this.serverVersion = CraftServer.class.getPackage().getImplementationVersion();
+        this.serverVersion = Uranium.getCurrentVersion();
         online.value = console.getPropertyManager().getBooleanProperty("online-mode", true);
 
         Bukkit.setServer(this);
