@@ -102,9 +102,24 @@ def gitInfo(String key) {
 ext.mcVersion = "1.7.10"
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
-ext.uranium_version = 2
-version = "${mcVersion}-${forgeVersion}-${uranium_version}.${build}"
+ext.uranium_version = 3
+version = "${uranium_version}-"+getCurrentGitBranch()+"-B${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
+
+def getCurrentGitBranch() {
+    def gitBranch = "unoffical"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim()
+        }
+        if (gitBranch.equals("master")) return "stable";
+    } catch (e) {
+    }
+    return gitBranch
+}
 
 launch4j {
     jreMinVersion = '1.7.0'
