@@ -104,7 +104,7 @@ ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fml
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
 ext.branch = System.getenv('GIT_BRANCH') ? System.getenv('GIT_BRANCH') : getCurrentGitBranch()
 ext.uranium_version = 3
-version = "${uranium_version}-${branch}-B${build}"
+version = "${branch}-${uranium_version}-B${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 
 def getCurrentGitBranch() {
