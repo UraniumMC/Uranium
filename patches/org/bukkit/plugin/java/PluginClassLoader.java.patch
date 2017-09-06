@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,5 +1,24 @@
+@@ -1,5 +1,25 @@
  package org.bukkit.plugin.java;
  
 +// Cauldron start
@@ -16,6 +16,7 @@
 +
 +import org.bukkit.plugin.PluginDescriptionFile;
 +import java.io.*;
++import java.lang.reflect.Method;
 +import java.net.JarURLConnection;
 +import java.security.CodeSigner;
 +import java.security.CodeSource;
@@ -25,7 +26,7 @@
  import java.io.File;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -7,6 +26,7 @@
+@@ -7,6 +27,7 @@
  import java.util.HashMap;
  import java.util.Map;
  import java.util.Set;
@@ -33,7 +34,7 @@
  
  import org.apache.commons.lang.Validate;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -15,16 +35,83 @@
+@@ -15,16 +36,111 @@
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
   */
@@ -75,6 +76,27 @@
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
 +    // Cauldron end
 +    // Uranium start
++
++    private static Method ADDURL;
++    static{
++        try{
++            ADDURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
++        }catch (Throwable e){
++
++        }
++    }
++    @Override
++    protected void addURL(URL url) {
++        try {
++            if (ADDURL != null) {
++                ADDURL.setAccessible(true);
++                ADDURL.invoke(getParent(), url);
++                return;
++            }
++        }catch(Exception e){}
++        super.addURL(url);
++    }
++
 +    public boolean checkVer(String pTargetVer){
 +        char sign=pTargetVer.charAt(0);
 +        String ver=description.getVersion()!=null?description.getVersion():"";
@@ -116,11 +138,18 @@
 +                return ver.equals(pTargetVer);
 +        }
 +    }
++    public String remapClassName(String name){
++        if(name.startsWith("net.minecraft.server.")) {
++            JarMapping jarMapping = getJarMapping(remapFlags);
++            return jarMapping.classes.get(name.replaceAll("\\.", "/"));
++        }
++        return name;
++    }
 +    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +121,121 @@
+@@ -34,6 +150,121 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -242,7 +271,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +260,305 @@
+@@ -58,34 +289,305 @@
      }
  
      @Override
@@ -514,7 +543,7 @@
 +                        bytecode = Streams.readAll(stream);
 +                    }*/
 +
-+                    // Remap the classes
++                    // RemapUtils the classes
 +                    byte[] remappedBytecode = remapper.remapClassFile(bytecode, RuntimeRepo.getInstance());
 +
 +                    if (debug) {
