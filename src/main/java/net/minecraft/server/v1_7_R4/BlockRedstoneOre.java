@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockRedstoneOre extends net.minecraft.block.BlockRedstoneOre
 {
+    public BlockRedstoneOre(boolean p_i45420_1_) {
+        super(p_i45420_1_);
+    }
 
-   public int a(java.util.Random arg1){
+    public int a(java.util.Random arg1){
        return super.quantityDropped(arg1);
 }
    public int a(net.minecraft.world.World arg1){
@@ -20,9 +23,6 @@ public class BlockRedstoneOre extends net.minecraft.block.BlockRedstoneOre
    public void dropNaturally(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,float arg6,int arg7){
        super.dropBlockAsItemWithChance(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
 }
-   public void e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_150185_e(arg1,arg2,arg3,arg4);
-}
    public int getDropCount(int arg1,java.util.Random arg2){
        return super.quantityDroppedWithBonus(arg1,arg2);
 }
@@ -34,8 +34,5 @@ public class BlockRedstoneOre extends net.minecraft.block.BlockRedstoneOre
 }
    public net.minecraft.item.ItemStack j(int arg1){
        return super.createStackedBlock(arg1);
-}
-   public void m(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_150186_m(arg1,arg2,arg3,arg4);
 }
 }

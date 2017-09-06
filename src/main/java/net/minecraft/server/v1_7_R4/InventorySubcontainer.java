@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class InventorySubcontainer extends net.minecraft.inventory.InventoryBasic
 {
+    public InventorySubcontainer(String p_i1561_1_, boolean p_i1561_2_, int p_i1561_3_) {
+        super(p_i1561_1_, p_i1561_2_, p_i1561_3_);
+    }
 
-   public void a(java.lang.String arg1){
+    public void a(java.lang.String arg1){
        super.func_110133_a(arg1);
 }
    public boolean a(net.minecraft.entity.player.EntityPlayer arg1){

@@ -39,9 +39,6 @@ public class AxisAlignedBB extends net.minecraft.util.AxisAlignedBB
    public double b(net.minecraft.util.AxisAlignedBB arg1,double arg2){
        return super.calculateYOffset(arg1,arg2);
 }
-   public boolean b(net.minecraft.util.Vec3 arg1){
-       return super.isVecInYZ(arg1);
-}
    public net.minecraft.util.AxisAlignedBB c(double arg1,double arg2,double arg3){
        super.getOffsetBoundingBox(arg1,arg2,arg3);
        return this;
@@ -49,9 +46,6 @@ public class AxisAlignedBB extends net.minecraft.util.AxisAlignedBB
    public double c(net.minecraft.util.AxisAlignedBB arg1,double arg2){
        return super.calculateZOffset(arg1,arg2);
 }
-   public boolean c(net.minecraft.util.Vec3 arg1){
-       return super.isVecInXZ(arg1);
-    }
    public net.minecraft.util.AxisAlignedBB clone(){
        super.copy();
        return this;
@@ -62,9 +56,6 @@ public class AxisAlignedBB extends net.minecraft.util.AxisAlignedBB
 }
    public void d(net.minecraft.util.AxisAlignedBB arg1){
        super.setBB(arg1);
-}
-   public boolean d(net.minecraft.util.Vec3 arg1){
-       return super.isVecInXY(arg1);
 }
    public net.minecraft.util.AxisAlignedBB grow(double arg1,double arg2,double arg3){
        super.expand(arg1,arg2,arg3);

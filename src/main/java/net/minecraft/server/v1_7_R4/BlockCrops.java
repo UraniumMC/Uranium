@@ -38,7 +38,4 @@ public class BlockCrops extends net.minecraft.block.BlockCrops
    public void m(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        super.func_149863_m(arg1,arg2,arg3,arg4);
 }
-   public float n(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_149864_n(arg1,arg2,arg3,arg4);
-}
 }

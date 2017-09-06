@@ -1,4 +1,7 @@
 package net.minecraft.server.v1_7_R4;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 public class BlockMonsterEggs extends net.minecraft.block.BlockSilverfish
 {
 
@@ -11,7 +14,7 @@ public class BlockMonsterEggs extends net.minecraft.block.BlockSilverfish
    public int a(net.minecraft.block.Block arg1,int arg2){
        return super.func_150195_a(arg1,arg2);
 }
-   public net.minecraft.util.org.apache.commons.lang3.tuple.ImmutablePair b(int arg1){
+   public ImmutablePair b(int arg1){
        return super.func_150197_b(arg1);
 }
    public void dropNaturally(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,float arg6,int arg7){

@@ -32,9 +32,6 @@ public class BlockBed extends net.minecraft.block.BlockBed
    public void dropNaturally(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,float arg6,int arg7){
        super.dropBlockAsItemWithChance(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
 }
-   public void e(){
-       super.func_149978_e();
-}
    public net.minecraft.item.Item getDropType(int arg1,java.util.Random arg2,int arg3){
        return super.getItemDropped(arg1,arg2,arg3);
 }

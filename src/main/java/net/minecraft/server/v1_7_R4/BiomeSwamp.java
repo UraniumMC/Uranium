@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BiomeSwamp extends net.minecraft.world.biome.BiomeGenSwamp
 {
+    public BiomeSwamp(int p_i1988_1_) {
+        super(p_i1988_1_);
+    }
 
-   public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){
+    public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){
        return super.func_150567_a(arg1);
 }
    public java.lang.String a(java.util.Random arg1,int arg2,int arg3,int arg4){

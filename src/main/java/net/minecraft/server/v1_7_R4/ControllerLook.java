@@ -14,9 +14,6 @@ public class ControllerLook extends net.minecraft.entity.ai.EntityLookHelper
    public void a(double arg1,double arg2,double arg3,float arg4,float arg5){
        super.setLookPosition(arg1,arg2,arg3,arg4,arg5);
 }
-   public float a(float arg1,float arg2,float arg3){
-       return super.updateRotation(arg1,arg2,arg3);
-}
    public void a(net.minecraft.entity.Entity arg1,float arg2,float arg3){
        super.setLookPositionWithEntity(arg1,arg2,arg3);
 }

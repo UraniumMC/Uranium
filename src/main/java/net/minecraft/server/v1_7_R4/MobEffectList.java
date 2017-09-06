@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class MobEffectList extends net.minecraft.potion.Potion
 {
+    public MobEffectList(int p_i1573_1_, boolean p_i1573_2_, int p_i1573_3_) {
+        super(p_i1573_1_, p_i1573_2_, p_i1573_3_);
+    }
 
-   public java.lang.String a(){
+    public java.lang.String a(){
        return super.getName();
 }
    public net.minecraft.potion.Potion a(double arg1){

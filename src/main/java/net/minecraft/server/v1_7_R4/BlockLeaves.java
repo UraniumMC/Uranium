@@ -1,5 +1,5 @@
 package net.minecraft.server.v1_7_R4;
-public class BlockLeaves extends net.minecraft.block.BlockLeaves
+public abstract class BlockLeaves extends net.minecraft.block.BlockLeaves
 {
 
    public int a(java.util.Random arg1){
@@ -22,12 +22,6 @@ public class BlockLeaves extends net.minecraft.block.BlockLeaves
 }
    public void dropNaturally(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,float arg6,int arg7){
        super.dropBlockAsItemWithChance(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
-}
-   public java.lang.String[] e(){
-       return super.func_150125_e();
-}
-   public void e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.removeLeaves(arg1,arg2,arg3,arg4);
 }
    public int getDropData(int arg1){
        return super.damageDropped(arg1);

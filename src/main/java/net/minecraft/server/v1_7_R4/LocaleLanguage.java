@@ -3,7 +3,6 @@ public class LocaleLanguage extends net.minecraft.util.StringTranslate
 {
 
    public net.minecraft.util.StringTranslate a(){
-       super.getInstance();
        return this;
 }
    public java.lang.String a(java.lang.String arg1){
@@ -17,8 +16,5 @@ public class LocaleLanguage extends net.minecraft.util.StringTranslate
 }
    public long c(){
        return super.getLastUpdateTimeInMilliseconds();
-}
-   public java.lang.String c(java.lang.String arg1){
-       return super.tryTranslateKey(arg1);
 }
 }

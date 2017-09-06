@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockFence extends net.minecraft.block.BlockFence
 {
+    public BlockFence(String p_i45406_1_, Material p_i45406_2_) {
+        super(p_i45406_1_, p_i45406_2_);
+    }
 
-   public boolean a(net.minecraft.block.Block arg1){
+    public boolean a(net.minecraft.block.Block arg1){
        return super.func_149825_a(arg1);
 }
    public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.util.AxisAlignedBB arg5,java.util.List arg6,net.minecraft.entity.Entity arg7){

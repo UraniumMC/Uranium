@@ -26,12 +26,6 @@ public class AttributeModifiable extends net.minecraft.entity.ai.attributes.Modi
    public java.util.Collection c(){
        return super.func_111122_c();
 }
-   public void f(){
-       super.flagForUpdate();
-}
-   public double g(){
-       return super.computeValue();
-}
    public net.minecraft.entity.ai.attributes.IAttribute getAttribute(){
        return super.getAttribute();
 }

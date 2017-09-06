@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BiomeMesa extends net.minecraft.world.biome.BiomeGenMesa
 {
+    public BiomeMesa(int p_i45380_1_, boolean p_i45380_2_, boolean p_i45380_3_) {
+        super(p_i45380_1_, p_i45380_2_, p_i45380_3_);
+    }
 
-   public void a(long arg1){
+    public void a(long arg1){
        super.func_150619_a(arg1);
 }
    public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){

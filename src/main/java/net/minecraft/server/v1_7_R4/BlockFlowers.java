@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockFlowers extends net.minecraft.block.BlockFlower
 {
+    public BlockFlowers(int p_i2173_1_) {
+        super(p_i2173_1_);
+    }
 
-   public net.minecraft.block.BlockFlower e(java.lang.String arg1){
+    public net.minecraft.block.BlockFlower e(java.lang.String arg1){
        super.func_149857_e(arg1);
        return this;
 }

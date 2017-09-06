@@ -11,9 +11,6 @@ public class BlockCake extends net.minecraft.block.BlockCake
    public void attack(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.entity.player.EntityPlayer arg5){
        super.onBlockClicked(arg1,arg2,arg3,arg4,arg5);
 }
-   public void b(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.entity.player.EntityPlayer arg5){
-       super.func_150036_b(arg1,arg2,arg3,arg4,arg5);
-}
    public boolean c(){
        return super.isOpaqueCube();
 }

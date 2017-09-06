@@ -1,15 +1,15 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockRedstoneTorch extends net.minecraft.block.BlockRedstoneTorch
 {
+    public BlockRedstoneTorch(boolean p_i45423_1_) {
+        super(p_i45423_1_);
+    }
 
-   public int a(net.minecraft.world.World arg1){
+    public int a(net.minecraft.world.World arg1){
        return super.tickRate(arg1);
 }
    public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,java.util.Random arg5){
        super.updateTick(arg1,arg2,arg3,arg4,arg5);
-}
-   public boolean a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,boolean arg5){
-       return super.func_150111_a(arg1,arg2,arg3,arg4,arg5);
 }
    public int b(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.isProvidingWeakPower(arg1,arg2,arg3,arg4,arg5);
@@ -28,9 +28,6 @@ public class BlockRedstoneTorch extends net.minecraft.block.BlockRedstoneTorch
 }
    public boolean isPowerSource(){
        return super.canProvidePower();
-}
-   public boolean m(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_150110_m(arg1,arg2,arg3,arg4);
 }
    public void onPlace(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        super.onBlockAdded(arg1,arg2,arg3,arg4);

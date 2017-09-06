@@ -1,15 +1,15 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockFurnace extends net.minecraft.block.BlockFurnace
 {
+    public BlockFurnace(boolean p_i45407_1_) {
+        super(p_i45407_1_);
+    }
 
-   public net.minecraft.tileentity.TileEntity a(net.minecraft.world.World arg1,int arg2){
+    public net.minecraft.tileentity.TileEntity a(net.minecraft.world.World arg1, int arg2){
        return super.createNewTileEntity(arg1,arg2);
 }
    public void a(boolean arg1,net.minecraft.world.World arg2,int arg3,int arg4,int arg5){
        super.updateFurnaceBlockState(arg1,arg2,arg3,arg4,arg5);
-}
-   public void e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_149930_e(arg1,arg2,arg3,arg4);
 }
    public int g(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){
        return super.getComparatorInputOverride(arg1,arg2,arg3,arg4,arg5);

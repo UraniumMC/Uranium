@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BiomeIcePlains extends net.minecraft.world.biome.BiomeGenSnow
 {
+    public BiomeIcePlains(int p_i45378_1_, boolean p_i45378_2_) {
+        super(p_i45378_1_, p_i45378_2_);
+    }
 
-   public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){
+    public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){
        return super.func_150567_a(arg1);
 }
    public void a(net.minecraft.world.World arg1,java.util.Random arg2,int arg3,int arg4){

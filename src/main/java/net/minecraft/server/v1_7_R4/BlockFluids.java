@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockFluids extends net.minecraft.block.BlockLiquid
 {
+    public BlockFluids(Material p_i45413_1_) {
+        super(p_i45413_1_);
+    }
 
-   public boolean a(int arg1,boolean arg2){
+    public boolean a(int arg1, boolean arg2){
        return super.canCollideCheck(arg1,arg2);
 }
    public int a(java.util.Random arg1){
@@ -44,17 +50,11 @@ public class BlockFluids extends net.minecraft.block.BlockLiquid
    public int e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        return super.func_149804_e(arg1,arg2,arg3,arg4);
 }
-   public net.minecraft.util.Vec3 f(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4){
-       return super.getFlowVector(arg1,arg2,arg3,arg4);
-}
    public void fizz(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        super.func_149799_m(arg1,arg2,arg3,arg4);
 }
    public net.minecraft.item.Item getDropType(int arg1,java.util.Random arg2,int arg3){
        return super.getItemDropped(arg1,arg2,arg3);
-}
-   public void n(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_149805_n(arg1,arg2,arg3,arg4);
 }
    public void onPlace(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        super.onBlockAdded(arg1,arg2,arg3,arg4);

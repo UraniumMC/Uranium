@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockChest extends net.minecraft.block.BlockChest
 {
+    public BlockChest(int p_i45397_1_) {
+        super(p_i45397_1_);
+    }
 
-   public net.minecraft.tileentity.TileEntity a(net.minecraft.world.World arg1,int arg2){
+    public net.minecraft.tileentity.TileEntity a(net.minecraft.world.World arg1, int arg2){
        return super.createNewTileEntity(arg1,arg2);
 }
    public int b(){
@@ -43,12 +46,6 @@ public class BlockChest extends net.minecraft.block.BlockChest
 }
    public net.minecraft.inventory.IInventory m(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        return super.func_149951_m(arg1,arg2,arg3,arg4);
-}
-   public boolean n(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_149952_n(arg1,arg2,arg3,arg4);
-}
-   public boolean o(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_149953_o(arg1,arg2,arg3,arg4);
 }
    public void onPlace(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        super.onBlockAdded(arg1,arg2,arg3,arg4);

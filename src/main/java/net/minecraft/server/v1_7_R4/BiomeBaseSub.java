@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.world.biome.BiomeGenBase;
+
 public class BiomeBaseSub extends net.minecraft.world.biome.BiomeGenMutated
 {
+    public BiomeBaseSub(int p_i45381_1_, BiomeGenBase p_i45381_2_) {
+        super(p_i45381_1_, p_i45381_2_);
+    }
 
-   public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){
+    public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){
        return super.func_150567_a(arg1);
 }
    public boolean a(net.minecraft.world.biome.BiomeGenBase arg1){
@@ -20,7 +26,7 @@ public class BiomeBaseSub extends net.minecraft.world.biome.BiomeGenMutated
    public java.lang.Class l(){
        return super.getBiomeClass();
 }
-   public net.minecraft.world.biome.BiomeGenBase$TempCategory m(){
+   public net.minecraft.world.biome.BiomeGenBase.TempCategory m(){
        return super.getTempCategory();
 }
 }

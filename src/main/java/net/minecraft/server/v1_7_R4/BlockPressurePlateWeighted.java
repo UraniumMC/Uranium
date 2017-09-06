@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockPressurePlateWeighted extends net.minecraft.block.BlockPressurePlateWeighted
 {
+    public BlockPressurePlateWeighted(String p_i45436_1_, Material p_i45436_2_, int p_i45436_3_) {
+        super(p_i45436_1_, p_i45436_2_, p_i45436_3_);
+    }
 
-   public int a(net.minecraft.world.World arg1){
+    public int a(net.minecraft.world.World arg1){
        return super.tickRate(arg1);
 }
    public int c(int arg1){

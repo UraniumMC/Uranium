@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
-public class BlockDiodeAbstract extends net.minecraft.block.BlockRedstoneDiode
+public abstract class BlockDiodeAbstract extends net.minecraft.block.BlockRedstoneDiode
 {
+    public BlockDiodeAbstract(boolean p_i45400_1_) {
+        super(p_i45400_1_);
+    }
 
-   public boolean a(net.minecraft.block.Block arg1){
+    public boolean a(net.minecraft.block.Block arg1){
        return super.func_149908_a(arg1);
 }
    public boolean a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){
@@ -13,9 +16,6 @@ public class BlockDiodeAbstract extends net.minecraft.block.BlockRedstoneDiode
 }
    public int b(){
        return super.getRenderType();
-}
-   public int b(int arg1){
-       return super.func_149901_b(arg1);
 }
    public int b(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.isProvidingWeakPower(arg1,arg2,arg3,arg4,arg5);
@@ -47,10 +47,6 @@ public class BlockDiodeAbstract extends net.minecraft.block.BlockRedstoneDiode
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
 }
-   public net.minecraft.block.BlockRedstoneDiode e(){
-       super.getBlockPowered();
-       return this;
-}
    public boolean e(net.minecraft.block.Block arg1){
        return super.func_149907_e(arg1);
 }
@@ -68,10 +64,6 @@ public class BlockDiodeAbstract extends net.minecraft.block.BlockRedstoneDiode
 }
    public int h(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){
        return super.getInputStrength(arg1,arg2,arg3,arg4,arg5);
-}
-   public net.minecraft.block.BlockRedstoneDiode i(){
-       super.getBlockUnpowered();
-       return this;
 }
    public int i(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.func_149913_i(arg1,arg2,arg3,arg4,arg5);

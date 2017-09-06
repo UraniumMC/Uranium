@@ -1,8 +1,10 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockAnvil extends net.minecraft.block.BlockAnvil
 {
+    public BlockAnvil() {
+    }
 
-   public void a(net.minecraft.entity.item.EntityFallingBlock arg1){
+    public void a(net.minecraft.entity.item.EntityFallingBlock arg1){
        super.func_149829_a(arg1);
 }
    public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){

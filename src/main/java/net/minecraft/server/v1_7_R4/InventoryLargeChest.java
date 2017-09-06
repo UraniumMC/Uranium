@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.inventory.IInventory;
+
 public class InventoryLargeChest extends net.minecraft.inventory.InventoryLargeChest
 {
+    public InventoryLargeChest(String p_i1559_1_, IInventory p_i1559_2_, IInventory p_i1559_3_) {
+        super(p_i1559_1_, p_i1559_2_, p_i1559_3_);
+    }
 
-   public boolean a(net.minecraft.entity.player.EntityPlayer arg1){
+    public boolean a(net.minecraft.entity.player.EntityPlayer arg1){
        return super.isUseableByPlayer(arg1);
 }
    public boolean a(net.minecraft.inventory.IInventory arg1){

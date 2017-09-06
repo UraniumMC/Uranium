@@ -1,8 +1,17 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.nbt.NBTTagCompound;
+
 public class MerchantRecipeList extends net.minecraft.village.MerchantRecipeList
 {
+    public MerchantRecipeList() {
+    }
 
-   public net.minecraft.nbt.NBTTagCompound a(){
+    public MerchantRecipeList(NBTTagCompound p_i1944_1_) {
+        super(p_i1944_1_);
+    }
+
+    public net.minecraft.nbt.NBTTagCompound a(){
        return super.getRecipiesAsTags();
 }
    public net.minecraft.village.MerchantRecipe a(net.minecraft.item.ItemStack arg1,net.minecraft.item.ItemStack arg2,int arg3){
@@ -13,8 +22,5 @@ public class MerchantRecipeList extends net.minecraft.village.MerchantRecipeList
 }
    public void a(net.minecraft.nbt.NBTTagCompound arg1){
        super.readRecipiesFromTags(arg1);
-}
-   public void a(net.minecraft.network.PacketBuffer arg1){
-       super.func_151391_a(arg1);
 }
 }

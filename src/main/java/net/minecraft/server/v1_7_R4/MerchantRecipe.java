@@ -1,8 +1,28 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 public class MerchantRecipe extends net.minecraft.village.MerchantRecipe
 {
+    public MerchantRecipe(NBTTagCompound p_i1940_1_) {
+        super(p_i1940_1_);
+    }
 
-   public void a(int arg1){
+    public MerchantRecipe(ItemStack p_i1941_1_, ItemStack p_i1941_2_, ItemStack p_i1941_3_) {
+        super(p_i1941_1_, p_i1941_2_, p_i1941_3_);
+    }
+
+    public MerchantRecipe(ItemStack p_i1942_1_, ItemStack p_i1942_2_) {
+        super(p_i1942_1_, p_i1942_2_);
+    }
+
+    public MerchantRecipe(ItemStack p_i1943_1_, Item p_i1943_2_) {
+        super(p_i1943_1_, p_i1943_2_);
+    }
+
+    public void a(int arg1){
        super.func_82783_a(arg1);
 }
    public boolean a(net.minecraft.village.MerchantRecipe arg1){

@@ -29,9 +29,6 @@ public class BlockHopper extends net.minecraft.block.BlockHopper
    public net.minecraft.tileentity.TileEntityHopper e(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4){
        return super.func_149920_e(arg1,arg2,arg3,arg4);
 }
-   public void e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_149919_e(arg1,arg2,arg3,arg4);
-}
    public int g(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){
        return super.getComparatorInputOverride(arg1,arg2,arg3,arg4,arg5);
 }

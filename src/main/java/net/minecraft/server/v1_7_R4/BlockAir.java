@@ -1,8 +1,10 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockAir extends net.minecraft.block.BlockAir
 {
+    public BlockAir() {
+    }
 
-   public boolean a(int arg1,boolean arg2){
+    public boolean a(int arg1, boolean arg2){
        return super.canCollideCheck(arg1,arg2);
 }
    public net.minecraft.util.AxisAlignedBB a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){

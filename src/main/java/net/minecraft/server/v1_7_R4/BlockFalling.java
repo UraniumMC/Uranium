@@ -1,8 +1,17 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockFalling extends net.minecraft.block.BlockFalling
 {
+    public BlockFalling() {
+    }
 
-   public void a(net.minecraft.entity.item.EntityFallingBlock arg1){
+    public BlockFalling(Material p_i45405_1_) {
+        super(p_i45405_1_);
+    }
+
+    public void a(net.minecraft.entity.item.EntityFallingBlock arg1){
        super.func_149829_a(arg1);
 }
    public int a(net.minecraft.world.World arg1){
@@ -19,9 +28,6 @@ public class BlockFalling extends net.minecraft.block.BlockFalling
 }
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
-}
-   public void m(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_149830_m(arg1,arg2,arg3,arg4);
 }
    public void onPlace(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        super.onBlockAdded(arg1,arg2,arg3,arg4);

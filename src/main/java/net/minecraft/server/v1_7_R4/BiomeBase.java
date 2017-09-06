@@ -1,8 +1,18 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.world.biome.BiomeGenBase;
+
 public class BiomeBase extends net.minecraft.world.biome.BiomeGenBase
 {
+    public BiomeBase(int p_i1971_1_) {
+        super(p_i1971_1_);
+    }
 
-   public net.minecraft.world.biome.BiomeDecorator a(){
+    public BiomeBase(int p_i1971_1_, boolean register) {
+        super(p_i1971_1_, register);
+    }
+
+    public net.minecraft.world.biome.BiomeDecorator a(){
        return super.createBiomeDecorator();
 }
    public net.minecraft.world.biome.BiomeGenBase a(float arg1,float arg2){
@@ -32,10 +42,6 @@ public class BiomeBase extends net.minecraft.world.biome.BiomeGenBase
 }
    public boolean a(net.minecraft.world.biome.BiomeGenBase arg1){
        return super.isEqualTo(arg1);
-}
-   public net.minecraft.world.biome.BiomeGenBase a(net.minecraft.world.biome.BiomeGenBase$Height arg1){
-       super.setHeight(arg1);
-       return this;
 }
    public void a(net.minecraft.world.World arg1,java.util.Random arg2,int arg3,int arg4){
        super.decorate(arg1,arg2,arg3,arg4);
@@ -77,11 +83,7 @@ public class BiomeBase extends net.minecraft.world.biome.BiomeGenBase
    public float g(){
        return super.getSpawningChance();
 }
-   public net.minecraft.world.biome.BiomeGenBase getBiome(int arg1){
-       super.getBiome(arg1);
-       return this;
-}
-   public net.minecraft.server.v1_7_R4.BiomeBase[] getBiomes(){
+   public BiomeGenBase[] getBiomes(){
        return super.getBiomeGenArray();
 }
    public java.util.List getMobs(net.minecraft.entity.EnumCreatureType arg1){
@@ -99,8 +101,5 @@ public class BiomeBase extends net.minecraft.world.biome.BiomeGenBase
 }
    public java.lang.Class l(){
        return super.getBiomeClass();
-}
-   public net.minecraft.world.biome.BiomeGenBase$TempCategory m(){
-       return super.getTempCategory();
 }
 }

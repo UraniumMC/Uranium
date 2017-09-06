@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockRepeater extends net.minecraft.block.BlockRedstoneRepeater
 {
+    public BlockRepeater(boolean p_i45424_1_) {
+        super(p_i45424_1_);
+    }
 
-   public boolean a(net.minecraft.block.Block arg1){
+    public boolean a(net.minecraft.block.Block arg1){
        return super.func_149908_a(arg1);
 }
    public int b(){

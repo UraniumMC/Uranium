@@ -20,9 +20,6 @@ public class BlockCarpet extends net.minecraft.block.BlockCarpet
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
 }
-   public boolean e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_150090_e(arg1,arg2,arg3,arg4);
-}
    public void g(){
        super.setBlockBoundsForItemRender();
 }

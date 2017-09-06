@@ -1,6 +1,7 @@
 package net.minecraft.server.v1_7_R4;
 
 import javax.crypto.Cipher;
+import javax.crypto.ShortBufferException;
 import java.io.IOException;
 
 public class PacketEncrypter extends net.minecraft.network.NettyEncryptingEncoder
@@ -12,7 +13,7 @@ public class PacketEncrypter extends net.minecraft.network.NettyEncryptingEncode
     public void a(io.netty.channel.ChannelHandlerContext arg1, io.netty.buffer.ByteBuf arg2, io.netty.buffer.ByteBuf arg3) throws Exception{
        super.encode(arg1,arg2,arg3);
 }
-   public void encode(io.netty.channel.ChannelHandlerContext arg1,java.lang.Object arg2,io.netty.buffer.ByteBuf arg3) throws Exception{
+   public void encode(io.netty.channel.ChannelHandlerContext arg1,java.lang.Object arg2,io.netty.buffer.ByteBuf arg3) throws ShortBufferException{
        super.encode(arg1,arg2,arg3);
 }
 }

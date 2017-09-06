@@ -32,9 +32,6 @@ public class BlockLever extends net.minecraft.block.BlockLever
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
 }
-   public boolean e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_149820_e(arg1,arg2,arg3,arg4);
-}
    public int getPlacedData(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,float arg6,float arg7,float arg8,int arg9){
        return super.onBlockPlaced(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
 }

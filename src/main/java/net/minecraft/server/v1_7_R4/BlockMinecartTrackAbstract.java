@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockMinecartTrackAbstract extends net.minecraft.block.BlockRailBase
 {
+    public BlockMinecartTrackAbstract(boolean p_i45389_1_) {
+        super(p_i45389_1_);
+    }
 
-   public int a(java.util.Random arg1){
+    public int a(java.util.Random arg1){
        return super.quantityDropped(arg1);
 }
    public boolean a(net.minecraft.block.Block arg1){

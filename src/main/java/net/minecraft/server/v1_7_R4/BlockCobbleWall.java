@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.*;
+
 public class BlockCobbleWall extends net.minecraft.block.BlockWall
 {
+    public BlockCobbleWall(net.minecraft.block.Block p_i45435_1_) {
+        super(p_i45435_1_);
+    }
 
-   public net.minecraft.util.AxisAlignedBB a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
+    public net.minecraft.util.AxisAlignedBB a(net.minecraft.world.World arg1, int arg2, int arg3, int arg4){
        return super.getCollisionBoundingBoxFromPool(arg1,arg2,arg3,arg4);
 }
    public int b(){

@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockEnderPortal extends net.minecraft.block.BlockEndPortal
 {
+    public BlockEnderPortal(Material p_i45404_1_) {
+        super(p_i45404_1_);
+    }
 
-   public int a(java.util.Random arg1){
+    public int a(java.util.Random arg1){
        return super.quantityDropped(arg1);
 }
    public net.minecraft.tileentity.TileEntity a(net.minecraft.world.World arg1,int arg2){

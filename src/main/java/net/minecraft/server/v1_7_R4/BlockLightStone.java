@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockLightStone extends net.minecraft.block.BlockGlowstone
 {
+    public BlockLightStone(Material p_i45409_1_) {
+        super(p_i45409_1_);
+    }
 
-   public int a(java.util.Random arg1){
+    public int a(java.util.Random arg1){
        return super.quantityDropped(arg1);
 }
    public net.minecraft.block.material.MapColor f(int arg1){

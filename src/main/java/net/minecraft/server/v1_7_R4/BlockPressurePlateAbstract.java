@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
-public class BlockPressurePlateAbstract extends net.minecraft.block.BlockBasePressurePlate
-{
 
-   public net.minecraft.util.AxisAlignedBB a(int arg1,int arg2,int arg3){
+import net.minecraft.block.material.Material;
+
+public abstract class BlockPressurePlateAbstract extends net.minecraft.block.BlockBasePressurePlate
+{
+    public BlockPressurePlateAbstract(String p_i45387_1_, Material p_i45387_2_) {
+        super(p_i45387_1_, p_i45387_2_);
+    }
+
+    public net.minecraft.util.AxisAlignedBB a(int arg1, int arg2, int arg3){
        return super.func_150061_a(arg1,arg2,arg3);
 }
    public int a(net.minecraft.world.World arg1){
@@ -35,9 +41,6 @@ public class BlockPressurePlateAbstract extends net.minecraft.block.BlockBasePre
    public boolean c(){
        return super.isOpaqueCube();
 }
-   public int c(int arg1){
-       return super.func_150060_c(arg1);
-}
    public int c(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.isProvidingStrongPower(arg1,arg2,arg3,arg4,arg5);
 }
@@ -47,14 +50,8 @@ public class BlockPressurePlateAbstract extends net.minecraft.block.BlockBasePre
    public boolean d(){
        return super.renderAsNormalBlock();
 }
-   public int d(int arg1){
-       return super.func_150066_d(arg1);
-}
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
-}
-   public int e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_150065_e(arg1,arg2,arg3,arg4);
 }
    public void g(){
        super.setBlockBoundsForItemRender();

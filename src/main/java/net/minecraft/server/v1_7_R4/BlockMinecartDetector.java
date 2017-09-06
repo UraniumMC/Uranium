@@ -5,9 +5,6 @@ public class BlockMinecartDetector extends net.minecraft.block.BlockRailDetector
    public int a(net.minecraft.world.World arg1){
        return super.tickRate(arg1);
 }
-   public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){
-       super.func_150054_a(arg1,arg2,arg3,arg4,arg5);
-}
    public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,java.util.Random arg5){
        super.updateTick(arg1,arg2,arg3,arg4,arg5);
 }

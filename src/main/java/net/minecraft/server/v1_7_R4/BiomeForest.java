@@ -1,8 +1,11 @@
 package net.minecraft.server.v1_7_R4;
 public class BiomeForest extends net.minecraft.world.biome.BiomeGenForest
 {
+    public BiomeForest(int p_i45377_1_, int p_i45377_2_) {
+        super(p_i45377_1_, p_i45377_2_);
+    }
 
-   public net.minecraft.world.biome.BiomeGenBase a(int arg1,boolean arg2){
+    public net.minecraft.world.biome.BiomeGenBase a(int arg1, boolean arg2){
        return super.func_150557_a(arg1,arg2);
 }
    public net.minecraft.world.gen.feature.WorldGenAbstractTree a(java.util.Random arg1){

@@ -2,9 +2,6 @@ package net.minecraft.server.v1_7_R4;
 public class BlockFlowerPot extends net.minecraft.block.BlockFlowerPot
 {
 
-   public boolean a(net.minecraft.block.Block arg1,int arg2){
-       return super.func_149928_a(arg1,arg2);
-}
    public net.minecraft.tileentity.TileEntity a(net.minecraft.world.World arg1,int arg2){
        return super.createNewTileEntity(arg1,arg2);
 }
@@ -25,9 +22,6 @@ public class BlockFlowerPot extends net.minecraft.block.BlockFlowerPot
 }
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
-}
-   public net.minecraft.tileentity.TileEntityFlowerPot e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_149929_e(arg1,arg2,arg3,arg4);
 }
    public void g(){
        super.setBlockBoundsForItemRender();

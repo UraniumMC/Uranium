@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class Block extends net.minecraft.block.Block
 {
+    public Block(Material p_i45394_1_) {
+        super(p_i45394_1_);
+    }
 
-   public double A(){
+    public double A(){
        return super.getBlockBoundsMaxY();
 }
    public double B(){
@@ -57,12 +63,9 @@ public class Block extends net.minecraft.block.Block
        super.getBlockFromItem(arg1);
        return this;
 }
-   public net.minecraft.block.Block a(net.minecraft.block.Block$SoundType arg1){
+   public net.minecraft.block.Block a(net.minecraft.block.Block.SoundType arg1){
        super.setStepSound(arg1);
        return this;
-}
-   public boolean a(net.minecraft.util.Vec3 arg1){
-       return super.isVecInsideYZBounds(arg1);
 }
    public int a(net.minecraft.world.World arg1){
        return super.tickRate(arg1);
@@ -124,9 +127,6 @@ public class Block extends net.minecraft.block.Block
    public int b(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.isProvidingWeakPower(arg1,arg2,arg3,arg4,arg5);
 }
-   public boolean b(net.minecraft.util.Vec3 arg1){
-       return super.isVecInsideXZBounds(arg1);
-}
    public void b(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,int arg6){
        super.dropBlockAsItem(arg1,arg2,arg3,arg4,arg5,arg6);
 }
@@ -149,9 +149,6 @@ public class Block extends net.minecraft.block.Block
 }
    public int c(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.isProvidingStrongPower(arg1,arg2,arg3,arg4,arg5);
-}
-   public boolean c(net.minecraft.util.Vec3 arg1){
-       return super.isVecInsideXYBounds(arg1);
 }
    public boolean canPlace(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        return super.canPlaceBlockAt(arg1,arg2,arg3,arg4);

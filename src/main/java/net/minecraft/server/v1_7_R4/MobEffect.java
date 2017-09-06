@@ -1,8 +1,26 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.potion.PotionEffect;
+
 public class MobEffect extends net.minecraft.potion.PotionEffect
 {
+    public MobEffect(int p_i1574_1_, int p_i1574_2_) {
+        super(p_i1574_1_, p_i1574_2_);
+    }
 
-   public void a(net.minecraft.potion.PotionEffect arg1){
+    public MobEffect(int p_i1575_1_, int p_i1575_2_, int p_i1575_3_) {
+        super(p_i1575_1_, p_i1575_2_, p_i1575_3_);
+    }
+
+    public MobEffect(int p_i1576_1_, int p_i1576_2_, int p_i1576_3_, boolean p_i1576_4_) {
+        super(p_i1576_1_, p_i1576_2_, p_i1576_3_, p_i1576_4_);
+    }
+
+    public MobEffect(PotionEffect p_i1577_1_) {
+        super(p_i1577_1_);
+    }
+
+    public void a(net.minecraft.potion.PotionEffect arg1){
        super.combine(arg1);
 }
    public net.minecraft.nbt.NBTTagCompound a(net.minecraft.nbt.NBTTagCompound arg1){
@@ -20,9 +38,6 @@ public class MobEffect extends net.minecraft.potion.PotionEffect
 }
    public int getEffectId(){
        return super.getPotionID();
-}
-   public int h(){
-       return super.deincrementDuration();
 }
    public boolean isAmbient(){
        return super.getIsAmbient();

@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockDoor extends net.minecraft.block.BlockDoor
 {
+    public BlockDoor(Material p_i45402_1_) {
+        super(p_i45402_1_);
+    }
 
-   public net.minecraft.util.AxisAlignedBB a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
+    public net.minecraft.util.AxisAlignedBB a(net.minecraft.world.World arg1, int arg2, int arg3, int arg4){
        return super.getCollisionBoundingBoxFromPool(arg1,arg2,arg3,arg4);
 }
    public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,net.minecraft.entity.player.EntityPlayer arg6){
@@ -16,9 +22,6 @@ public class BlockDoor extends net.minecraft.block.BlockDoor
 }
    public int b(){
        return super.getRenderType();
-}
-   public void b(int arg1){
-       super.func_150011_b(arg1);
 }
    public boolean b(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4){
        return super.getBlocksMovement(arg1,arg2,arg3,arg4);

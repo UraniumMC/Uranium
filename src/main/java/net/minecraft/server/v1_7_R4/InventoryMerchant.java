@@ -1,8 +1,15 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.player.EntityPlayer;
+
 public class InventoryMerchant extends net.minecraft.inventory.InventoryMerchant
 {
+    public InventoryMerchant(EntityPlayer p_i1820_1_, IMerchant p_i1820_2_) {
+        super(p_i1820_1_, p_i1820_2_);
+    }
 
-   public boolean a(net.minecraft.entity.player.EntityPlayer arg1){
+    public boolean a(net.minecraft.entity.player.EntityPlayer arg1){
        return super.isUseableByPlayer(arg1);
 }
    public boolean b(int arg1,net.minecraft.item.ItemStack arg2){
@@ -13,9 +20,6 @@ public class InventoryMerchant extends net.minecraft.inventory.InventoryMerchant
 }
    public void closeContainer(){
        super.closeInventory();
-}
-   public boolean d(int arg1){
-       return super.inventoryResetNeededOnSlotChange(arg1);
 }
    public net.minecraft.item.ItemStack getItem(int arg1){
        return super.getStackInSlot(arg1);

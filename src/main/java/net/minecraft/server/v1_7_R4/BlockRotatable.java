@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
-public class BlockRotatable extends net.minecraft.block.BlockRotatedPillar
-{
 
-   public int b(){
+import net.minecraft.block.material.Material;
+
+public abstract class BlockRotatable extends net.minecraft.block.BlockRotatedPillar
+{
+    public BlockRotatable(Material p_i45425_1_) {
+        super(p_i45425_1_);
+    }
+
+    public int b(){
        return super.getRenderType();
 }
    public int getDropData(int arg1){

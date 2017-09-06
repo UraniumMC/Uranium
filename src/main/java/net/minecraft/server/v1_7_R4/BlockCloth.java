@@ -1,8 +1,14 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.block.material.Material;
+
 public class BlockCloth extends net.minecraft.block.BlockColored
 {
+    public BlockCloth(Material p_i45398_1_) {
+        super(p_i45398_1_);
+    }
 
-   public int b(int arg1){
+    public int b(int arg1){
        return super.func_150032_b(arg1);
 }
    public int c(int arg1){

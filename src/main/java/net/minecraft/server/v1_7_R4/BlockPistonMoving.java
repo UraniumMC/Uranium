@@ -35,9 +35,6 @@ public class BlockPistonMoving extends net.minecraft.block.BlockPistonMoving
    public void dropNaturally(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5,float arg6,int arg7){
        super.dropBlockAsItemWithChance(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
 }
-   public net.minecraft.tileentity.TileEntityPiston e(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4){
-       return super.func_149963_e(arg1,arg2,arg3,arg4);
-}
    public net.minecraft.item.Item getDropType(int arg1,java.util.Random arg2,int arg3){
        return super.getItemDropped(arg1,arg2,arg3);
 }

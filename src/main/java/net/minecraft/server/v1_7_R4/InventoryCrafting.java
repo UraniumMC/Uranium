@@ -1,8 +1,19 @@
 package net.minecraft.server.v1_7_R4;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+
 public class InventoryCrafting extends net.minecraft.inventory.InventoryCrafting
 {
+    public InventoryCrafting(Container container, int i, int j, EntityPlayer player) {
+        super(container, i, j, player);
+    }
 
-   public boolean a(net.minecraft.entity.player.EntityPlayer arg1){
+    public InventoryCrafting(Container p_i1807_1_, int p_i1807_2_, int p_i1807_3_) {
+        super(p_i1807_1_, p_i1807_2_, p_i1807_3_);
+    }
+
+    public boolean a(net.minecraft.entity.player.EntityPlayer arg1){
        return super.isUseableByPlayer(arg1);
 }
    public net.minecraft.item.ItemStack b(int arg1,int arg2){

@@ -1,15 +1,15 @@
 package net.minecraft.server.v1_7_R4;
 public class BlockButtonAbstract extends net.minecraft.block.BlockButton
 {
+    public BlockButtonAbstract(boolean p_i45396_1_) {
+        super(p_i45396_1_);
+    }
 
-   public int a(net.minecraft.world.World arg1){
+    public int a(net.minecraft.world.World arg1){
        return super.tickRate(arg1);
 }
    public net.minecraft.util.AxisAlignedBB a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
        return super.getCollisionBoundingBoxFromPool(arg1,arg2,arg3,arg4);
-}
-   public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,int arg5){
-       super.func_150042_a(arg1,arg2,arg3,arg4,arg5);
 }
    public void a(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,java.util.Random arg5){
        super.updateTick(arg1,arg2,arg3,arg4,arg5);
@@ -19,9 +19,6 @@ public class BlockButtonAbstract extends net.minecraft.block.BlockButton
 }
    public void attack(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.entity.player.EntityPlayer arg5){
        super.onBlockClicked(arg1,arg2,arg3,arg4,arg5);
-}
-   public void b(int arg1){
-       super.func_150043_b(arg1);
 }
    public int b(net.minecraft.world.IBlockAccess arg1,int arg2,int arg3,int arg4,int arg5){
        return super.isProvidingWeakPower(arg1,arg2,arg3,arg4,arg5);
@@ -44,9 +41,6 @@ public class BlockButtonAbstract extends net.minecraft.block.BlockButton
    public void doPhysics(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5){
        super.onNeighborBlockChange(arg1,arg2,arg3,arg4,arg5);
 }
-   public int e(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_150045_e(arg1,arg2,arg3,arg4);
-}
    public void g(){
        super.setBlockBoundsForItemRender();
 }
@@ -58,12 +52,6 @@ public class BlockButtonAbstract extends net.minecraft.block.BlockButton
 }
    public boolean isPowerSource(){
        return super.canProvidePower();
-}
-   public boolean m(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       return super.func_150044_m(arg1,arg2,arg3,arg4);
-}
-   public void n(net.minecraft.world.World arg1,int arg2,int arg3,int arg4){
-       super.func_150046_n(arg1,arg2,arg3,arg4);
 }
    public void remove(net.minecraft.world.World arg1,int arg2,int arg3,int arg4,net.minecraft.block.Block arg5,int arg6){
        super.breakBlock(arg1,arg2,arg3,arg4,arg5,arg6);
