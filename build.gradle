@@ -85,7 +85,7 @@ def gitInfo(String key) {
             gitInfoCached = [
                     hash    : ['git', 'log', "--format=%h", '-n', '1'].execute().text.trim(),
                     fullHash: ['git', 'log', "--format=%H", '-n', '1'].execute().text.trim(),
-                    branch  : System.getenv("CI_BUILD_REF_NAME") ?: ['git', 'symbolic-ref', '--short', 'HEAD'].execute().text.trim(),
+                    branch  : System.getenv("GIT_BRANCH") ?System.getenv("GIT_BRANCH").split("/")[1]: ['git', 'symbolic-ref', '--short', 'HEAD'].execute().text.trim(),
                     message : ['git', 'log', "--format=%B", '-n', '1'].execute().text.trim()
             ]
         } else {
@@ -99,31 +99,17 @@ def gitInfo(String key) {
     }
     return key ? gitInfoCached[key] : gitInfoCached;
 }
-ext.mcVersion = "1.7.10"
+ext.mcVersion = minecraft.version.replace(".","")
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
-ext.branch = System.getenv('GIT_BRANCH') ? getJenkinsGitBranch() : getCurrentGitBranch()
+ext.branch = getGitBranch()
 ext.uranium_version = 3
 version = "${mcVersion}-${branch}-${uranium_version}-B${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
-def getJenkinsGitBranch(){
-    def branch=System.getenv('GIT_BRANCH').split("/")[1];
+def getGitBranch(){
+    def branch=gitInfo("branch");
     if (branch.equals("master")) return "stable";
     return branch;
-}
-def getCurrentGitBranch() {
-    def gitBranch = "unoffical"
-    try {
-        def workingDir = new File("${project.projectDir}")
-        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
-        result.waitFor()
-        if (result.exitValue() == 0) {
-            gitBranch = result.text.trim()
-        }
-        if (gitBranch.equals("master")) return "stable";
-    } catch (e) {
-    }
-    return gitBranch
 }
 
 launch4j {
