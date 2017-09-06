@@ -104,7 +104,7 @@ ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fml
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
 ext.branch = System.getenv('GIT_BRANCH') ? getJenkinsGitBranch() : getCurrentGitBranch()
 ext.uranium_version = 3
-version = "${branch}-${uranium_version}-B${build}"
+version = "${mcVersion}-${branch}-${uranium_version}-B${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 def getJenkinsGitBranch(){
     def branch=System.getenv('GIT_BRANCH').split("/")[1];
@@ -335,8 +335,8 @@ tasks.generateProjectCauldron {
         mavenLocal()
         mavenCentral()
         maven {
-            name 'yumc'
-            url 'http://repo.yumc.pw/content/groups/public/'
+            name 'yumc\'
+            url 'http://repo.yumc.pw/content/groups/public/\'
         }
         maven {
             name 'forge'
@@ -359,7 +359,7 @@ tasks.generateProjectCauldron {
             }
             file.append("    compile '${module}'\n")
         }
-        file.append("compile 'org.projectlombok:lombok:1.16.18'\n")
+        file.append("    compile 'org.projectlombok:lombok:1.16.18'\n")
         file.append('}')
     }
 }
