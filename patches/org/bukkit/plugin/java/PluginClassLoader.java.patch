@@ -34,7 +34,7 @@
  
  import org.apache.commons.lang.Validate;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -15,16 +36,111 @@
+@@ -15,16 +36,91 @@
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
   */
@@ -76,26 +76,6 @@
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
 +    // Cauldron end
 +    // Uranium start
-+
-+    private static Method ADDURL;
-+    static{
-+        try{
-+            ADDURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-+        }catch (Throwable e){
-+
-+        }
-+    }
-+    @Override
-+    protected void addURL(URL url) {
-+        try {
-+            if (ADDURL != null) {
-+                ADDURL.setAccessible(true);
-+                ADDURL.invoke(getParent(), url);
-+                return;
-+            }
-+        }catch(Exception e){}
-+        super.addURL(url);
-+    }
 +
 +    public boolean checkVer(String pTargetVer){
 +        char sign=pTargetVer.charAt(0);
@@ -149,7 +129,7 @@
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +150,121 @@
+@@ -34,6 +130,121 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -271,7 +251,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +289,305 @@
+@@ -58,34 +269,305 @@
      }
  
      @Override
