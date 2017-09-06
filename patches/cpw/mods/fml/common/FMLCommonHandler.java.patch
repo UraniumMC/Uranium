@@ -40,13 +40,14 @@
          handlerSet.add(handler);
          handlerToCheck = new WeakReference<SaveHandler>(handler); // for confirmBackupLevelDatUse
          Map<String,NBTBase> additionalProperties = Maps.newHashMap();
-@@ -496,7 +503,13 @@
+@@ -496,7 +503,14 @@
  
      public String getModName()
      {
 -        List<String> modNames = Lists.newArrayListWithExpectedSize(3);
 +        // Cauldron start    
 +        List<String> modNames = Lists.newArrayListWithExpectedSize(6);
++        modNames.add("uranium");
 +        modNames.add("kcauldron");
 +        modNames.add("cauldron");
 +        modNames.add("craftbukkit");
@@ -55,7 +56,7 @@
          modNames.add("fml");
          if (!noForge)
          {
-@@ -540,8 +553,17 @@
+@@ -540,8 +554,17 @@
          bus().post(new InputEvent.KeyInputEvent());
      }
  

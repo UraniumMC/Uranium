@@ -543,7 +543,7 @@
 +                        bytecode = Streams.readAll(stream);
 +                    }*/
 +
-+                    // RemapUtils the classes
++                    // Remap the classes
 +                    byte[] remappedBytecode = remapper.remapClassFile(bytecode, RuntimeRepo.getInstance());
 +
 +                    if (debug) {
