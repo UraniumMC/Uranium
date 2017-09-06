@@ -551,7 +551,7 @@
          if (p_147465_1_ >= -30000000 && p_147465_3_ >= -30000000 && p_147465_1_ < 30000000 && p_147465_3_ < 30000000)
          {
              if (p_147465_2_ < 0)
-@@ -435,32 +770,41 @@
+@@ -435,32 +770,42 @@
              {
                  Chunk chunk = this.getChunkFromChunkCoords(p_147465_1_ >> 4, p_147465_3_ >> 4);
                  Block block1 = null;
@@ -571,6 +571,7 @@
 +                BlockSnapshot tSnapshot=null;
 +                if(tBlockCapture!=null&&tBlockCapture.mEnable){
 +                    tSnapshot=BlockSnapshot.getBlockSnapshot(this,p_147465_1_,p_147465_2_,p_147465_3_,p_147465_6_);
++                    tBlockCapture.mCapturedBlocks.add(tSnapshot);
 +                    if(p_147465_4_==Blocks.air){
 +                        flag&=tBlockCapture.fireBlockBreak(tSnapshot,false);
 +                    }
@@ -589,8 +590,8 @@
 +                    if(p_147465_4_!=Blocks.air){
 +                        tBlockCapture.fireBlockPlace(tSnapshot,p_147465_4_,false);
 +                    }
-+                    tBlockCapture.mCapturedBlocks.add(tSnapshot);
-+                }else{
++                }else if(tSnapshot!=null){
++                    tBlockCapture.mCapturedBlocks.remove(tSnapshot);
 +                    tSnapshot=null;
                  }
  
@@ -604,7 +605,7 @@
                  {
                      // Modularize client and physic updates
                      this.markAndNotifyBlock(p_147465_1_, p_147465_2_, p_147465_3_, chunk, block1, p_147465_4_, p_147465_6_);
-@@ -496,6 +840,20 @@
+@@ -496,6 +841,20 @@
  
      public int getBlockMetadata(int p_72805_1_, int p_72805_2_, int p_72805_3_)
      {
@@ -625,7 +626,7 @@
          if (p_72805_1_ >= -30000000 && p_72805_3_ >= -30000000 && p_72805_1_ < 30000000 && p_72805_3_ < 30000000)
          {
              if (p_72805_2_ < 0)
-@@ -511,7 +869,7 @@
+@@ -511,7 +870,7 @@
                  Chunk chunk = this.getChunkFromChunkCoords(p_72805_1_ >> 4, p_72805_3_ >> 4);
                  p_72805_1_ &= 15;
                  p_72805_3_ &= 15;
@@ -634,7 +635,7 @@
              }
          }
          else
-@@ -534,6 +892,11 @@
+@@ -534,6 +893,11 @@
              }
              else
              {
@@ -646,7 +647,7 @@
                  Chunk chunk = this.getChunkFromChunkCoords(p_72921_1_ >> 4, p_72921_3_ >> 4);
                  int j1 = p_72921_1_ & 15;
                  int k1 = p_72921_3_ & 15;
-@@ -541,20 +904,25 @@
+@@ -541,20 +905,25 @@
  
                  if (flag)
                  {
@@ -683,7 +684,7 @@
                          }
                      }
                  }
-@@ -610,6 +978,12 @@
+@@ -610,6 +979,12 @@
  
      public void notifyBlockChange(int p_147444_1_, int p_147444_2_, int p_147444_3_, Block p_147444_4_)
      {
@@ -696,7 +697,7 @@
          this.notifyBlocksOfNeighborChange(p_147444_1_, p_147444_2_, p_147444_3_, p_147444_4_);
      }
  
-@@ -694,6 +1068,21 @@
+@@ -694,6 +1069,21 @@
  
              try
              {
@@ -718,7 +719,7 @@
                  block.onNeighborBlockChange(this, p_147460_1_, p_147460_2_, p_147460_3_, p_147460_4_);
              }
              catch (Throwable throwable1)
-@@ -1307,8 +1696,22 @@
+@@ -1307,8 +1697,22 @@
  
      public boolean spawnEntityInWorld(Entity p_72838_1_)
      {
@@ -742,7 +743,7 @@
  
          int i = MathHelper.floor_double(p_72838_1_.posX / 16.0D);
          int j = MathHelper.floor_double(p_72838_1_.posZ / 16.0D);
-@@ -1319,23 +1722,99 @@
+@@ -1319,23 +1723,99 @@
              flag = true;
          }
  
@@ -844,7 +845,7 @@
              return true;
          }
      }
-@@ -1346,6 +1825,8 @@
+@@ -1346,6 +1826,8 @@
          {
              ((IWorldAccess)this.worldAccesses.get(i)).onEntityCreate(p_72923_1_);
          }
@@ -853,7 +854,7 @@
      }
  
      public void onEntityRemoved(Entity p_72847_1_)
-@@ -1354,6 +1835,8 @@
+@@ -1354,6 +1836,8 @@
          {
              ((IWorldAccess)this.worldAccesses.get(i)).onEntityDestroy(p_72847_1_);
          }
@@ -862,7 +863,7 @@
      }
  
      public void removeEntity(Entity p_72900_1_)
-@@ -1397,6 +1880,19 @@
+@@ -1397,6 +1881,19 @@
          }
  
          this.loadedEntityList.remove(p_72973_1_);
@@ -882,7 +883,7 @@
          this.onEntityRemoved(p_72973_1_);
      }
  
-@@ -1408,40 +1904,58 @@
+@@ -1408,40 +1905,58 @@
      public List getCollidingBoundingBoxes(Entity p_72945_1_, AxisAlignedBB p_72945_2_)
      {
          this.collidingBoundingBoxes.clear();
@@ -955,7 +956,7 @@
  
          for (int j2 = 0; j2 < list.size(); ++j2)
          {
-@@ -1797,11 +2311,22 @@
+@@ -1797,11 +2312,22 @@
          Entity entity;
          CrashReport crashreport;
          CrashReportCategory crashreportcategory;
@@ -978,7 +979,7 @@
              try
              {
                  ++entity.ticksExisted;
-@@ -1812,14 +2337,7 @@
+@@ -1812,14 +2338,7 @@
                  crashreport = CrashReport.makeCrashReport(throwable2, "Ticking entity");
                  crashreportcategory = crashreport.makeCategory("Entity being ticked");
  
@@ -994,7 +995,7 @@
  
                  if (ForgeModContainer.removeErroringEntities)
                  {
-@@ -1862,10 +2380,14 @@
+@@ -1862,10 +2381,14 @@
  
          this.unloadedEntityList.clear();
          this.theProfiler.endStartSection("regular");
@@ -1012,7 +1013,7 @@
  
              if (entity.ridingEntity != null)
              {
-@@ -1884,7 +2406,9 @@
+@@ -1884,7 +2407,9 @@
              {
                  try
                  {
@@ -1022,7 +1023,7 @@
                  }
                  catch (Throwable throwable1)
                  {
-@@ -1916,30 +2440,84 @@
+@@ -1916,30 +2441,84 @@
                  {
                      this.getChunkFromChunkCoords(j, l).removeEntity(entity);
                  }
@@ -1114,7 +1115,7 @@
                      crashreport = CrashReport.makeCrashReport(throwable, "Ticking block entity");
                      crashreportcategory = crashreport.makeCategory("Block entity being ticked");
                      tileentity.func_145828_a(crashreportcategory);
-@@ -1955,23 +2533,13 @@
+@@ -1955,23 +2534,13 @@
                      }
                  }
              }
@@ -1143,7 +1144,7 @@
          if (!this.field_147483_b.isEmpty())
          {
              for (Object tile : field_147483_b)
-@@ -1981,6 +2549,7 @@
+@@ -1981,6 +2550,7 @@
              this.loadedTileEntityList.removeAll(this.field_147483_b);
              this.field_147483_b.clear();
          }
@@ -1151,7 +1152,7 @@
  
          this.field_147481_N = false;
  
-@@ -2016,17 +2585,23 @@
+@@ -2016,17 +2586,23 @@
              this.addedTileEntityList.clear();
          }
  
@@ -1178,7 +1179,7 @@
      }
  
      public void updateEntity(Entity p_72870_1_)
-@@ -2036,21 +2611,41 @@
+@@ -2036,21 +2612,41 @@
  
      public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
      {
@@ -1222,7 +1223,7 @@
              p_72866_1_.lastTickPosX = p_72866_1_.posX;
              p_72866_1_.lastTickPosY = p_72866_1_.posY;
              p_72866_1_.lastTickPosZ = p_72866_1_.posZ;
-@@ -2134,6 +2729,7 @@
+@@ -2134,6 +2730,7 @@
                      p_72866_1_.riddenByEntity = null;
                  }
              }
@@ -1230,7 +1231,7 @@
          }
      }
  
-@@ -2570,7 +3166,7 @@
+@@ -2570,7 +3167,7 @@
              return;
          }
  
@@ -1239,7 +1240,7 @@
          {
              if (this.field_147481_N)
              {
-@@ -2612,6 +3208,9 @@
+@@ -2612,6 +3209,9 @@
  
      public void func_147457_a(TileEntity p_147457_1_)
      {
@@ -1249,7 +1250,7 @@
          this.field_147483_b.add(p_147457_1_);
      }
  
-@@ -2718,7 +3317,15 @@
+@@ -2718,7 +3318,15 @@
  
                      if (i <= 0)
                      {
@@ -1266,7 +1267,7 @@
                      }
                  }
  
-@@ -2754,7 +3361,15 @@
+@@ -2754,7 +3362,15 @@
  
                      if (j <= 0)
                      {
@@ -1283,7 +1284,7 @@
                      }
                  }
  
-@@ -2777,8 +3392,41 @@
+@@ -2777,8 +3393,41 @@
      protected void setActivePlayerChunksAndCheckLight()
      {
          this.activeChunkSet.clear();
@@ -1326,7 +1327,7 @@
          int i;
          EntityPlayer entityplayer;
          int j;
-@@ -2788,17 +3436,28 @@
+@@ -2788,17 +3437,28 @@
          for (i = 0; i < this.playerEntities.size(); ++i)
          {
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
@@ -1361,7 +1362,7 @@
          }
  
          this.theProfiler.endSection();
-@@ -2810,7 +3469,7 @@
+@@ -2810,7 +3470,7 @@
  
          this.theProfiler.startSection("playerCheckLight");
  
@@ -1370,7 +1371,7 @@
          {
              i = this.rand.nextInt(this.playerEntities.size());
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
-@@ -3034,9 +3693,9 @@
+@@ -3034,9 +3694,9 @@
          }
      }
  
@@ -1382,7 +1383,7 @@
          {
              return false;
          }
-@@ -3284,8 +3943,21 @@
+@@ -3284,8 +3944,21 @@
          {
              Entity entity = (Entity)this.loadedEntityList.get(j);
  
@@ -1405,7 +1406,7 @@
                  ++i;
              }
          }
-@@ -3298,6 +3970,7 @@
+@@ -3298,6 +3971,7 @@
          for (int i = 0; i < p_72868_1_.size(); ++i)
          {
              Entity entity = (Entity)p_72868_1_.get(i);
@@ -1413,7 +1414,7 @@
              if (!MinecraftForge.EVENT_BUS.post(new EntityJoinWorldEvent(entity, this)))
              {
                  loadedEntityList.add(entity);
-@@ -3314,8 +3987,17 @@
+@@ -3314,8 +3988,17 @@
      public boolean canPlaceEntityOnSide(Block p_147472_1_, int p_147472_2_, int p_147472_3_, int p_147472_4_, boolean p_147472_5_, int p_147472_6_, Entity p_147472_7_, ItemStack p_147472_8_)
      {
          Block block1 = this.getBlock(p_147472_2_, p_147472_3_, p_147472_4_);
@@ -1432,7 +1433,7 @@
      }
  
      public PathEntity getPathEntityToEntity(Entity p_72865_1_, Entity p_72865_2_, float p_72865_3_, boolean p_72865_4_, boolean p_72865_5_, boolean p_72865_6_, boolean p_72865_7_)
-@@ -3464,6 +4146,12 @@
+@@ -3464,6 +4147,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1445,7 +1446,7 @@
              double d5 = entityplayer1.getDistanceSq(p_72977_1_, p_72977_3_, p_72977_5_);
  
              if ((p_72977_7_ < 0.0D || d5 < p_72977_7_ * p_72977_7_) && (d4 == -1.0D || d5 < d4))
-@@ -3489,7 +4177,12 @@
+@@ -3489,7 +4178,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1459,7 +1460,7 @@
              if (!entityplayer1.capabilities.disableDamage && entityplayer1.isEntityAlive())
              {
                  double d5 = entityplayer1.getDistanceSq(p_72846_1_, p_72846_3_, p_72846_5_);
-@@ -3660,6 +4353,18 @@
+@@ -3660,6 +4354,18 @@
  
      public void updateAllPlayersSleepingFlag() {}
  
@@ -1478,7 +1479,7 @@
      public float getWeightedThunderStrength(float p_72819_1_)
      {
          return (this.prevThunderingStrength + (this.thunderingStrength - this.prevThunderingStrength) * p_72819_1_) * this.getRainStrength(p_72819_1_);
-@@ -3932,8 +4637,8 @@
+@@ -3932,8 +4638,8 @@
       */
      public void addTileEntity(TileEntity entity)
      {
@@ -1489,7 +1490,7 @@
          {
              dest.add(entity);
          }
-@@ -4029,4 +4734,117 @@
+@@ -4029,4 +4735,117 @@
          }
          return count;
      }
