@@ -1,14 +1,15 @@
 --- ../src-base/minecraft/net/minecraft/network/NetHandlerPlayServer.java
 +++ ../src-work/minecraft/net/minecraft/network/NetHandlerPlayServer.java
-@@ -1,5 +1,7 @@
+@@ -1,5 +1,8 @@
  package net.minecraft.network;
  
++import cc.uraniummc.Uranium;
 +import cc.uraniummc.UraniumPlusCommon;
 +import cc.uraniummc.packet.PacketChatWithType;
  import com.google.common.base.Charsets;
  import com.google.common.collect.Lists;
  import io.netty.buffer.Unpooled;
-@@ -13,6 +15,7 @@
+@@ -13,6 +16,7 @@
  import java.util.Iterator;
  import java.util.Random;
  import java.util.concurrent.Callable;
@@ -16,7 +17,7 @@
  import net.minecraft.block.material.Material;
  import net.minecraft.command.server.CommandBlockLogic;
  import net.minecraft.crash.CrashReport;
-@@ -26,12 +29,14 @@
+@@ -26,12 +30,14 @@
  import net.minecraft.entity.player.EntityPlayerMP;
  import net.minecraft.entity.player.InventoryPlayer;
  import net.minecraft.entity.projectile.EntityArrow;
@@ -31,7 +32,7 @@
  import net.minecraft.item.ItemEditableBook;
  import net.minecraft.item.ItemStack;
  import net.minecraft.item.ItemWritableBook;
-@@ -61,6 +66,7 @@
+@@ -61,6 +67,7 @@
  import net.minecraft.network.play.server.S00PacketKeepAlive;
  import net.minecraft.network.play.server.S02PacketChat;
  import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -39,7 +40,15 @@
  import net.minecraft.network.play.server.S23PacketBlockChange;
  import net.minecraft.network.play.server.S2FPacketSetSlot;
  import net.minecraft.network.play.server.S32PacketConfirmTransaction;
-@@ -81,22 +87,78 @@
+@@ -68,6 +75,7 @@
+ import net.minecraft.network.play.server.S40PacketDisconnect;
+ import net.minecraft.server.MinecraftServer;
+ import net.minecraft.server.management.UserListBansEntry;
++import net.minecraft.server.v1_7_R4.PlayerConnection;
+ import net.minecraft.stats.AchievementList;
+ import net.minecraft.tileentity.TileEntity;
+ import net.minecraft.tileentity.TileEntityBeacon;
+@@ -81,22 +89,78 @@
  import net.minecraft.util.IChatComponent;
  import net.minecraft.util.IntHashMap;
  import net.minecraft.util.ReportedException;
@@ -117,13 +126,13 @@
 +import org.bukkit.event.inventory.InventoryType;
 +// Cauldron end
 +
-+public class NetHandlerPlayServer implements INetHandlerPlayServer{
++public class NetHandlerPlayServer implements INetHandlerPlayServer,PlayerConnection{
 +
 +    private static final Logger logger=LogManager.getLogger();
      public final NetworkManager netManager;
      private final MinecraftServer serverController;
      public EntityPlayerMP playerEntity;
-@@ -105,571 +167,733 @@
+@@ -105,571 +169,733 @@
      private boolean field_147366_g;
      private int field_147378_h;
      private long field_147379_i;
@@ -1198,7 +1207,7 @@
                      return p_147359_1_.getClass().getCanonicalName();
                  }
              });
-@@ -677,22 +901,33 @@
+@@ -677,22 +903,33 @@
          }
      }
  
@@ -1242,7 +1251,7 @@
          {
              ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.cannotSend", new Object[0]);
              chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-@@ -708,156 +943,475 @@
+@@ -708,156 +945,475 @@
              {
                  if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i)))
                  {
@@ -1806,7 +1815,7 @@
                  }
  
                  break;
-@@ -869,117 +1423,484 @@
+@@ -869,117 +1425,484 @@
          }
      }
  
@@ -2361,7 +2370,7 @@
                      return;
                  }
              }
-@@ -987,79 +1908,95 @@
+@@ -987,79 +1910,95 @@
              int i;
              int j;
  
@@ -2503,7 +2512,7 @@
          this.playerEntity.func_147100_a(p_147352_1_);
      }
  
-@@ -1068,7 +2005,6 @@
+@@ -1068,7 +2007,6 @@
          PacketBuffer packetbuffer;
          ItemStack itemstack;
          ItemStack itemstack1;
@@ -2511,7 +2520,7 @@
          if ("MC|BEdit".equals(p_147349_1_.func_149559_c()))
          {
              packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
-@@ -1089,20 +2025,21 @@
+@@ -1089,20 +2027,21 @@
  
                  itemstack1 = this.playerEntity.inventory.getCurrentItem();
  
@@ -2544,7 +2553,7 @@
              }
              finally
              {
-@@ -1128,26 +2065,26 @@
+@@ -1128,26 +2067,26 @@
  
                      itemstack1 = this.playerEntity.inventory.getCurrentItem();
  
@@ -2585,7 +2594,7 @@
              }
              finally
              {
-@@ -1174,9 +2111,12 @@
+@@ -1174,9 +2113,12 @@
                          ((ContainerMerchant)container).setCurrentRecipeIndex(i);
                      }
                  }
@@ -2599,7 +2608,7 @@
                  }
              }
              else if ("MC|AdvCdm".equals(p_147349_1_.func_149559_c()))
-@@ -1222,9 +2162,12 @@
+@@ -1222,9 +2164,12 @@
                              this.playerEntity.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", new Object[] {s1}));
                          }
                      }
@@ -2614,7 +2623,7 @@
                      }
                      finally
                      {
-@@ -1257,9 +2200,12 @@
+@@ -1257,9 +2202,12 @@
                              tileentitybeacon.markDirty();
                          }
                      }
@@ -2629,7 +2638,7 @@
                      }
                  }
              }
-@@ -1281,50 +2227,58 @@
+@@ -1281,50 +2229,66 @@
                      containerrepair.updateItemName("");
                  }
              }
@@ -2721,4 +2730,12 @@
 +            }
          }
 +    }
++    // Uranium start
++    public void disconnect(java.lang.String arg1){
++        kickPlayerFromServer(arg1);
++    }
++    public void handleCommand(java.lang.String arg1){
++        handleSlashCommand(arg1);
++    }
++    // Uranium end
  }
