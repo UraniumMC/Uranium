@@ -1,4 +1,5 @@
 **[加入Uranium官方钦定交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
+**[Join UraniumMC offical discord chat room](https://discord.gg/dCjehb3)**
 # Uranium
 ### Uranium - continuation of KCauldron minecraft server
 [![Build Status][build_status]](https://ci.xjboss.net/job/Uranium) [![Download Uranium][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
