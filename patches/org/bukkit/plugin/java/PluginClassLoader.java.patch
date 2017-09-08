@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,5 +1,24 @@
+@@ -1,5 +1,26 @@
  package org.bukkit.plugin.java;
  
 +// Cauldron start
@@ -16,6 +16,8 @@
 +
 +import org.bukkit.plugin.PluginDescriptionFile;
 +import java.io.*;
++import java.lang.reflect.Field;
++import java.lang.reflect.Method;
 +import java.net.JarURLConnection;
 +import java.security.CodeSigner;
 +import java.security.CodeSource;
@@ -25,7 +27,7 @@
  import java.io.File;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -7,6 +26,7 @@
+@@ -7,24 +28,102 @@
  import java.util.HashMap;
  import java.util.Map;
  import java.util.Set;
@@ -33,7 +35,9 @@
  
  import org.apache.commons.lang.Validate;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -15,16 +35,83 @@
+ import org.bukkit.plugin.PluginDescriptionFile;
++import org.objectweb.asm.Type;
+ 
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
   */
@@ -75,6 +79,8 @@
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
 +    // Cauldron end
 +    // Uranium start
++
++    private HashMap<String,String> methods=new HashMap();
 +    public boolean checkVer(String pTargetVer){
 +        char sign=pTargetVer.charAt(0);
 +        String ver=description.getVersion()!=null?description.getVersion():"";
@@ -116,11 +122,18 @@
 +                return ver.equals(pTargetVer);
 +        }
 +    }
++    public String remapClassName(String pName){
++        if(pName.startsWith("net.minecraft.server.")) {
++            JarMapping jarMapping = getJarMapping(remapFlags);
++            return jarMapping.classes.get(pName.replace(".", "/"));
++        }
++        return pName;
++    }
 +    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +121,121 @@
+@@ -34,6 +133,123 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -238,11 +251,13 @@
 +            remapperProcessor = null;
 +        }
 +        // Cauldron end
++        //Uranium start
 +
++        //Uranium end
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +260,305 @@
+@@ -58,34 +274,305 @@
      }
  
      @Override
