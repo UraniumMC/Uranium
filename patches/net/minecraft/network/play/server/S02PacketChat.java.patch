@@ -9,36 +9,19 @@
  import net.minecraft.network.INetHandler;
  import net.minecraft.network.Packet;
  import net.minecraft.network.PacketBuffer;
-@@ -14,10 +16,12 @@
+@@ -14,7 +16,6 @@
      private IChatComponent field_148919_a;
      private boolean field_148918_b;
      private static final String __OBFID = "CL_00001289";
 -
-+    @Getter
-+    private byte type;
      public S02PacketChat()
      {
          this.field_148918_b = true;
-+        this.type=1;
-     }
+@@ -27,7 +28,6 @@
  
-     public S02PacketChat(IChatComponent p_i45179_1_)
-@@ -25,11 +29,18 @@
-         this(p_i45179_1_, true);
-     }
- 
-+    public S02PacketChat(IChatComponent p_i45180_1_, byte p_i45180_2_)
-+    {
-+        this(p_i45180_1_);
-+        type=p_i45180_2_;
-+    }
-+
      public S02PacketChat(IChatComponent p_i45180_1_, boolean p_i45180_2_)
      {
-         this.field_148918_b = true;
+-        this.field_148918_b = true;
          this.field_148919_a = p_i45180_1_;
          this.field_148918_b = p_i45180_2_;
-+        this.type=1;
      }
- 
-     public void readPacketData(PacketBuffer p_148837_1_) throws IOException
