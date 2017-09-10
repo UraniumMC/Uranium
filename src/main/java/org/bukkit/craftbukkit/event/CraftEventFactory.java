@@ -11,6 +11,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import net.minecraft.entity.Entity;
 
+import net.minecraft.util.MovingObjectPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -809,6 +810,15 @@ public class CraftEventFactory {
         return event;
     }
 
+    public static ProjectileHitEvent callProjectileHitEvent(Entity entity, MovingObjectPosition position) {
+        Block hitBlock = null;
+        if (position.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            hitBlock = entity.getBukkitEntity().getWorld().getBlockAt(position.blockX, position.blockY, position.blockZ);
+        }
+        ProjectileHitEvent event = new ProjectileHitEvent((Projectile) entity.getBukkitEntity(), position.entityHit == null ? null : position.entityHit.getBukkitEntity(), hitBlock);
+        entity.worldObj.getServer().getPluginManager().callEvent(event);
+        return event;
+    }
     public static ProjectileHitEvent callProjectileHitEvent(net.minecraft.entity.Entity entity) {
         ProjectileHitEvent event = new ProjectileHitEvent((Projectile) entity.getBukkitEntity());
         entity.worldObj.getServer().getPluginManager().callEvent(event);
