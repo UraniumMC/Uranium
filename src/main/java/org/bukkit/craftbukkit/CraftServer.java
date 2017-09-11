@@ -102,6 +102,7 @@ import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.SimpleServicesManager;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import org.bukkit.plugin.java.PluginClassLoader;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
@@ -434,6 +435,14 @@ public final class CraftServer implements Server {
 
     @Override
     public String getName() {
+        ClassLoader cl=Thread.currentThread().getContextClassLoader();
+        if(cl instanceof PluginClassLoader){
+            String sname;
+            sname=MinecraftServer.uraniumConfig.getString("plugin-settings." + ((PluginClassLoader) cl).getDescription().getName()+ ".custom-server-name", "");
+            if(sname!=null&&!sname.isEmpty()){
+                return sname;
+            }
+        }
         return serverName;
     }
 

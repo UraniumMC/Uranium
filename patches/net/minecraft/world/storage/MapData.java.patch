@@ -129,7 +129,7 @@
                  int i1;
  
 +                // Spigot start
-+                boolean custom = this.mapDataObj.mapView.renderers.size() > 1);
++                boolean custom = this.mapDataObj.mapView.renderers.size() > 1;
 +                org.bukkit.craftbukkit.map.RenderData render = (custom) ? this.mapDataObj.mapView.render((org.bukkit.craftbukkit.entity.CraftPlayer) entityplayerObj.getBukkitEntity()) : null; // CraftBukkit
 +    
                  if (--this.ticksUntilPlayerLocationMapUpdate < 0)

@@ -1,10 +1,11 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,5 +1,26 @@
+@@ -1,5 +1,27 @@
  package org.bukkit.plugin.java;
  
 +// Cauldron start
 +import cc.uraniummc.UraniumConfig;
++import lombok.Getter;
 +import net.md_5.specialsource.provider.ClassLoaderProvider;
 +import net.md_5.specialsource.transformer.MavenShade;
 +//import org.bouncycastle.util.io.Streams;
@@ -27,7 +28,7 @@
  import java.io.File;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -7,24 +28,102 @@
+@@ -7,24 +29,104 @@
  import java.util.HashMap;
  import java.util.Map;
  import java.util.Set;
@@ -46,6 +47,7 @@
      private final JavaPluginLoader loader;
 -    private final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
 +    private final ConcurrentMap<String, Class<?>> classes = new ConcurrentHashMap<String, Class<?>>(); // Cauldron - Threadsafe classloading
++    @Getter
      private final PluginDescriptionFile description;
      private final File dataFolder;
      private final File file;
@@ -73,6 +75,7 @@
 +    private static final int F_REMAP_OBC179     = 1 << 11;
 +    private static final int F_REMAP_OBC1710    = 1 << 12;
 +    private static final int F_REMAP_GUAVA17    = 1 << 13;
++    private static final int F_REMAP_GUAVA21    = 1 << 14;
 +    private static final int F_REMAP_NMSPRE_MASK= 0xffff0000;  // "unversioned" NMS plugin version
 +
 +    // This trick bypasses Maven Shade's package rewriting when using String literals [same trick in jline]
@@ -133,7 +136,7 @@
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +133,123 @@
+@@ -34,6 +136,123 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -257,7 +260,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +274,305 @@
+@@ -58,34 +277,305 @@
      }
  
      @Override
