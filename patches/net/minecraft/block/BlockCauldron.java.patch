@@ -1,14 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/block/BlockCauldron.java
 +++ ../src-work/minecraft/net/minecraft/block/BlockCauldron.java
-@@ -19,6 +19,7 @@
- import net.minecraft.util.IIcon;
- import net.minecraft.util.MathHelper;
- import net.minecraft.world.World;
-+import org.bukkit.event.block.CauldronLevelChangeEvent;
- 
- public class BlockCauldron extends Block
- {
-@@ -233,4 +234,23 @@
+@@ -233,4 +233,23 @@
          int j = MathHelper.clamp_int(p_150025_0_, 0, 3);
          return (float)(6 + 3 * j) / 16.0F;
      }

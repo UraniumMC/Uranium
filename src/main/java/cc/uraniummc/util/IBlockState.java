@@ -2,12 +2,12 @@ package cc.uraniummc.util;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 
 import java.util.Collection;
 
 public interface IBlockState
 {
+    /*
     Collection<IProperty> getPropertyNames();
 
     <T extends Comparable<T>> T getValue(IProperty<T> property);
@@ -19,4 +19,5 @@ public interface IBlockState
     ImmutableMap<IProperty, Comparable> getProperties();
 
     Block getBlock();
+    */
 }
