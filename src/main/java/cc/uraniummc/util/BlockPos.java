@@ -1,7 +1,10 @@
-package net.minecraft.util;
+package cc.uraniummc.util;
 
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 import java.util.Iterator;
 
@@ -386,7 +389,7 @@ public class BlockPos extends Vec3i
             /**
              * Set the values
              */
-            public BlockPos.MutableBlockPos set(int xIn, int yIn, int zIn)
+            public MutableBlockPos set(int xIn, int yIn, int zIn)
             {
                 this.x = xIn;
                 this.y = yIn;

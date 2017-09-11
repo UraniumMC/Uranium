@@ -1,4 +1,4 @@
-package net.minecraft.util;
+package cc.uraniummc.util;
 
 public interface IStringSerializable
 {
