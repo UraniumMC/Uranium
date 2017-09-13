@@ -1,10 +1,11 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,5 +1,27 @@
+@@ -1,5 +1,28 @@
  package org.bukkit.plugin.java;
  
 +// Cauldron start
 +import cc.uraniummc.UraniumConfig;
++import cc.uraniummc.UraniumMapping;
 +import lombok.Getter;
 +import net.md_5.specialsource.provider.ClassLoaderProvider;
 +import net.md_5.specialsource.transformer.MavenShade;
@@ -28,7 +29,7 @@
  import java.io.File;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -7,24 +29,104 @@
+@@ -7,24 +30,134 @@
  import java.util.HashMap;
  import java.util.Map;
  import java.util.Set;
@@ -61,7 +62,7 @@
 +    private boolean debug;            // classloader debugging
 +    private int remapFlags = -1;
  
-+    private static ConcurrentMap<Integer,JarMapping> jarMappings = new ConcurrentHashMap<Integer, JarMapping>();
++    private static ConcurrentMap<Integer,UraniumMapping> jarMappings = new ConcurrentHashMap<Integer, UraniumMapping>();
 +    private static final int F_GLOBAL_INHERIT   = 1 << 1;
 +    private static final int F_REMAP_OBCPRE     = 1 << 2;
 +    private static final int F_REMAP_NMS152     = 1 << 3;
@@ -77,66 +78,96 @@
 +    private static final int F_REMAP_GUAVA17    = 1 << 13;
 +    private static final int F_REMAP_GUAVA21    = 1 << 14;
 +    private static final int F_REMAP_NMSPRE_MASK= 0xffff0000;  // "unversioned" NMS plugin version
-+
 +    // This trick bypasses Maven Shade's package rewriting when using String literals [same trick in jline]
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
 +    // Cauldron end
 +    // Uranium start
-+
-+    private HashMap<String,String> methods=new HashMap();
-+    public boolean checkVer(String pTargetVer){
-+        char sign=pTargetVer.charAt(0);
-+        String ver=description.getVersion()!=null?description.getVersion():"";
-+        double ven;
-+        try{
-+            ven=Double.valueOf(ver);
-+        }catch (NumberFormatException e){
-+            ven=0;
++    public final UraniumPluginClassLoader umcl=new UraniumPluginClassLoader();
++    public final class UraniumPluginClassLoader{
++        public UraniumPluginClassLoader() {
 +        }
-+        String cver_info=pTargetVer.substring(1);
-+        double cven;
-+        try{
-+            cven=Double.valueOf(cver_info);
-+        }catch (NumberFormatException e){
-+            cven=0;
++        public boolean checkVer(String pTargetVer){
++            char sign=pTargetVer.charAt(0);
++            String ver=description.getVersion()!=null?description.getVersion():"";
++            double ven;
++            try{
++                ven=Double.valueOf(ver);
++            }catch (NumberFormatException e){
++                ven=0;
++            }
++            String cver_info=pTargetVer.substring(1);
++            double cven;
++            try{
++                cven=Double.valueOf(cver_info);
++            }catch (NumberFormatException e){
++                cven=0;
++            }
++            boolean equal=false;
++            switch (sign){
++                case '>':
++                case '<':
++                    if(pTargetVer.charAt(1)=='=')equal=true;
++                    cver_info=cver_info.substring(1);
++                    break;
++            }
++            switch (sign){
++                case '=':
++                    return ver.equals(cver_info);
++                case '-':
++                    return ver.startsWith(cver_info);
++                case '+':
++                    return ver.endsWith(cver_info);
++                case '>':
++                    return equal?ven>=cven:ven>cven;
++                case '<':
++                    return equal?ven<=cven:ven<cven;
++                case '*':
++                    return Pattern.compile(cver_info).matcher(ver).find();
++                default:
++                    return ver.equals(pTargetVer);
++            }
 +        }
-+        boolean equal=false;
-+        switch (sign){
-+            case '>':
-+            case '<':
-+                if(pTargetVer.charAt(1)=='=')equal=true;
-+                cver_info=cver_info.substring(1);
-+                break;
++        public String remapClass(String pClass){
++            if(pClass.startsWith("net.minecraft.server")) {
++                JarMapping jarMapping = getJarMapping(remapFlags); // grab from SpecialSource
++                String remappedClass = jarMapping.classes.get(pClass.replaceAll("\\.", "/")); // get remapped pkgmcp class name
++                return remappedClass;
++            }
++            return pClass;
 +        }
-+        switch (sign){
-+            case '=':
-+                return ver.equals(cver_info);
-+            case '-':
-+                return ver.startsWith(cver_info);
-+            case '+':
-+                return ver.endsWith(cver_info);
-+            case '>':
-+                return equal?ven>=cven:ven>cven;
-+            case '<':
-+                return equal?ven<=cven:ven<cven;
-+            case '*':
-+                return Pattern.compile(cver_info).matcher(ver).find();
-+            default:
-+                return ver.equals(pTargetVer);
++        public String remapMethod(Class<?> pClass,String pName, Class<?>... parameterTypes){
++            UraniumMapping jarMapping = (UraniumMapping) getJarMapping(remapFlags); // grab from SpecialSource
++            String oldClass = jarMapping.mRclasses.get(pClass.getName().replaceAll("\\.", "/")); // get remapped pkgmcp class name
++            String method=oldClass+"/"+pName;
++            StringBuilder keyF=new StringBuilder(method+" (");
++            for(Class<?> type:parameterTypes){
++                keyF.append(Type.getType(type).getDescriptor());
++            }
++            keyF.append(")");
++            String newmethod=jarMapping.mMethodsNR.get(keyF.toString());
++            if(newmethod!=null){
++                return newmethod;
++            }else{
++                return pName;
++            }
 +        }
-+    }
-+    public String remapClassName(String pName){
-+        if(pName.startsWith("net.minecraft.server.")) {
-+            JarMapping jarMapping = getJarMapping(remapFlags);
-+            return jarMapping.classes.get(pName.replace(".", "/"));
++        public String remapField(Class<?> pClass,String pName){
++            UraniumMapping jarMapping = (UraniumMapping) getJarMapping(remapFlags); // grab from SpecialSource
++            String oldClass = jarMapping.mRclasses.get(pClass.getName().replaceAll("\\.", "/")); // get remapped pkgmcp class name
++            String field=oldClass+"/"+pName;
++            String newmethod=jarMapping.fields.get(field);
++            if(newmethod!=null){
++                return newmethod;
++            }else{
++                return pName;
++            }
 +        }
-+        return pName;
 +    }
 +    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +136,123 @@
+@@ -34,6 +167,123 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -189,7 +220,7 @@
 +        String remap_guava17_ver=MinecraftServer.uraniumConfig.getString("plugin-settings."+pluginName+".remap-guava17-ver",null);
 +        remapGuava17 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings." + pluginName + ".remap-guava17", remapGuava17, false);
 +        if(remap_guava17_ver!=null&&!remapGuava17) {
-+            remapGuava17 = checkVer(remap_guava17_ver);
++            remapGuava17 = umcl.checkVer(remap_guava17_ver);
 +        }
 +        // Uranium end
 +        if (debug) {
@@ -260,7 +291,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +277,305 @@
+@@ -58,34 +308,305 @@
      }
  
      @Override
@@ -348,7 +379,7 @@
 +    }
 +
 +    private JarMapping getJarMapping(int flags) {
-+        JarMapping jarMapping = jarMappings.get(flags);
++        UraniumMapping jarMapping = jarMappings.get(flags);
 +
 +        if (jarMapping != null) {
 +            if (debug) {
@@ -357,7 +388,7 @@
 +            return jarMapping;
 +        }
  
-+        jarMapping = new JarMapping();
++        jarMapping = new UraniumMapping();
 +        try {
 +
 +            // Guava 10 is part of the Bukkit API, so plugins can use it, but FML includes Guava 15
