@@ -39,7 +39,7 @@ If you're once checkout source - you not need to do it again
   * All versions situated [there](https://ci.xjboss.net/job/Uranium)
 * If bug still present - Uranium issue
   * Make sure that similar issue not exists already
-  * Please fill [issue form](https://git.xjboss.net/KC-RELOADED/Uranium/issues/new) else
+  * Please fill [issue form](https://git.xjboss.net/UraniumDev/Uranium/issues/new) else
 
 [donate_img]: https://git.xjboss.net/static/donate-Bitcoin.svg
 [download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
