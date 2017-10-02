@@ -103,7 +103,7 @@ ext.mcVersion = minecraft.version.replace(".","")
 ext.forgeVersion = VersionParser.parseForgeRevision(file('src/main/resources/fmlversion.properties'))
 ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unkonwn"
 ext.branch = getGitBranch()
-ext.uranium_version = 3
+ext.uranium_version = 4
 version = "${mcVersion}-${branch}-${uranium_version}-B${build}"
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 def getGitBranch(){
