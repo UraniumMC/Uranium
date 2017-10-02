@@ -59,6 +59,7 @@ public class UraniumConfig extends ConfigBase {
     public BoolSetting onlyConsoleOP=new BoolSetting(this,"op.onlyConsole",false,"Only allow console using op command");
     public BoolSetting allowShowCommandThrowableOnClient =new BoolSetting(this,"command.allowShowCommandThrowableOnClient",true,"Allow show throwable information on client.");
     public BoolSetting enableGuava17=new BoolSetting(this,"experimental.guava17",false,"EXPERIMENTAL! Using guava17 to replace guava 10 in com.google.common package");
+    public StringSetting uraniumName=new StringSetting(this,"experimental.UraniumName","","EXPERIMENTAL! Some plugins not support Uranium as server name, you can change it to KCauldron or Cauldron to improve compatibility");
     public static boolean tileEntityListRecreation;
     
     public UraniumConfig() {
@@ -83,6 +84,7 @@ public class UraniumConfig extends ConfigBase {
         register(onlyConsoleOP);
         register(allowShowCommandThrowableOnClient);
         register(enableGuava17);
+        register(uraniumName);
         load();
     }
 

@@ -435,15 +435,7 @@ public final class CraftServer implements Server {
 
     @Override
     public String getName() {
-        ClassLoader cl=Thread.currentThread().getContextClassLoader();
-        if(cl instanceof PluginClassLoader){
-            String sname;
-            sname=MinecraftServer.uraniumConfig.getString("plugin-settings." + ((PluginClassLoader) cl).getDescription().getName()+ ".custom-server-name", "");
-            if(sname!=null&&!sname.isEmpty()){
-                return sname;
-            }
-        }
-        return serverName;
+        return MinecraftServer.uraniumConfig.uraniumName.getValue().isEmpty()?serverName:MinecraftServer.uraniumConfig.uraniumName.getValue();
     }
 
     @Override
