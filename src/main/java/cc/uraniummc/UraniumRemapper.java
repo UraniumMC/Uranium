@@ -1,6 +1,8 @@
 package cc.uraniummc;
 
 import cc.uraniummc.util.NMSClassUtil;
+import lombok.Setter;
+import lombok.experimental.var;
 import net.md_5.specialsource.RemappingClassAdapter;
 import net.md_5.specialsource.SpecialSource;
 import net.md_5.specialsource.repo.ClassRepo;
@@ -11,12 +13,12 @@ import net.md_5.specialsource.JarRemapper;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.objectweb.asm.ClassWriter.COMPUTE_MAXS;
 
@@ -24,7 +26,8 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
     protected final PluginClassLoader mLoader;
     private int writerFlags = COMPUTE_MAXS;
     private int readerFlags = 0;
-
+    @Setter
+    private boolean debug=false;
     public UraniumRemapper(JarMapping jarMapping,PluginClassLoader pPluginClassLoader){
         super(jarMapping);
 
@@ -57,102 +60,314 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
         return remapClassFile(new ClassReader(super.remapClassFile(in, repo)));
     }
 
+    private void logR(String message) {
+        if (debug) {
+            System.out.println("[ReflectionRemapper] " + message);
+        }
+    }
     @SuppressWarnings("unchecked")
     private byte[] remapClassFile(ClassReader reader) {
-        ClassWriter cw=new ClassWriter(writerFlags);
-        CV cv = new CV(cw);
-        reader.accept(cv,readerFlags);
+        ClassNode cn=new ClassNode();
+        reader.accept(cn, ClassReader.EXPAND_FRAMES);
+        HashSet<Object> varTypes=new HashSet();
+        for(int i=0;i<cn.methods.size();i++){
+            MethodNode nm=cn.methods.get(i);
+            if(nm.name.equals("<cinit>")){
+
+            }
+            String[] exceptions = new String[nm.exceptions.size()];
+            nm.exceptions.toArray(exceptions);
+            MethodNode mn=new MethodNode(ASM5,nm.access,nm.name,nm.desc,nm.signature,exceptions);
+            MV mv=new MV(mn,nm.access,nm.name,nm.desc,varTypes);
+            nm.accept(mv);
+            /*
+            for(int o=0;o<mn.instructions.size();o++){
+                AbstractInsnNode insnN=mn.instructions.get(o);
+                if(insnN instanceof TypeInsnNode){
+                    if(insnN.getOpcode()==NEW&&((TypeInsnNode) insnN).desc.equals(Type.getType(NMSClassUtil.class).getInternalName())){
+                        AbstractInsnNode LI=mn.instructions.get(o-1);
+                        if(LI instanceof VarInsnNode){
+                            if(LI.getOpcode()==ALOAD&&insnN.getNext().getOpcode()==DUP&&insnN.getNext().getNext().getOpcode()==GETFIELD){
+                                mn.instructions.remove(LI);
+                                mn.instructions.insert(insnN.getNext(),LI);
+                                logR("output");
+                            }
+                        }
+                    }
+                }
+            }
+            */
+            cn.methods.set(i,mn);
+        }
+        ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        cn.accept(cw);
         return cw.toByteArray();
     }
-    class CV extends ClassVisitor{
-        public CV(ClassVisitor cv) {
-            super(ASM5,cv);
+    class MV extends GeneratorAdapter{
+        private int access;
+        private String desc;
+        public MV(MethodVisitor mv, int access, String name, String desc,HashSet types) {
+            super(ASM5, mv,access,name,desc);
+            this.access=access;
+            this.desc=desc;
+            this.varTypes=types;
+            ga_list=new GeneratorAdapter(new MethodVisitor(ASM5) {
+                @Override
+                public void visitLdcInsn(Object cst) {
+                    insnList.add(new LdcInsnNode(cst));
+                }
+
+                @Override
+                public void visitIntInsn(int opcode, int operand) {
+                    insnList.add(new IntInsnNode(opcode,operand));
+                }
+
+                @Override
+                public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+                    insnList.add(new FieldInsnNode(opcode, owner, name, desc));
+                }
+
+                @Override
+                public void visitInsn(int opcode) {
+                    insnList.add(new InsnNode(opcode));
+                }
+
+                @Override
+                public void visitIincInsn(int var, int increment) {
+                    insnList.add(new IincInsnNode(var,increment));
+                }
+
+                @Override
+                public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+                    insnList.add(new MethodInsnNode(opcode, owner, name, desc,itf));
+                }
+
+                @Override
+                public void visitTypeInsn(int opcode, String type) {
+                    insnList.add(new TypeInsnNode(opcode, type));
+                }
+
+                @Override
+                public void visitVarInsn(int opcode, int var) {
+                    insnList.add(new VarInsnNode(opcode, var));
+                }
+
+                @Override
+                public void visitJumpInsn(int opcode, Label label) {
+                    insnList.add(new JumpInsnNode(opcode,new LabelNode(label)));
+                }
+            }, this.access, "", desc);
+        }
+        public boolean inclass=false;
+        public boolean inclassstart=false;
+        public boolean ininclass=false;
+        Object nvar=null;
+        public int nvar_type;
+        HashSet<Object> varTypes;
+        boolean isicount=false;
+        private LinkedList<Object> insnList=new LinkedList();
+        private boolean remaped=false;
+        private GeneratorAdapter ga_list;
+
+        @Override
+        public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+            mv.visitLocalVariable(name, desc, signature, start, end, index);
         }
 
         @Override
-        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-            MethodVisitor mv= super.visitMethod(access, name, desc, signature, exceptions);
-            return new MV(mv,access,name,desc);
+        public void visitTypeInsn(int opcode, String type) {
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            ga.visitTypeInsn(opcode, type);
         }
-    }
-    enum nowt{
-        none,Class
-    }
-    class MV extends GeneratorAdapter {
-        public MV(MethodVisitor mv, int access, String name, String desc) {
-            super(ASM5, mv,access,name,desc);
-        }
-        nowt now=nowt.none;
-        int nvar=0;
-        Object ldcobj="";
-        HashMap<Integer,nowt> varTypes=new HashMap();
+
         @Override
-        public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+        public void visitIincInsn(int var, int increment) {
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            ga.visitIincInsn(var,increment);
+        }
+
+        @Override
+        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+            GeneratorAdapter ga=inclassstart?ga_list:this;
             if(opcode==INVOKESTATIC){
                 if(owner.equals("java/lang/Class")){
                     if(name.equals("forName")){
-                        invokeStatic(Type.getType(NMSClassUtil.class),new Method(name,desc));
-                        now=nowt.Class;
+                        ga.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
+                        ga.invokeStatic(Type.getType(NMSClassUtil.class),new Method(name,"(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Class;"));
+                        if(inclassstart){
+                            ininclass=true;
+                        }else{
+                            inclass=true;
+                        }
+                        remaped=true;
+                        logR("Remapped Class.forName");
                         return;
+                    }
+                }else if(owner.equals("org/bukkit/Bukkit")){
+                    if(name.equals("getName")){
+                        /*
+                        ga.dup();
+                        ga.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
+                        ga.invokeStatic(Type.getType(NMSClassUtil.class),new Method("BgetName","(Ljava/lang/Class;)Ljava/lang/String;"));
+                        logR("Remapped Bukkit.getName");
+                        return;
+                        */
                     }
                 }
             }else if(opcode==INVOKEVIRTUAL){
-                if(now!=nowt.none) {
+                if(inclassstart) {
                     if (owner.equals("java/lang/Class")) {
-                        if (name.equals("forName") || name.equals("getDeclaredMethod") || name.equals("getMethod") || name.equals("getField") || name.equals("getDeclaredField")) {
+                        if (name.equals("getDeclaredMethod") || name.equals("getMethod") || name.equals("getField") || name.equals("getDeclaredField")) {
                             newInstance(Type.getType(NMSClassUtil.class));
                             dup();
-                            super.visitVarInsn(ALOAD, nvar);
-                            super.visitFieldInsn(INVOKESPECIAL, Type.getType(NMSClassUtil.class).getInternalName(), "<init>", "((Ljava/lang/Class;)V)");
-                            super.visitLdcInsn(ldcobj);
+                            if(nvar instanceof Integer) {
+                                mv.visitVarInsn(ALOAD, (Integer)nvar);
+                            }else if(nvar instanceof String){
+                                String[] nvars=((String) nvar).split("\\.");
+                                super.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
+                            }
+                            super.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
+                            super.visitMethodInsn(INVOKESPECIAL, Type.getType(NMSClassUtil.class).getInternalName(), "<init>", "(Ljava/lang/Class;Ljava/lang/Class;)V",false);
+                            for (Object node:insnList) {
+                                if (node instanceof LdcInsnNode) {
+                                    super.visitLdcInsn(((LdcInsnNode) node).cst);
+                                } else if (node instanceof IntInsnNode) {
+                                    super.visitIntInsn(((IntInsnNode) node).getOpcode(), ((IntInsnNode) node).operand);
+                                } else if (node instanceof FieldInsnNode) {
+                                    super.visitFieldInsn(((FieldInsnNode) node).getOpcode(), ((FieldInsnNode) node).owner, ((FieldInsnNode) node).name, ((FieldInsnNode) node).desc);
+                                } else if (node instanceof InsnNode) {
+                                    super.visitInsn(((InsnNode) node).getOpcode());
+                                } else if (node instanceof MethodInsnNode){
+                                    super.visitMethodInsn(((MethodInsnNode) node).getOpcode(),((MethodInsnNode) node).owner,((MethodInsnNode) node).name,((MethodInsnNode) node).desc,((MethodInsnNode) node).itf);
+                                } else if( node instanceof IincInsnNode){
+                                    super.visitIincInsn(((IincInsnNode) node).incr,((IincInsnNode) node).var);
+                                } else if(node instanceof TypeInsnNode){
+                                    super.visitTypeInsn(((TypeInsnNode) node).getOpcode(),((TypeInsnNode) node).desc);
+                                } else if(node instanceof VarInsnNode){
+                                    super.visitVarInsn(((VarInsnNode) node).getOpcode(),((VarInsnNode) node).var);
+                                } else if(node instanceof JumpInsnNode){
+                                    super.visitJumpInsn(((JumpInsnNode) node).getOpcode(),((JumpInsnNode) node).label.getLabel());
+                                }
+                            }
+                            insnList.clear();
                             invokeVirtual(Type.getType(NMSClassUtil.class), new Method(name, desc));
                         } else {
-                            super.visitVarInsn(ALOAD, nvar);
-                            super.visitLdcInsn(ldcobj);
-                            super.visitFieldInsn(opcode, owner, name, desc);
+                            if(nvar instanceof Integer) {
+                                mv.visitVarInsn(ALOAD, (Integer)nvar);
+                            }else if(nvar instanceof String){
+                                String[] nvars=((String) nvar).split("\\.");
+                                super.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
+                            }
+                            for (Object node:insnList){
+                                if(node instanceof LdcInsnNode){
+                                    super.visitLdcInsn(((LdcInsnNode) node).cst);
+                                }else if(node instanceof IntInsnNode){
+                                    super.visitIntInsn(((IntInsnNode) node).getOpcode(),((IntInsnNode) node).operand);
+                                }else if(node instanceof FieldInsnNode){
+                                    super.visitFieldInsn(((FieldInsnNode) node).getOpcode(),((FieldInsnNode) node).owner,((FieldInsnNode) node).name,((FieldInsnNode) node).desc);
+                                }else if(node instanceof InsnNode){
+                                    super.visitInsn(((InsnNode) node).getOpcode());
+                                } else if (node instanceof MethodInsnNode){
+                                    super.visitMethodInsn(((MethodInsnNode) node).getOpcode(),((MethodInsnNode) node).owner,((MethodInsnNode) node).name,((MethodInsnNode) node).desc,((MethodInsnNode) node).itf);
+                                } else if( node instanceof IincInsnNode){
+                                    super.visitIincInsn(((IincInsnNode) node).incr,((IincInsnNode) node).var);
+                                } else if(node instanceof TypeInsnNode){
+                                    super.visitTypeInsn(((TypeInsnNode) node).getOpcode(),((TypeInsnNode) node).desc);
+                                }else if(node instanceof VarInsnNode){
+                                    super.visitVarInsn(((VarInsnNode) node).getOpcode(),((VarInsnNode) node).var);
+                                } else if(node instanceof JumpInsnNode){
+                                    super.visitJumpInsn(((JumpInsnNode) node).getOpcode(),((JumpInsnNode) node).label.getLabel());
+                                }
+                            }
+                            insnList.clear();
+                            super.visitMethodInsn(opcode, owner, name, desc);
                         }
-                        now = nowt.none;
+                        logR("Remapped Class."+name);
+                        inclassstart=false;
                         return;
                     }
                 }
             }
-            super.visitFieldInsn(opcode, owner, name, desc);
+            if(inclassstart){
+                ga.visitMethodInsn(opcode,owner,name,desc,itf);
+            }else {
+                super.visitMethodInsn(opcode, owner, name, desc,itf);
+            }
+        }
+
+        @Override
+        public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+            GeneratorAdapter ga=inclassstart?ga_list:this;
+            if(opcode==PUTSTATIC||opcode==PUTFIELD){
+                if (inclass&&!inclassstart) {
+                    varTypes.add(owner+"."+name);
+                    inclass=false;
+                }else if(ininclass&&!inclass&&inclassstart){
+                    varTypes.add(owner+"."+name);
+                    ininclass=false;
+                }
+            }else if(opcode==GETSTATIC||opcode==GETFIELD){
+                if(!inclassstart&&varTypes.contains(owner+"."+name)) {
+                    inclassstart=true;
+                    nvar = owner+"."+name;
+                    nvar_type=opcode;
+                    return;
+                }
+            }
+            if(inclassstart){
+                ga.visitFieldInsn(opcode,owner,name,desc);
+            }else {
+                super.visitFieldInsn(opcode, owner, name, desc);
+            }
+        }
+
+        @Override
+        public void visitLabel(Label label) {
+            super.visitLabel(label);
+            inclass=false;
+            ininclass=false;
+            inclassstart=false;
         }
 
         @Override
         public void visitInsn(int opcode) {
-            if(opcode==Opcodes.POP){
-                now=nowt.none;
-            }
-            super.visitInsn(opcode);
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            ga.visitInsn(opcode);
         }
 
         @Override
         public void visitLdcInsn(Object cst) {
-            if(now == nowt.none){
-                super.visitLdcInsn(cst);
-            }else{
-                ldcobj=cst;
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            ga.visitLdcInsn(cst);
+        }
+        boolean hasT=false;
+        int lastTArg=-1;
+        @Override
+        public void visitVarInsn(int opcode, int var) {
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            if(opcode==Opcodes.ASTORE) {
+                if (inclass) {
+                    varTypes.add(var);
+                    inclass=false;
+                }
+            }else if(opcode==Opcodes.ALOAD){
+                if(!inclassstart&&varTypes.contains(var)) {
+                    inclassstart=true;
+                    nvar = new Integer(var);
+                    return;
+                }
             }
+            ga.visitVarInsn(opcode, var);
         }
 
         @Override
-        public void visitVarInsn(int opcode, int var) {
-            if(opcode==Opcodes.ASTORE) {
-                if (now != nowt.none) {
-                    varTypes.put(var,now);
-                    now = nowt.none;
-                }
-            }else if(opcode==Opcodes.ALOAD){
-                nowt vt=varTypes.get(var);
-                switch (vt){
-                    case Class:
-                        now=nowt.Class;
-                        nvar=var;
-                        return;
+        public void visitEnd() {
+            for(Object obj:(HashSet)varTypes.clone()){
+                if(obj instanceof Integer){
+                    varTypes.remove(obj);
                 }
             }
-            super.visitVarInsn(opcode,var);
+            super.visitEnd();
         }
     }
 }
