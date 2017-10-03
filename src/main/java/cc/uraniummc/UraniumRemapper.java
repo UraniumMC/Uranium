@@ -206,7 +206,7 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
             GeneratorAdapter ga=inclassstart?ga_list:this;
             MethodVisitor gmv=inclassstart?ga_list:mv;
-            if(opcode==INVOKESTATIC&&inclassstart){
+            if(opcode==INVOKESTATIC&&!inclassstart){
                 if(owner.equals("java/lang/Class")){
                     if(name.equals("forName")){
                         if(desc.equals("(Ljava/lang/String;)Ljava/lang/Class;")) {
