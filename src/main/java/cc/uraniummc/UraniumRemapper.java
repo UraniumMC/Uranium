@@ -80,7 +80,6 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
             MethodNode mn=new MethodNode(ASM5,nm.access,nm.name,nm.desc,nm.signature,exceptions);
             MV mv=new MV(mn,nm.access,nm.name,nm.desc,varTypes);
             nm.accept(mv);
-            /*
             for(int o=0;o<mn.instructions.size();o++){
                 AbstractInsnNode insnN=mn.instructions.get(o);
                 if(insnN instanceof TypeInsnNode){
@@ -96,7 +95,6 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                     }
                 }
             }
-            */
             cn.methods.set(i,mn);
         }
         ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -193,6 +191,17 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
         @Override
         public void visitTypeInsn(int opcode, String type) {
             MethodVisitor ga=inclassstart?ga_list:mv;
+            if(insnList.size()==0&&inclassstart){
+                if(nvar instanceof Integer) {
+                    mv.visitVarInsn(ALOAD, (Integer)nvar);
+                }else if(nvar instanceof String){
+                    String[] nvars=((String) nvar).split("\\.");
+                    mv.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
+                }
+                mv.visitTypeInsn(opcode,type);
+                inclassstart=false;
+                return;
+            }
             ga.visitTypeInsn(opcode, type);
         }
 
@@ -241,17 +250,17 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                         return;
                         */
                     }
-                }
-            }else if((opcode==INVOKEVIRTUAL||opcode==INVOKESTATIC||opcode==INVOKEINTERFACE)&&inclassstart){
-                    if (owner.equals("java/lang/Class")&&(name.equals("getDeclaredMethod") || name.equals("getMethod") || name.equals("getField") || name.equals("getDeclaredField"))) {
-                            newInstance(Type.getType(NMSClassUtil.class));
-                            dup();
-                            if(nvar instanceof Integer) {
-                                mv.visitVarInsn(ALOAD, (Integer)nvar);
-                            }else if(nvar instanceof String){
-                                String[] nvars=((String) nvar).split("\\.");
-                                mv.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
-                            }
+                    }
+            }else if((opcode==INVOKEVIRTUAL||opcode==INVOKESTATIC||opcode==INVOKESPECIAL||opcode==INVOKEINTERFACE)&&inclassstart){
+                if (owner.equals("java/lang/Class")&&(name.equals("getDeclaredMethod") || name.equals("getMethod") || name.equals("getField") || name.equals("getDeclaredField"))) {
+                    newInstance(Type.getType(NMSClassUtil.class));
+                    dup();
+                    if(nvar instanceof Integer) {
+                        mv.visitVarInsn(ALOAD, (Integer)nvar);
+                    }else if(nvar instanceof String){
+                        String[] nvars=((String) nvar).split("\\.");
+                        mv.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
+                    }
                             mv.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
                             mv.visitMethodInsn(INVOKESPECIAL, Type.getType(NMSClassUtil.class).getInternalName(), "<init>", "(Ljava/lang/Class;Ljava/lang/Class;)V",false);
 
@@ -331,11 +340,16 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                 mv.visitMethodInsn(opcode, owner, name, desc,itf);
             }
         }
-
         @Override
         public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
             MethodVisitor ga=inclassstart?ga_list:mv;
             ga.visitInvokeDynamicInsn(name,desc,bsm,bsmArgs);
+        }
+
+        @Override
+        public void visitJumpInsn(int opcode, Label label) {
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            ga.visitJumpInsn(opcode,label);
         }
 
         @Override
