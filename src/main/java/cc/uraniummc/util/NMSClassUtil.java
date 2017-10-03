@@ -39,6 +39,15 @@ public class NMSClassUtil {
         return Class.forName(className);
     }
     @CallerSensitive
+    public static Class<?> forName(String className,boolean init,ClassLoader loader,Class<?> pPClass)
+            throws ClassNotFoundException {
+        URLClassLoader mCL=(URLClassLoader) pPClass.getClassLoader();
+        if(mCL instanceof PluginClassLoader){
+            return Class.forName(((PluginClassLoader) mCL).umcl.remapClass(className).replace("/","."),init,loader);
+        }
+        return Class.forName(className,init,loader);
+    }
+    @CallerSensitive
     public Method getDeclaredMethod(String name, Class<?>... parameterTypes)
             throws NoSuchMethodException, SecurityException {
         if(mCL instanceof PluginClassLoader) {

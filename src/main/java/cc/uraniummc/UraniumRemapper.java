@@ -156,6 +156,22 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                 public void visitJumpInsn(int opcode, Label label) {
                     insnList.add(new JumpInsnNode(opcode,new LabelNode(label)));
                 }
+
+                @Override
+                public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+                    insnList.add(new FrameNode(type,nLocal,local,nStack,stack));
+                }
+
+                @Override
+                public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+                    insnList.add(new InvokeDynamicInsnNode(name,desc,bsm,bsmArgs));
+                }
+
+                @Override
+                public void visitLabel(Label label) {
+                    insnList.add(new LabelNode(label));
+                }
+
             }, this.access, "", desc);
         }
         public boolean inclass=false;
@@ -189,17 +205,29 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
             GeneratorAdapter ga=inclassstart?ga_list:this;
-            if(opcode==INVOKESTATIC){
+            MethodVisitor gmv=inclassstart?ga_list:mv;
+            if(opcode==INVOKESTATIC&&inclassstart){
                 if(owner.equals("java/lang/Class")){
                     if(name.equals("forName")){
-                        ga.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
-                        ga.invokeStatic(Type.getType(NMSClassUtil.class),new Method(name,"(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Class;"));
-                        if(inclassstart){
-                            ininclass=true;
+                        if(desc.equals("(Ljava/lang/String;)Ljava/lang/Class;")) {
+                            gmv.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".", "/")));
+                            ga.invokeStatic(Type.getType(NMSClassUtil.class), new Method(name, "(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Class;"));
+                            if (inclassstart) {
+                                ininclass = true;
+                            } else {
+                                inclass = true;
+                            }
+                            remaped = true;
                         }else{
-                            inclass=true;
+                            gmv.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".", "/")));
+                            ga.invokeStatic(Type.getType(NMSClassUtil.class), new Method(name, "(Ljava/lang/String;ZLjava/lang/ClassLoader;Ljava/lang/Class;)Ljava/lang/Class;"));
+                            if (inclassstart) {
+                                ininclass = true;
+                            } else {
+                                inclass = true;
+                            }
+                            remaped = true;
                         }
-                        remaped=true;
                         logR("Remapped Class.forName");
                         return;
                     }
@@ -214,39 +242,44 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                         */
                     }
                 }
-            }else if(opcode==INVOKEVIRTUAL){
-                if(inclassstart) {
-                    if (owner.equals("java/lang/Class")) {
-                        if (name.equals("getDeclaredMethod") || name.equals("getMethod") || name.equals("getField") || name.equals("getDeclaredField")) {
+            }else if((opcode==INVOKEVIRTUAL||opcode==INVOKESTATIC||opcode==INVOKEINTERFACE)&&inclassstart){
+                    if (owner.equals("java/lang/Class")&&(name.equals("getDeclaredMethod") || name.equals("getMethod") || name.equals("getField") || name.equals("getDeclaredField"))) {
                             newInstance(Type.getType(NMSClassUtil.class));
                             dup();
                             if(nvar instanceof Integer) {
                                 mv.visitVarInsn(ALOAD, (Integer)nvar);
                             }else if(nvar instanceof String){
                                 String[] nvars=((String) nvar).split("\\.");
-                                super.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
+                                mv.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
                             }
-                            super.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
-                            super.visitMethodInsn(INVOKESPECIAL, Type.getType(NMSClassUtil.class).getInternalName(), "<init>", "(Ljava/lang/Class;Ljava/lang/Class;)V",false);
+                            mv.visitLdcInsn(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/")));
+                            mv.visitMethodInsn(INVOKESPECIAL, Type.getType(NMSClassUtil.class).getInternalName(), "<init>", "(Ljava/lang/Class;Ljava/lang/Class;)V",false);
+
                             for (Object node:insnList) {
                                 if (node instanceof LdcInsnNode) {
-                                    super.visitLdcInsn(((LdcInsnNode) node).cst);
+                                    mv.visitLdcInsn(((LdcInsnNode) node).cst);
                                 } else if (node instanceof IntInsnNode) {
-                                    super.visitIntInsn(((IntInsnNode) node).getOpcode(), ((IntInsnNode) node).operand);
+                                    mv.visitIntInsn(((IntInsnNode) node).getOpcode(), ((IntInsnNode) node).operand);
                                 } else if (node instanceof FieldInsnNode) {
-                                    super.visitFieldInsn(((FieldInsnNode) node).getOpcode(), ((FieldInsnNode) node).owner, ((FieldInsnNode) node).name, ((FieldInsnNode) node).desc);
+                                    mv.visitFieldInsn(((FieldInsnNode) node).getOpcode(), ((FieldInsnNode) node).owner, ((FieldInsnNode) node).name, ((FieldInsnNode) node).desc);
                                 } else if (node instanceof InsnNode) {
-                                    super.visitInsn(((InsnNode) node).getOpcode());
+                                    mv.visitInsn(((InsnNode) node).getOpcode());
                                 } else if (node instanceof MethodInsnNode){
-                                    super.visitMethodInsn(((MethodInsnNode) node).getOpcode(),((MethodInsnNode) node).owner,((MethodInsnNode) node).name,((MethodInsnNode) node).desc,((MethodInsnNode) node).itf);
+                                    mv.visitMethodInsn(((MethodInsnNode) node).getOpcode(),((MethodInsnNode) node).owner,((MethodInsnNode) node).name,((MethodInsnNode) node).desc,((MethodInsnNode) node).itf);
                                 } else if( node instanceof IincInsnNode){
-                                    super.visitIincInsn(((IincInsnNode) node).incr,((IincInsnNode) node).var);
+                                    mv.visitIincInsn(((IincInsnNode) node).incr,((IincInsnNode) node).var);
                                 } else if(node instanceof TypeInsnNode){
-                                    super.visitTypeInsn(((TypeInsnNode) node).getOpcode(),((TypeInsnNode) node).desc);
+                                    mv.visitTypeInsn(((TypeInsnNode) node).getOpcode(),((TypeInsnNode) node).desc);
                                 } else if(node instanceof VarInsnNode){
-                                    super.visitVarInsn(((VarInsnNode) node).getOpcode(),((VarInsnNode) node).var);
+                                    mv.visitVarInsn(((VarInsnNode) node).getOpcode(),((VarInsnNode) node).var);
                                 } else if(node instanceof JumpInsnNode){
-                                    super.visitJumpInsn(((JumpInsnNode) node).getOpcode(),((JumpInsnNode) node).label.getLabel());
+                                    mv.visitJumpInsn(((JumpInsnNode) node).getOpcode(),((JumpInsnNode) node).label.getLabel());
+                                } else if(node instanceof FrameNode){
+                                    mv.visitFrame(((FrameNode) node).type,((FrameNode) node).local.size(),((FrameNode) node).local.toArray(),((FrameNode) node).stack.size(),((FrameNode) node).stack.toArray());
+                                }else if(node instanceof InvokeDynamicInsnNode){
+                                    mv.visitInvokeDynamicInsn(((InvokeDynamicInsnNode) node).name,((InvokeDynamicInsnNode) node).desc,((InvokeDynamicInsnNode) node).bsm,((InvokeDynamicInsnNode) node).bsmArgs);
+                                }else if(node instanceof LabelNode){
+                                    mv.visitLabel(((LabelNode) node).getLabel());
                                 }
                             }
                             insnList.clear();
@@ -256,43 +289,53 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                                 mv.visitVarInsn(ALOAD, (Integer)nvar);
                             }else if(nvar instanceof String){
                                 String[] nvars=((String) nvar).split("\\.");
-                                super.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
+                                mv.visitFieldInsn(nvar_type,nvars[0],nvars[1],"Ljava/lang/Class;");
                             }
                             for (Object node:insnList){
                                 if(node instanceof LdcInsnNode){
-                                    super.visitLdcInsn(((LdcInsnNode) node).cst);
+                                    mv.visitLdcInsn(((LdcInsnNode) node).cst);
                                 }else if(node instanceof IntInsnNode){
-                                    super.visitIntInsn(((IntInsnNode) node).getOpcode(),((IntInsnNode) node).operand);
+                                    mv.visitIntInsn(((IntInsnNode) node).getOpcode(),((IntInsnNode) node).operand);
                                 }else if(node instanceof FieldInsnNode){
-                                    super.visitFieldInsn(((FieldInsnNode) node).getOpcode(),((FieldInsnNode) node).owner,((FieldInsnNode) node).name,((FieldInsnNode) node).desc);
+                                    mv.visitFieldInsn(((FieldInsnNode) node).getOpcode(),((FieldInsnNode) node).owner,((FieldInsnNode) node).name,((FieldInsnNode) node).desc);
                                 }else if(node instanceof InsnNode){
-                                    super.visitInsn(((InsnNode) node).getOpcode());
+                                    mv.visitInsn(((InsnNode) node).getOpcode());
                                 } else if (node instanceof MethodInsnNode){
-                                    super.visitMethodInsn(((MethodInsnNode) node).getOpcode(),((MethodInsnNode) node).owner,((MethodInsnNode) node).name,((MethodInsnNode) node).desc,((MethodInsnNode) node).itf);
+                                    mv.visitMethodInsn(((MethodInsnNode) node).getOpcode(),((MethodInsnNode) node).owner,((MethodInsnNode) node).name,((MethodInsnNode) node).desc,((MethodInsnNode) node).itf);
                                 } else if( node instanceof IincInsnNode){
-                                    super.visitIincInsn(((IincInsnNode) node).incr,((IincInsnNode) node).var);
+                                    mv.visitIincInsn(((IincInsnNode) node).incr,((IincInsnNode) node).var);
                                 } else if(node instanceof TypeInsnNode){
-                                    super.visitTypeInsn(((TypeInsnNode) node).getOpcode(),((TypeInsnNode) node).desc);
+                                    mv.visitTypeInsn(((TypeInsnNode) node).getOpcode(),((TypeInsnNode) node).desc);
                                 }else if(node instanceof VarInsnNode){
-                                    super.visitVarInsn(((VarInsnNode) node).getOpcode(),((VarInsnNode) node).var);
+                                    mv.visitVarInsn(((VarInsnNode) node).getOpcode(),((VarInsnNode) node).var);
                                 } else if(node instanceof JumpInsnNode){
-                                    super.visitJumpInsn(((JumpInsnNode) node).getOpcode(),((JumpInsnNode) node).label.getLabel());
+                                    mv.visitJumpInsn(((JumpInsnNode) node).getOpcode(),((JumpInsnNode) node).label.getLabel());
+                                } else if(node instanceof FrameNode){
+                                    mv.visitFrame(((FrameNode) node).type,((FrameNode) node).local.size(),((FrameNode) node).local.toArray(),((FrameNode) node).stack.size(),((FrameNode) node).stack.toArray());
+                                }else if(node instanceof InvokeDynamicInsnNode){
+                                    mv.visitInvokeDynamicInsn(((InvokeDynamicInsnNode) node).name,((InvokeDynamicInsnNode) node).desc,((InvokeDynamicInsnNode) node).bsm,((InvokeDynamicInsnNode) node).bsmArgs);
+                                }else if(node instanceof LabelNode){
+                                    mv.visitLabel(((LabelNode) node).getLabel());
                                 }
                             }
                             insnList.clear();
-                            super.visitMethodInsn(opcode, owner, name, desc);
+                            mv.visitMethodInsn(opcode, owner, name, desc,itf);
                         }
                         logR("Remapped Class."+name);
                         inclassstart=false;
                         return;
-                    }
-                }
             }
             if(inclassstart){
                 ga.visitMethodInsn(opcode,owner,name,desc,itf);
             }else {
-                super.visitMethodInsn(opcode, owner, name, desc,itf);
+                mv.visitMethodInsn(opcode, owner, name, desc,itf);
             }
+        }
+
+        @Override
+        public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+            MethodVisitor ga=inclassstart?ga_list:mv;
+            ga.visitInvokeDynamicInsn(name,desc,bsm,bsmArgs);
         }
 
         @Override
@@ -317,7 +360,7 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
             if(inclassstart){
                 ga.visitFieldInsn(opcode,owner,name,desc);
             }else {
-                super.visitFieldInsn(opcode, owner, name, desc);
+                mv.visitFieldInsn(opcode, owner, name, desc);
             }
         }
 
