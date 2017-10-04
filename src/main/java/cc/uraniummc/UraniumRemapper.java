@@ -28,10 +28,17 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
     private int readerFlags = 0;
     @Setter
     private boolean debug=false;
+
+    private boolean RemapReflection=false;
     public UraniumRemapper(JarMapping jarMapping,PluginClassLoader pPluginClassLoader){
         super(jarMapping);
 
         this.mLoader=pPluginClassLoader;
+    }
+
+    public UraniumRemapper(JarMapping jarMapping,PluginClassLoader pPluginClassLoader,boolean reflection){
+        this(jarMapping,pPluginClassLoader);
+        this.RemapReflection=reflection;
     }
 
     @Override
@@ -53,11 +60,11 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
      * Remap an individual class given an InputStream to its bytecode
      */
     public byte[] remapClassFile(InputStream is, ClassRepo repo) throws IOException {
-        return remapClassFile(new ClassReader(super.remapClassFile(is, repo)));
+        return RemapReflection?remapClassFile(new ClassReader(super.remapClassFile(is, repo))):super.remapClassFile(is,repo);
     }
 
     public byte[] remapClassFile(byte[] in, ClassRepo repo) {
-        return remapClassFile(new ClassReader(super.remapClassFile(in, repo)));
+        return RemapReflection?remapClassFile(new ClassReader(super.remapClassFile(in, repo))):super.remapClassFile(in,repo);
     }
 
     private void logR(String message) {
