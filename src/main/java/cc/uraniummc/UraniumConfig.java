@@ -53,6 +53,7 @@ public class UraniumConfig extends ConfigBase {
      * by xjboss<br>
      * offline uuid mode
      */
+    public BoolSetting captureBlockOnItemRightClick=new BoolSetting(this,"capture.captureBlockOnItemRightClick",true,"Capture block to prevent brush things.");
     public IntSetting uuidMode=new IntSetting(this,"uuid.mode",0,"Offline UUID Mode 0 is normal mode 1 is lowercase mode 2 is upcase mode");
     public BoolSetting usingCustomOnlineModeServer=new BoolSetting(this,"onlinemode.usingCustomServer",false,"Using custom online mode server like netease \"\u6211\u7684\u4e16\u754c\"");
     public StringSetting customOnlineModeServer =new StringSetting(this,"onlinemode.customServer","https://sessionserver.mojang.com/session/minecraft/join","Custom online mode server URL");
@@ -87,6 +88,9 @@ public class UraniumConfig extends ConfigBase {
         register(enableGuava17);
         register(uraniumName);
         register(remapReflection);
+
+        register(captureBlockOnItemRightClick);
+
         load();
     }
 

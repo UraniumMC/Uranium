@@ -30,7 +30,7 @@
  import java.io.File;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -7,24 +31,134 @@
+@@ -7,24 +31,135 @@
  import java.util.HashMap;
  import java.util.Map;
  import java.util.Set;
@@ -78,6 +78,7 @@
 +    private static final int F_REMAP_OBC1710    = 1 << 12;
 +    private static final int F_REMAP_GUAVA17    = 1 << 13;
 +    private static final int F_REMAP_GUAVA21    = 1 << 14;
++    private static final int F_REMAP_REFLECTION = 1 << 15;
 +    private static final int F_REMAP_NMSPRE_MASK= 0xffff0000;  // "unversioned" NMS plugin version
 +    // This trick bypasses Maven Shade's package rewriting when using String literals [same trick in jline]
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
@@ -168,7 +169,7 @@
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +168,123 @@
+@@ -34,6 +169,125 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -223,6 +224,8 @@
 +        if(remap_guava17_ver!=null&&!remapGuava17) {
 +            remapGuava17 = umcl.checkVer(remap_guava17_ver);
 +        }
++        boolean remapReflection=MinecraftServer.uraniumConfig.remapReflection.getValue();
++        remapReflection=MinecraftServer.uraniumConfig.getBoolean("plugin-settings."+pluginName+".remap-Reflection",remapReflection,false);
 +        // Uranium end
 +        if (debug) {
 +            System.out.println("PluginClassLoader debugging enabled for "+pluginName);
@@ -258,7 +261,7 @@
 +        if (globalInherit) flags |= F_GLOBAL_INHERIT;
 +        //Uranium guava 17 support
 +        if (remapGuava17) flags |= F_REMAP_GUAVA17;
-+
++        if (remapReflection) flags |=F_REMAP_REFLECTION;
 +        remapFlags = flags; // used in findClass0
 +        JarMapping jarMapping = getJarMapping(flags);
 +
@@ -272,7 +275,7 @@
 +            jarMapping.setFallbackInheritanceProvider(new ClassLoaderProvider(this));
 +        }
 +
-+        remapper = new cc.uraniummc.UraniumRemapper(jarMapping,this);
++        remapper = new cc.uraniummc.UraniumRemapper(jarMapping,this,remapReflection);
 +        ((UraniumRemapper)remapper).setDebug(true);
 +        if (pluginInherit || reflectFields || reflectClass) {
 +            remapperProcessor = new RemapperProcessor(
@@ -292,7 +295,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +309,305 @@
+@@ -58,34 +312,309 @@
      }
  
      @Override
@@ -381,7 +384,6 @@
 +
 +    private JarMapping getJarMapping(int flags) {
 +        UraniumMapping jarMapping = jarMappings.get(flags);
-+
 +        if (jarMapping != null) {
 +            if (debug) {
 +                System.out.println("Mapping reused for "+Integer.toHexString(flags));
@@ -407,7 +409,6 @@
 +            jarMapping.packages.put("net/minecraft/util/com", "com");
 +            jarMapping.packages.put("net/minecraft/util/gnu", "gnu");
 +            jarMapping.packages.put("net/minecraft/util/org", "org");
-+
 +            if ((flags & F_REMAP_NMS1710) != 0) {
 +                loadNmsMappings(jarMapping, "v1_7_R4");
 +            }
@@ -482,6 +483,12 @@
 +
 +            System.out.println("Mapping loaded "+jarMapping.packages.size()+" packages, "+jarMapping.classes.size()+" classes, "+jarMapping.fields.size()+" fields, "+jarMapping.methods.size()+" methods, flags "+Integer.toHexString(flags));
 +
++            if(jarMapping.mMethodsNR.isEmpty()&&!jarMapping.methods.isEmpty()){
++                jarMapping.loadMethodsNR();
++            }
++            if(jarMapping.mRclasses.isEmpty()&&!jarMapping.classes.isEmpty()){
++                jarMapping.loadRClasses();
++            }
 +            JarMapping currentJarMapping = jarMappings.putIfAbsent(flags, jarMapping);
 +            return currentJarMapping == null ? jarMapping : currentJarMapping;
 +        } catch (IOException ex) {
