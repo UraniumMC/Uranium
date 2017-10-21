@@ -61,7 +61,7 @@ public class UraniumConfig extends ConfigBase {
     public BoolSetting allowShowCommandThrowableOnClient =new BoolSetting(this,"command.allowShowCommandThrowableOnClient",true,"Allow show throwable information on client.");
     public BoolSetting enableGuava17=new BoolSetting(this,"experimental.guava17",false,"EXPERIMENTAL! Using guava17 to replace guava 10 in com.google.common package");
     public StringSetting uraniumName=new StringSetting(this,"experimental.UraniumName","","EXPERIMENTAL! Some plugins not support Uranium as server name, you can change it to KCauldron or Cauldron to improve compatibility");
-    public BoolSetting remapReflection=new BoolSetting(this,"experimental.remap-Reflection",false,"EXPERIMENTAL! This options can remap Class.forName getMethod getField to support plugins which using the net.minecraft.server.Rxxx package, but lots of plugin not support this.");
+    public BoolSetting remapReflection=new BoolSetting(this,"experimental.remap-Reflection",true,"EXPERIMENTAL! This options can remap Class.forName getMethod getField to support plugins which using the net.minecraft.server.Rxxx package, but lots of plugin not support this.");
     public static boolean tileEntityListRecreation;
     
     public UraniumConfig() {
