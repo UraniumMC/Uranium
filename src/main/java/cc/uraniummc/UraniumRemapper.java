@@ -149,7 +149,7 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
             if(nm.localVariables!=null) {
                 for (int lv = 0; lv < nm.localVariables.size(); lv++) {
                     LocalVariableNode lvar = nm.localVariables.get(lv);
-                    if (lvar.desc.equals("Ljava/lang/Class;")) vt.add(lv);
+                    if (lvar.desc.equals("Ljava/lang/Class;")) vt.add(lvar.index);
                 }
             }
             AbstractInsnNode loadedclass_pos=null;
