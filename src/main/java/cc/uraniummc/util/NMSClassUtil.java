@@ -41,7 +41,7 @@ public class NMSClassUtil{
     public static Class<?> forName(String pClassName,boolean pInit,ClassLoader pLoader,Class<?> pClass) throws ClassNotFoundException{
         return forName0(pClass,pClassName,pInit,pLoader);
     }
-    
+
     @CallerSensitive
     private static Class<?> forName0(Class<?> pClass,String pClassName,boolean pInit,ClassLoader pLoader) throws ClassNotFoundException{
         URLClassLoader mCL=(URLClassLoader)pClass.getClassLoader();
@@ -52,35 +52,35 @@ public class NMSClassUtil{
     }
 
     @CallerSensitive
-    public static Method getMethod(Class<?> pClazz,String pMethodName,Class<?>...pParamTypes) throws NoSuchMethodException,SecurityException{
-        if(pClazz.getClassLoader() instanceof PluginClassLoader){
-            pMethodName=((PluginClassLoader)pClazz.getClassLoader()).umcl.remapMethod(pClazz,pMethodName,pParamTypes);
+    public static Method getMethod(Class<?> pOwnClazz,String pMethodName,Class<?>[] pParamTypes,Class<?> pCaller) throws NoSuchMethodException,SecurityException{
+        if(pCaller.getClassLoader() instanceof PluginClassLoader){
+            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes);
         }
-        return pClazz.getMethod(pMethodName,pParamTypes);
+        return pOwnClazz.getMethod(pMethodName,pParamTypes);
     }
 
     @CallerSensitive
-    public static Method getDeclaredMethod(Class<?> pClazz,String pMethodName,Class<?>...pParamTypes) throws NoSuchMethodException,SecurityException{
-        if(pClazz.getClassLoader() instanceof PluginClassLoader){
-            pMethodName=((PluginClassLoader)pClazz.getClassLoader()).umcl.remapMethod(pClazz,pMethodName,pParamTypes);
+    public static Method getDeclaredMethod(Class<?> pOwnClazz,String pMethodName,Class<?>[] pParamTypes,Class<?> pCaller) throws NoSuchMethodException,SecurityException{
+        if(pCaller.getClassLoader() instanceof PluginClassLoader){
+            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes);
         }
-        return pClazz.getDeclaredMethod(pMethodName,pParamTypes);
+        return pOwnClazz.getDeclaredMethod(pMethodName,pParamTypes);
     }
 
     @CallerSensitive
-    public static Field getField(Class<?> pClazz,String pFieldName) throws NoSuchFieldException,SecurityException{
-        if(pClazz.getClassLoader() instanceof PluginClassLoader){
-            pFieldName=((PluginClassLoader)pClazz.getClassLoader()).umcl.remapField(pClazz,pFieldName);
+    public static Field getField(Class<?> pOwnClazz,String pFieldName,Class<?> pCaller) throws NoSuchFieldException,SecurityException{
+        if(pCaller.getClassLoader() instanceof PluginClassLoader){
+            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName);
         }
-        return pClazz.getField(pFieldName);
+        return pOwnClazz.getField(pFieldName);
     }
 
     @CallerSensitive
-    public static Field getDeclaredField(Class<?> pClazz,String pFieldName) throws NoSuchFieldException,SecurityException{
-        if(pClazz.getClassLoader() instanceof PluginClassLoader){
-            pFieldName=((PluginClassLoader)pClazz.getClassLoader()).umcl.remapField(pClazz,pFieldName);
+    public static Field getDeclaredField(Class<?> pOwnClazz,String pFieldName,Class<?> pCaller) throws NoSuchFieldException,SecurityException{
+        if(pCaller.getClassLoader() instanceof PluginClassLoader){
+            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName);
         }
-        return pClazz.getDeclaredField(pFieldName);
+        return pOwnClazz.getDeclaredField(pFieldName);
     }
 
 }

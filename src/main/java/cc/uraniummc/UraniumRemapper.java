@@ -92,14 +92,14 @@ public class UraniumRemapper extends JarRemapper implements Opcodes{
                             mi.name.equals("getDeclaredField"))){
                         mi.setOpcode(INVOKESTATIC);
                         mi.owner=Type.getType(NMSClassUtil.class).getInternalName();
-                        mi.desc="(Ljava/lang/Class;"+(mi.desc.substring(1));
-                        logR("Remapped Class."+mi.name);
+                        tMNode.instructions.insertBefore(mi,new LdcInsnNode(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/"))));
+                        int tIndex=mi.desc.indexOf(')');
+                        mi.desc="(Ljava/lang/Class;"+(mi.desc.substring(1,tIndex))+"Ljava/lang/Class;"+(mi.desc.substring(tIndex));
                     }else if(mi.getOpcode()==INVOKESTATIC&&mi.owner.equals("java/lang/Class")&&mi.name.equals("forName")){
                         tMNode.instructions.insertBefore(mi,new LdcInsnNode(Type.getObjectType(mLoader.getDescription().getMain().replace(".","/"))));
                         mi.owner=Type.getType(NMSClassUtil.class).getInternalName();
                         int tIndex=mi.desc.indexOf(')');
                         mi.desc=mi.desc.substring(0,tIndex)+"Ljava/lang/Class;"+(mi.desc.substring(tIndex));
-                        logR("Remapped Class.forName");
                     }
                 }
             }
