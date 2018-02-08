@@ -53,32 +53,32 @@ public class NMSClassUtil{
 
     @CallerSensitive
     public static Method getMethod(Class<?> pOwnClazz,String pMethodName,Class<?>[] pParamTypes,Class<?> pCaller) throws NoSuchMethodException,SecurityException{
-        if(pCaller.getClassLoader() instanceof PluginClassLoader){
-            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes);
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes,false);
         }
         return pOwnClazz.getMethod(pMethodName,pParamTypes);
     }
 
     @CallerSensitive
     public static Method getDeclaredMethod(Class<?> pOwnClazz,String pMethodName,Class<?>[] pParamTypes,Class<?> pCaller) throws NoSuchMethodException,SecurityException{
-        if(pCaller.getClassLoader() instanceof PluginClassLoader){
-            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes);
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes,true);
         }
         return pOwnClazz.getDeclaredMethod(pMethodName,pParamTypes);
     }
 
     @CallerSensitive
     public static Field getField(Class<?> pOwnClazz,String pFieldName,Class<?> pCaller) throws NoSuchFieldException,SecurityException{
-        if(pCaller.getClassLoader() instanceof PluginClassLoader){
-            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName);
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName,false);
         }
         return pOwnClazz.getField(pFieldName);
     }
 
     @CallerSensitive
     public static Field getDeclaredField(Class<?> pOwnClazz,String pFieldName,Class<?> pCaller) throws NoSuchFieldException,SecurityException{
-        if(pCaller.getClassLoader() instanceof PluginClassLoader){
-            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName);
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName,true);
         }
         return pOwnClazz.getDeclaredField(pFieldName);
     }

@@ -1,39 +1,26 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,5 +1,29 @@
+@@ -1,30 +1,158 @@
  package org.bukkit.plugin.java;
  
-+// Cauldron start
-+import cc.uraniummc.UraniumConfig;
-+import cc.uraniummc.UraniumMapping;
-+import cc.uraniummc.UraniumRemapper;
-+import lombok.Getter;
-+import net.md_5.specialsource.provider.ClassLoaderProvider;
-+import net.md_5.specialsource.transformer.MavenShade;
-+//import org.bouncycastle.util.io.Streams;
-+import net.md_5.specialsource.*;
-+import net.md_5.specialsource.repo.*;
-+import net.minecraft.server.MinecraftServer;
-+import net.minecraftforge.cauldron.configuration.CauldronConfig;
-+import net.minecraftforge.cauldron.CauldronUtils;
-+
-+import org.bukkit.plugin.PluginDescriptionFile;
-+import java.io.*;
-+import java.lang.reflect.Field;
-+import java.lang.reflect.Method;
-+import java.net.JarURLConnection;
-+import java.security.CodeSigner;
-+import java.security.CodeSource;
-+import java.util.concurrent.*;
-+// Cauldron end
-+
++import java.io.BufferedReader;
  import java.io.File;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.InputStreamReader;
++import java.net.JarURLConnection;
  import java.net.MalformedURLException;
  import java.net.URL;
-@@ -7,24 +31,141 @@
+ import java.net.URLClassLoader;
++import java.security.CodeSigner;
++import java.security.CodeSource;
  import java.util.HashMap;
  import java.util.Map;
  import java.util.Set;
++// Cauldron end
++import java.util.concurrent.ConcurrentHashMap;
++import java.util.concurrent.ConcurrentMap;
 +import java.util.regex.Pattern;
  
  import org.apache.commons.lang.Validate;
@@ -41,6 +28,19 @@
  import org.bukkit.plugin.PluginDescriptionFile;
 +import org.objectweb.asm.Type;
  
++import cc.uraniummc.UraniumMapping;
++import cc.uraniummc.UraniumRemapper;
++import lombok.Getter;
++//import org.bouncycastle.util.io.Streams;
++import net.md_5.specialsource.JarMapping;
++import net.md_5.specialsource.JarRemapper;
++import net.md_5.specialsource.RemapperProcessor;
++import net.md_5.specialsource.provider.ClassLoaderProvider;
++import net.md_5.specialsource.repo.RuntimeRepo;
++import net.md_5.specialsource.transformer.MavenShade;
++import net.minecraft.server.MinecraftServer;
++import net.minecraftforge.cauldron.CauldronUtils;
++
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
   */
@@ -141,41 +141,28 @@
 +            }
 +            return pClass;
 +        }
-+        public String remapMethod(Class<?> pClass,String pName, Class<?>... parameterTypes){
++        public String remapMethod(Class<?> pClass,String pName, Class<?>[]parameterTypes,boolean pDeclared){
 +            UraniumMapping jarMapping = (UraniumMapping) getJarMapping(remapFlags); // grab from SpecialSource
-+            String oldClass = jarMapping.mRclasses.get(pClass.getName().replaceAll("\\.", "/")); // get remapped pkgmcp class name
-+            String method=oldClass+"/"+pName;
-+            StringBuilder keyF=new StringBuilder(method+" (");
++            StringBuilder keyF=new StringBuilder(pName+" (");
 +            if(parameterTypes!=null&&parameterTypes.length>0){
 +                for(Class<?> type : parameterTypes){
 +                    keyF.append(Type.getType(type).getDescriptor());
 +                }
 +            }
 +            keyF.append(")");
-+            String newmethod=jarMapping.mMethodsNR.get(keyF.toString());
-+            if(newmethod!=null){
-+                return newmethod;
-+            }else{
-+                return pName;
-+            }
++            return jarMapping.remapMethod(jarMapping.mRclasses.get(pClass.getName().replace('.', '/')),pName,keyF.toString(),pDeclared);
 +        }
-+        public String remapField(Class<?> pClass,String pName){
-+            UraniumMapping jarMapping = (UraniumMapping) getJarMapping(remapFlags); // grab from SpecialSource
-+            String oldClass = jarMapping.mRclasses.get(pClass.getName().replaceAll("\\.", "/")); // get remapped pkgmcp class name
-+            String field=oldClass+"/"+pName;
-+            String newmethod=jarMapping.fields.get(field);
-+            if(newmethod!=null){
-+                return newmethod;
-+            }else{
-+                return pName;
-+            }
++
++        public String remapField(Class<?> pClass,String pName,boolean pDeclared){
++            UraniumMapping jarMapping=(UraniumMapping)getJarMapping(remapFlags); // grab from SpecialSource
++            return jarMapping.remapField(jarMapping.mRclasses.get(pClass.getName().replace('.', '/')),pName,pDeclared);
 +        }
 +    }
 +    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +175,125 @@
+@@ -34,6 +162,125 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -301,7 +288,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +318,309 @@
+@@ -58,34 +305,309 @@
      }
  
      @Override
