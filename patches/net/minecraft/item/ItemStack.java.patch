@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/net/minecraft/item/ItemStack.java
 +++ ../src-work/minecraft/net/minecraft/item/ItemStack.java
-@@ -1,15 +1,19 @@
+@@ -1,15 +1,18 @@
  package net.minecraft.item;
  
 -import com.google.common.collect.HashMultimap;
@@ -15,7 +15,6 @@
  import java.util.Map.Entry;
 +import java.util.Random;
 +
-+import cc.uraniummc.Uranium;
 +import com.google.common.collect.HashMultimap;
 +import com.google.common.collect.Multimap;
 +
@@ -25,7 +24,7 @@
  import net.minecraft.block.Block;
  import net.minecraft.enchantment.Enchantment;
  import net.minecraft.enchantment.EnchantmentDurability;
-@@ -21,11 +25,13 @@
+@@ -21,11 +24,13 @@
  import net.minecraft.entity.ai.attributes.AttributeModifier;
  import net.minecraft.entity.item.EntityItemFrame;
  import net.minecraft.entity.player.EntityPlayer;
@@ -39,15 +38,7 @@
  import net.minecraft.stats.StatList;
  import net.minecraft.util.ChatComponentText;
  import net.minecraft.util.EnumChatFormatting;
-@@ -33,6 +39,7 @@
- import net.minecraft.util.IIcon;
- import net.minecraft.util.StatCollector;
- import net.minecraft.world.World;
-+import net.minecraftforge.common.MinecraftForge;
- import net.minecraftforge.event.ForgeEventFactory;
- 
- public final class ItemStack
-@@ -43,7 +50,12 @@
+@@ -43,7 +48,12 @@
      private Item field_151002_e;
      public NBTTagCompound stackTagCompound;
      int itemDamage;
@@ -61,7 +52,7 @@
      private static final String __OBFID = "CL_00000043";
  
      private cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate;
-@@ -95,6 +107,9 @@
+@@ -95,6 +105,9 @@
  
      public ItemStack splitStack(int p_77979_1_)
      {
@@ -71,7 +62,7 @@
          ItemStack itemstack = new ItemStack(this.field_151002_e, p_77979_1_, this.itemDamage);
  
          if (this.stackTagCompound != null)
-@@ -126,12 +141,14 @@
+@@ -126,12 +139,14 @@
      public boolean tryPlaceItemIntoWorld(EntityPlayer p_77943_1_, World p_77943_2_, int p_77943_3_, int p_77943_4_, int p_77943_5_, int p_77943_6_, float p_77943_7_, float p_77943_8_, float p_77943_9_)
      {
          if (!p_77943_2_.isRemote) return net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(this, p_77943_1_, p_77943_2_, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_);
@@ -87,7 +78,7 @@
  
          return flag;
      }
-@@ -143,7 +160,14 @@
+@@ -143,7 +158,14 @@
  
      public ItemStack useItemRightClick(World p_77957_1_, EntityPlayer p_77957_2_)
      {
@@ -103,7 +94,7 @@
      }
  
      public ItemStack onFoodEaten(World p_77950_1_, EntityPlayer p_77950_2_)
-@@ -227,8 +251,22 @@
+@@ -227,8 +249,22 @@
          return getItem().getMaxDamage(this);
      }
  
@@ -126,7 +117,7 @@
          if (!this.isItemStackDamageable())
          {
              return false;
-@@ -250,6 +288,23 @@
+@@ -250,6 +286,23 @@
  
                  p_96631_1_ -= k;
  
@@ -150,7 +141,7 @@
                  if (p_96631_1_ <= 0)
                  {
                      return false;
-@@ -267,7 +322,7 @@
+@@ -267,7 +320,7 @@
          {
              if (this.isItemStackDamageable())
              {
@@ -159,7 +150,7 @@
                  {
                      p_77972_2_.renderBrokenItemStack(this);
                      --this.stackSize;
-@@ -288,6 +343,12 @@
+@@ -288,6 +341,12 @@
                          this.stackSize = 0;
                      }
  
@@ -172,7 +163,16 @@
                      this.itemDamage = 0;
                  }
              }
-@@ -419,6 +480,7 @@
+@@ -409,7 +468,7 @@
+ 
+     public NBTTagCompound getTagCompound()
+     {
+-        return this.stackTagCompound;
++        return this.stackTagCompound == null ? (this.stackTagCompound= new NBTTagCompound()) : this.stackTagCompound;
+     }
+ 
+     public NBTTagList getEnchantmentTagList()
+@@ -419,6 +478,7 @@
  
      public void setTagCompound(NBTTagCompound p_77982_1_)
      {
@@ -180,7 +180,7 @@
          this.stackTagCompound = p_77982_1_;
      }
  
-@@ -667,6 +729,12 @@
+@@ -667,6 +727,12 @@
          NBTTagCompound nbttagcompound = new NBTTagCompound();
          nbttagcompound.setShort("id", (short)p_77966_1_.effectId);
          nbttagcompound.setShort("lvl", (short)((byte)p_77966_2_));
@@ -193,7 +193,7 @@
          nbttaglist.appendTag(nbttagcompound);
      }
  
-@@ -768,4 +836,12 @@
+@@ -768,4 +834,12 @@
  
          return ichatcomponent;
      }
