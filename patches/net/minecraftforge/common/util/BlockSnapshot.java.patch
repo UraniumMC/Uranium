@@ -12,3 +12,12 @@
  
      public World getWorld() 
      {
+@@ -309,4 +314,8 @@
+         hash = 73 * hash + (this.blockIdentifier != null ? this.blockIdentifier.hashCode() : 0);
+         return hash;
+     }
++    
++    public NBTTagCompound getNBT(){
++        return this.nbt;
++    }
+ }
