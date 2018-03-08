@@ -48,13 +48,13 @@
          return this.field_145994_a;
      }
 +
-+    // Uranium start
++    // Cauldron start
 +    @Override
 +    public boolean canUpdate()
 +    {
-+        return true;
++        return true; //False will make some mods not work
 +    }
 +    @Override
-+    public void updateEntity() {}
-+    // Uranium end
++    public void updateEntity() {}//???
++    // Cauldron end
  }
