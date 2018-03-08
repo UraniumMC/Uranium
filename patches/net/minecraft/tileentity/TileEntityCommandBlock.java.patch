@@ -43,16 +43,18 @@
      private static final String __OBFID = "CL_00000347";
  
      public void writeToNBT(NBTTagCompound p_145841_1_)
-@@ -70,4 +40,12 @@
+@@ -70,4 +40,14 @@
      {
          return this.field_145994_a;
      }
 +
-+    // Cauldron start
++    // Uranium start
 +    @Override
 +    public boolean canUpdate()
 +    {
-+        return false;
++        return true;
 +    }
-+    // Cauldron end
++    @Override
++    public void updateEntity() {}
++    // Uranium end
  }
