@@ -5,7 +5,6 @@
 ### Uranium - continuation of KCauldron minecraft server
 [![Build Status][build_status]](https://ci.xjboss.net/job/Uranium) [![Download Uranium][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
 
-![donate][donate_img] 1PFBV7gFBEqG1hcYhR9CvrvQhENczsRgHg
 ## Building Uranium
 * Ensure you are using Java JDK 8u101 or higher.
 * Checkout project
