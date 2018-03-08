@@ -601,7 +601,7 @@
  
 -                if (flag && blockSnapshot == null) // Don't notify clients or update physics while capturing blockstates
 +                // Cauldron add !this.captureBlockStates
-+                if (tSnapshot == null) // Don't notify clients or update physics while capturing blockstates
++                if (tSnapshot==null&&flag) // Don't notify clients or update physics while capturing blockstates
                  {
                      // Modularize client and physic updates
                      this.markAndNotifyBlock(p_147465_1_, p_147465_2_, p_147465_3_, chunk, block1, p_147465_4_, p_147465_6_);

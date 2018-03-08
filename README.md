@@ -3,14 +3,13 @@
 **[Join UraniumMC offical discord chat room](https://discord.gg/dCjehb3)**
 # Uranium
 ### Uranium - continuation of KCauldron minecraft server
-[![Build Status][build_status]](https://ci.xjboss.net/job/Uranium) [![Download Uranium][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+[![Build Status][build_status]](https://ci.aimc.vip/job/Uranium) [![Download Uranium][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
 
-![donate][donate_img] 1PFBV7gFBEqG1hcYhR9CvrvQhENczsRgHg
 ## Building Uranium
 * Ensure you are using Java JDK 8u101 or higher.
 * Checkout project
   * You can use IDE or clone from console:
-  `git clone https://git.xjboss.net/UraniumDev/Uranium.git`
+  `git clone https://git.aimc.vip/UraniumDev/Uranium.git`
 * Init submodules
   * Since this project is merger of two other we need both.
   `git submodule update --init --recursive`
@@ -36,16 +35,16 @@ If you're once checkout source - you not need to do it again
   * Reset all configs to default
   If bug present - mod compatibility issue
 * If you're using beta-release of Uranium - check on latest stable
-  * All versions situated [there](https://ci.xjboss.net/job/Uranium)
+  * All versions situated [there](https://ci.aimc.vip/job/Uranium)
 * If bug still present - Uranium issue
   * Make sure that similar issue not exists already
-  * Please fill [issue form](https://git.xjboss.net/UraniumDev/Uranium/issues/new) else
+  * Please fill [issue form](https://git.aimc.vip/UraniumDev/Uranium/issues/new) else
 
-[donate_img]: https://git.xjboss.net/static/donate-Bitcoin.svg
+[donate_img]: https://git.aimc.vip/static/donate-Bitcoin.svg
 [download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
-[download_img]: https://git.xjboss.net/static/download-latest.svg
-[build_status]: https://ci.xjboss.net/job/Uranium/badge/icon
-[bStats]: https://git.xjboss.net/static/bStats-Uranium.svg
+[download_img]: https://git.aimc.vip/static/download-latest.svg
+[build_status]: https://ci.aimc.vip/job/Uranium/badge/icon
+[bStats]: https://git.aimc.vip/static/bStats-Uranium.svg
 [bStats_link]: https://bstats.org/plugin/bukkit/Uranium
-[yumc_Stats]: https://git.xjboss.net/static/yumc-UM.svg
+[yumc_Stats]: https://git.aimc.vip/static/yumc-UM.svg
 [yumc_Stats_link]: http://www.yumc.pw/Home/Statistics/Plugin.html?name=Uranium

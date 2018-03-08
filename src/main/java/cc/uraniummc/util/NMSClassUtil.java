@@ -1,88 +1,86 @@
 package cc.uraniummc.util;
 
-import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.PluginClassLoader;
-import sun.reflect.CallerSensitive;
-
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 
-public class NMSClassUtil {
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.PluginClassLoader;
+
+import net.minecraft.server.MinecraftServer;
+import sun.reflect.CallerSensitive;
+
+public class NMSClassUtil{
+
     private final Class<?> mClass;
     private final URLClassLoader mCL;
+
     public NMSClassUtil(Class<?> pClass,Class<?> pPClass){
         this.mClass=pClass;
-        mCL=(URLClassLoader) pPClass.getClassLoader();
+        mCL=(URLClassLoader)pPClass.getClassLoader();
     }
+
     public static String BgetName(Class<?> pPClass){
-        URLClassLoader mCL=(URLClassLoader) pPClass.getClassLoader();
+        URLClassLoader mCL=(URLClassLoader)pPClass.getClassLoader();
         if(mCL instanceof PluginClassLoader){
             String sname;
-            sname= MinecraftServer.uraniumConfig.getString("plugin-settings." + ((PluginClassLoader) mCL).getDescription().getName()+ ".custom-server-name", "");
+            sname=MinecraftServer.uraniumConfig.getString("plugin-settings."+((PluginClassLoader)mCL).getDescription().getName()+".custom-server-name","");
             if(sname!=null&&!sname.isEmpty()){
                 return sname;
             }
         }
         return Bukkit.getServerName();
     }
+
     @CallerSensitive
-    public static Class<?> forName(String className,Class<?> pPClass)
-            throws ClassNotFoundException {
-        URLClassLoader mCL=(URLClassLoader) pPClass.getClassLoader();
-        if(mCL instanceof PluginClassLoader){
-            return Class.forName(((PluginClassLoader) mCL).umcl.remapClass(className).replace("/","."));
-        }
-        return Class.forName(className);
-    }
-    @CallerSensitive
-    public static Class<?> forName(String className,boolean init,ClassLoader loader,Class<?> pPClass)
-            throws ClassNotFoundException {
-        URLClassLoader mCL=(URLClassLoader) pPClass.getClassLoader();
-        if(mCL instanceof PluginClassLoader){
-            return Class.forName(((PluginClassLoader) mCL).umcl.remapClass(className).replace("/","."),init,loader);
-        }
-        return Class.forName(className,init,loader);
-    }
-    @CallerSensitive
-    public Method getDeclaredMethod(String name, Class<?>... parameterTypes)
-            throws NoSuchMethodException, SecurityException {
-        if(mCL instanceof PluginClassLoader) {
-            String newName = ((PluginClassLoader) mCL).umcl.remapMethod(mClass,name,parameterTypes);
-            return mClass.getDeclaredMethod(newName,parameterTypes);
-        }
-        return mClass.getDeclaredMethod(name,parameterTypes);
+    public static Class<?> forName(String pClassName,Class<?> pClass) throws ClassNotFoundException{
+        return forName0(pClass,pClassName,true,pClass.getClassLoader());
     }
 
     @CallerSensitive
-    public Method getMethod(String name, Class<?>... parameterTypes)
-            throws NoSuchMethodException, SecurityException {
-        if(mCL instanceof PluginClassLoader) {
-            String newName = ((PluginClassLoader) mCL).umcl.remapMethod(mClass,name,parameterTypes);
-            return mClass.getMethod(newName,parameterTypes);
-        }
-        return mClass.getMethod(name,parameterTypes);
+    public static Class<?> forName(String pClassName,boolean pInit,ClassLoader pLoader,Class<?> pClass) throws ClassNotFoundException{
+        return forName0(pClass,pClassName,pInit,pLoader);
     }
 
     @CallerSensitive
-    public Field getField(String name)
-            throws NoSuchFieldException, SecurityException {
-        if(mCL instanceof PluginClassLoader) {
-            String newName = ((PluginClassLoader) mCL).umcl.remapField(mClass,name);
-            return mClass.getField(newName);
+    private static Class<?> forName0(Class<?> pClass,String pClassName,boolean pInit,ClassLoader pLoader) throws ClassNotFoundException{
+        URLClassLoader mCL=(URLClassLoader)pClass.getClassLoader();
+        if(mCL instanceof PluginClassLoader){
+            pClassName=((PluginClassLoader)mCL).umcl.remapClass(pClassName).replace("/",".");
         }
-        return mClass.getField(name);
+        return Class.forName(pClassName,pInit,pLoader==null?pClass.getClassLoader():pLoader);
     }
+
     @CallerSensitive
-    public Field getDeclaredField(String name)
-            throws NoSuchFieldException, SecurityException {
-        if(mCL instanceof PluginClassLoader) {
-            String newName = ((PluginClassLoader) mCL).umcl.remapField(mClass,name);
-            return mClass.getDeclaredField(newName);
+    public static Method getMethod(Class<?> pOwnClazz,String pMethodName,Class<?>[] pParamTypes,Class<?> pCaller) throws NoSuchMethodException,SecurityException{
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes,false);
         }
-        return mClass.getDeclaredField(name);
+        return pOwnClazz.getMethod(pMethodName,pParamTypes);
     }
+
+    @CallerSensitive
+    public static Method getDeclaredMethod(Class<?> pOwnClazz,String pMethodName,Class<?>[] pParamTypes,Class<?> pCaller) throws NoSuchMethodException,SecurityException{
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pMethodName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapMethod(pOwnClazz,pMethodName,pParamTypes,true);
+        }
+        return pOwnClazz.getDeclaredMethod(pMethodName,pParamTypes);
+    }
+
+    @CallerSensitive
+    public static Field getField(Class<?> pOwnClazz,String pFieldName,Class<?> pCaller) throws NoSuchFieldException,SecurityException{
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName,false);
+        }
+        return pOwnClazz.getField(pFieldName);
+    }
+
+    @CallerSensitive
+    public static Field getDeclaredField(Class<?> pOwnClazz,String pFieldName,Class<?> pCaller) throws NoSuchFieldException,SecurityException{
+        if(pOwnClazz.getClassLoader()==NMSClassUtil.class.getClassLoader()){
+            pFieldName=((PluginClassLoader)pCaller.getClassLoader()).umcl.remapField(pOwnClazz,pFieldName,true);
+        }
+        return pOwnClazz.getDeclaredField(pFieldName);
+    }
+
 }
