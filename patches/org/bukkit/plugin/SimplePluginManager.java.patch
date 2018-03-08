@@ -29,3 +29,12 @@
          return result.toArray(new Plugin[result.size()]);
      }
  
+@@ -615,7 +621,7 @@
+     }
+ 
+     public void recalculatePermissionDefaults(Permission perm) {
+-        if (permissions.containsValue(perm)) {
++        if (perm!=null&&permissions.containsValue(perm)) {//Uranium added null check
+             defaultPerms.get(true).remove(perm);
+             defaultPerms.get(false).remove(perm);
+ 
