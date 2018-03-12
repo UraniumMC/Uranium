@@ -7,7 +7,7 @@
 -                if (name.equalsIgnoreCase("bukkit") || name.equalsIgnoreCase("minecraft") || name.equalsIgnoreCase("mojang")) {
 +                if (name.equalsIgnoreCase("bukkit") || name.equalsIgnoreCase("minecraft") || name.equalsIgnoreCase("mojang")
 +                        // Cauldron - Add more restricted names
-+                        || name.equalsIgnoreCase("spigot") || name.equalsIgnoreCase("forge") || name.equalsIgnoreCase("cauldron") || name.equalsIgnoreCase("mcpc")) {
++                        || name.equalsIgnoreCase("spigot") || name.equalsIgnoreCase("forge") || name.equalsIgnoreCase("cauldron") || name.equalsIgnoreCase("mcpc") || name.equalsIgnoreCase("uranium")) {
                      server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "': Restricted Name");
                      continue;
                  } else if (description.rawName.indexOf(' ') != -1) {
@@ -16,7 +16,7 @@
          }
  
 +        // Cauldron - fill names for Cauldron-provided dependencies
-+        loadedPlugins.addAll(ImmutableSet.of("Cauldron", "Forge", "MCPC", "MCPC+"));
++        loadedPlugins.addAll(ImmutableSet.of("Cauldron", "Forge", "MCPC", "MCPC+","Uranium"));
 +
          while (!plugins.isEmpty()) {
              boolean missingDependency = true;
@@ -28,4 +28,13 @@
 +        org.bukkit.command.defaults.TimingsCommand.timingStart = System.nanoTime(); // Spigot
          return result.toArray(new Plugin[result.size()]);
      }
+ 
+@@ -615,7 +621,7 @@
+     }
+ 
+     public void recalculatePermissionDefaults(Permission perm) {
+-        if (permissions.containsValue(perm)) {
++        if (perm!=null&&permissions.containsValue(perm)) {//Uranium added null check
+             defaultPerms.get(true).remove(perm);
+             defaultPerms.get(false).remove(perm);
  
