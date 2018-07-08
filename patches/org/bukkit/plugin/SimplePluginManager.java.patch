@@ -29,7 +29,15 @@
          return result.toArray(new Plugin[result.size()]);
      }
  
-@@ -615,7 +621,7 @@
+@@ -433,6 +439,7 @@
+ 
+             try {
+                 server.getServicesManager().unregisterAll(plugin);
++                cc.uraniummc.eventexecutor.ASMEventExecutorGenerate.removeListener(plugin);
+             } catch (Throwable ex) {
+                 server.getLogger().log(Level.SEVERE, "Error occurred (in the plugin loader) while unregistering services for " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+             }
+@@ -615,7 +622,7 @@
      }
  
      public void recalculatePermissionDefaults(Permission perm) {
