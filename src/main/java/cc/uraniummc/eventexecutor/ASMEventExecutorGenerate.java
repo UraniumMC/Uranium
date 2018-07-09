@@ -129,10 +129,7 @@ public class ASMEventExecutorGenerate{
     }
 
     private static boolean canAccess(Class<?> pTarget,Method pMethod){
-        if(!pTarget.isMemberClass()) return true;
-
-        int tModifiers=pTarget.getModifiers();
-        return Modifier.isPublic(pMethod.getModifiers())&&Modifier.isPublic(tModifiers);
+        return Modifier.isPublic(pMethod.getModifiers())&&Modifier.isPublic(pMethod.getModifiers());
     }
 
     private static Class<?> defineClass(String pName,byte[] pData,ClassLoader pLoader){
