@@ -7,4 +7,4 @@
 	branch = 1.7.10
 [submodule "UraniumPlus"]
 	path = UraniumPlus
-	url = https://github.com/UraniumMC/KCauldron-Bukkit
+	url = https://github.com/UraniumMC/UraniumPlus
