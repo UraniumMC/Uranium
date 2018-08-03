@@ -12,3 +12,6 @@ build
 .gradle
 
 *.DS_Store
+hs_err_pid*.log
+replay_pid*.log
+gradle/wrapper/gradle-wrapper.properties
