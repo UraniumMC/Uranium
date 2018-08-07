@@ -64,6 +64,7 @@ public class UraniumConfig extends ConfigBase {
     public StringSetting uraniumName=new StringSetting(this,"experimental.UraniumName","","EXPERIMENTAL! Some plugins not support Uranium as server name, you can change it to KCauldron or Cauldron to improve compatibility");
     public BoolSetting remapReflection=new BoolSetting(this,"experimental.remap-Reflection",false,"EXPERIMENTAL! This options can remap Class.forName getMethod getField to support plugins which using the net.minecraft.server.Rxxx package, but lots of plugin not support this.");
     public BoolSetting fakeVanillaMode= new BoolSetting(this,"experimental.fakeVanillaMode",false,"EXPERIMENTAL! Make client think this is a Vanilla server.");
+    public BoolSetting getPlayerForceThreadSafe=new BoolSetting(this,"forceThreadSafe.getPlayer",false,"Force")
     public static boolean tileEntityListRecreation;
     
     public UraniumConfig() {
