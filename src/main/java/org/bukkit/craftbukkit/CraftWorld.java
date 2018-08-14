@@ -1446,7 +1446,7 @@ public class CraftWorld implements World {
 
         final net.minecraft.world.gen.ChunkProviderServer cps = world.theChunkProviderServer;
         List tLoadedChunk = world.theChunkProviderServer.loadedChunks;
-        List<net.minecraft.world.chunk.Chunk> tToUnloadChunk=new ArrayList<>();
+        List<net.minecraft.world.chunk.Chunk> tToUnloadChunk=new ArrayList<net.minecraft.world.chunk.Chunk>();
         for(int i=tLoadedChunk.size()-1;i>=0;i--){
             net.minecraft.world.chunk.Chunk chunk = null;
             try{
@@ -1468,7 +1468,9 @@ public class CraftWorld implements World {
             tToUnloadChunk.add(chunk);
         }
         
-        tToUnloadChunk.forEach((chunk)->cps.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition));
+        for(net.minecraft.world.chunk.Chunk sChunk : tToUnloadChunk){
+            cps.unloadChunksIfNotNearSpawn(sChunk.xPosition, sChunk.zPosition);
+        }
     }
 
     // Spigot start
