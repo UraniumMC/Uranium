@@ -2535,7 +2535,7 @@
 +                if(itemstack1!=null&&itemstack.getItem()==Items.writable_book
 +                        &&itemstack.getItem()==itemstack1.getItem()
 +                        &&itemstack.hasTagCompound()
-+                        &&itemstack.getTagCompound().hasKey("pages",8)){
++                        &&itemstack.getTagCompound().hasKey("pages",9)){
 +                    ItemStack tNewItem=itemstack1.copy();
 +                    tNewItem.setTagInfo("pages",itemstack.getTagCompound().getTagList("pages",8));
 +                    CraftEventFactory.handleEditBookEvent(playerEntity,tNewItem);
@@ -2560,12 +2560,12 @@
 -                    if (itemstack1 == null)
 -                    {
 -                        return;
-+                    if(itemstack1!=null&&itemstack.getItem()==Items.writable_book
-+                            &&itemstack.getItem()==itemstack1.getItem()
++                    if(itemstack1!=null&&itemstack.getItem()==Items.written_book
 +                            &&itemstack.hasTagCompound()
 +                            &&itemstack.getTagCompound().hasKey("author")
 +                            &&itemstack.getTagCompound().hasKey("title")){
 +                        ItemStack tNewItem=itemstack1.copy();
++                        tNewItem.func_150996_a(Items.written_book);
 +                        tNewItem.setTagInfo("author",itemstack.getTagCompound().getTag("author"));
 +                        tNewItem.setTagInfo("title",itemstack.getTagCompound().getTag("title"));
 +                        CraftEventFactory.handleEditBookEvent(playerEntity,tNewItem);
