@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,30 +1,159 @@
+@@ -1,30 +1,161 @@
  package org.bukkit.plugin.java;
  
 +import java.io.BufferedReader;
@@ -23,6 +23,8 @@
 +import java.util.concurrent.ConcurrentMap;
 +import java.util.regex.Pattern;
  
++import lombok.val;
++import org.apache.commons.io.IOUtils;
  import org.apache.commons.lang.Validate;
  import org.bukkit.plugin.InvalidPluginException;
  import org.bukkit.plugin.PluginDescriptionFile;
@@ -79,7 +81,7 @@
 +    private static final int F_REMAP_GUAVA17    = 1 << 13;
 +    private static final int F_REMAP_GUAVA21    = 1 << 14;
 +    private static final int F_REMAP_REFLECTION = 1 << 15;
-+    private static final int F_REMAP_NEWTITLE = 1 << 16;
++    private static final int F_REMAP_FUTURE = 1 << 16;
 +    private static final int F_REMAP_NMSPRE_MASK= 0xffff0000;  // "unversioned" NMS plugin version
 +    // This trick bypasses Maven Shade's package rewriting when using String literals [same trick in jline]
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
@@ -163,7 +165,7 @@
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +163,125 @@
+@@ -34,6 +165,127 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -253,9 +255,11 @@
 +        if (remapOBC152) flags |= F_REMAP_OBC152;
 +        if (remapOBCPre) flags |= F_REMAP_OBCPRE;
 +        if (globalInherit) flags |= F_GLOBAL_INHERIT;
-+        //Uranium guava 17 support
++        //Uranium start
 +        if (remapGuava17) flags |= F_REMAP_GUAVA17;
 +        if (remapReflection) flags |=F_REMAP_REFLECTION;
++        if (allowFuture) flags |=F_REMAP_FUTURE;
++        //Uranium end
 +        remapFlags = flags; // used in findClass0
 +        JarMapping jarMapping = getJarMapping(flags);
 +
@@ -289,7 +293,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +306,309 @@
+@@ -58,34 +310,326 @@
      }
  
      @Override
@@ -318,7 +322,7 @@
 +     * @param jarMapping An existing JarMappings instance to load into
 +     * @param obfVersion CraftBukkit version with internal obfuscation counter identifier
 +     *                   >=1.4.7 this is the major version + R#. v1_4_R1=1.4.7, v1_5_R1=1.5, v1_5_R2=1.5.1..
-+     *                   For older versions (including pre-safeguard) it is the full Minecraft version number
++     *                   For older Futureversions (including pre-safeguard) it is the full Minecraft version number
 +     * @throws IOException
 +     */
 +    private void loadNmsMappings(JarMapping jarMapping, String obfVersion) throws IOException {
@@ -375,7 +379,17 @@
 +        // remap bouncycastle to Forge's included copy, not the vanilla obfuscated copy (not in Cauldron), see #133
 +        //jarMapping.packages.put("net/minecraft/"+obfVersion+"/org/bouncycastle", "org/bouncycastle"); No longer needed
 +    }
-+
++    private void loadFuture(JarMapping jarMapping, String[] obfVersion) throws IOException{
++        Map<String, String> relocations = new HashMap<String, String>();
++        // mc-dev jar to CB, apply version shading (aka plugin safeguard)
++        for(val obf:obfVersion) {
++            relocations.put("net.minecraft.server", "net.minecraft.server." + obf);
++        }
++        jarMapping.loadMappings(
++                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("uranium_data/mappings/new.srg"))),
++                new MavenShade(relocations),
++                null, false);
++    }
 +    private JarMapping getJarMapping(int flags) {
 +        UraniumMapping jarMapping = jarMappings.get(flags);
 +        if (jarMapping != null) {
@@ -473,6 +487,13 @@
 +                        new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/" + obfVersion + "/cb2numpkg.srg"))),
 +                        null, // no version relocation!
 +                        null, false);
++            }
++
++            if((flags & F_REMAP_FUTURE) !=0){
++                val is=loader.getClass().getClassLoader().getResourceAsStream("Futureversions");
++                val all=IOUtils.toString(is);
++                val futureVer=all.split("\n");
++                loadFuture(jarMapping,futureVer);
 +            }
 +
 +            System.out.println("Mapping loaded "+jarMapping.packages.size()+" packages, "+jarMapping.classes.size()+" classes, "+jarMapping.fields.size()+" fields, "+jarMapping.methods.size()+" methods, flags "+Integer.toHexString(flags));
