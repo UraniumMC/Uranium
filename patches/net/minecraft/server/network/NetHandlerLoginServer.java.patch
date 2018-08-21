@@ -77,7 +77,7 @@
          {
              this.func_147326_c();
          }
-@@ -81,24 +93,72 @@
+@@ -81,24 +93,73 @@
          }
      }
  
@@ -143,18 +143,19 @@
              this.field_147328_g = NetHandlerLoginServer.LoginState.ACCEPTED;
              this.field_147333_a.scheduleOutboundPacket(new S02PacketLoginSuccess(this.field_147337_i), new GenericFutureListener[0]);
 -            FMLNetworkHandler.fmlServerHandshake(this.field_147327_f.getConfigurationManager(), this.field_147333_a, this.field_147327_f.getConfigurationManager().createPlayerForUser(this.field_147337_i));
++            /*
 +            if(MinecraftServer.uraniumConfig.fakeVanillaMode.getValue()){
 +                NetHandlerPlayServer handler=new NetHandlerPlayServer(this.field_147327_f.getConfigurationManager().getServerInstance(), this.field_147333_a, s);
 +                this.field_147333_a.setConnectionState(EnumConnectionState.PLAY);
 +                this.field_147333_a.channel().config().setAutoRead(false);
 +                this.field_147327_f.getConfigurationManager().initializeConnectionToPlayer(this.field_147333_a, this.field_147327_f.getConfigurationManager().processLogin(this.field_147337_i,s),handler);
-+            }else {
++            }else {*/
 +                FMLNetworkHandler.fmlServerHandshake(this.field_147327_f.getConfigurationManager(), this.field_147333_a, this.field_147327_f.getConfigurationManager().processLogin(this.field_147337_i, s)); // CraftBukkit - add player reference
-+            }
++            //}
          }
      }
  
-@@ -114,29 +174,33 @@
+@@ -114,29 +175,33 @@
  
      public void onConnectionStateTransition(EnumConnectionState p_147232_1_, EnumConnectionState p_147232_2_)
      {
@@ -193,7 +194,7 @@
          PrivateKey privatekey = this.field_147327_f.getKeyPair().getPrivate();
  
          if (!Arrays.equals(this.field_147330_e, p_147315_1_.func_149299_b(privatekey)))
-@@ -145,63 +209,64 @@
+@@ -145,63 +210,64 @@
          }
          else
          {

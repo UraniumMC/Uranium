@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,30 +1,158 @@
+@@ -1,30 +1,159 @@
  package org.bukkit.plugin.java;
  
 +import java.io.BufferedReader;
@@ -79,6 +79,7 @@
 +    private static final int F_REMAP_GUAVA17    = 1 << 13;
 +    private static final int F_REMAP_GUAVA21    = 1 << 14;
 +    private static final int F_REMAP_REFLECTION = 1 << 15;
++    private static final int F_REMAP_NEWTITLE = 1 << 16;
 +    private static final int F_REMAP_NMSPRE_MASK= 0xffff0000;  // "unversioned" NMS plugin version
 +    // This trick bypasses Maven Shade's package rewriting when using String literals [same trick in jline]
 +    private static final String org_bukkit_craftbukkit = new String(new char[] {'o','r','g','/','b','u','k','k','i','t','/','c','r','a','f','t','b','u','k','k','i','t'});
@@ -162,7 +163,7 @@
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +162,125 @@
+@@ -34,6 +163,125 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -288,7 +289,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +305,309 @@
+@@ -58,34 +306,309 @@
      }
  
      @Override
