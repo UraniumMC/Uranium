@@ -1,12 +1,22 @@
 package cc.uraniummc.updater;
 
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Map;
 
 import cc.uraniummc.Uranium;
 import cc.uraniummc.ULog;
+import cc.uraniummc.entity.UraniumAPISoft;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import lombok.val;
 import net.minecraft.server.MinecraftServer;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -75,14 +85,35 @@ public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
             }
         }
     }
-    @Deprecated
     private void check() {
         try {
-            HttpClient client=HttpClientBuilder.create().setUserAgent("Uranium "+Uranium.getBranch()+" B"+Uranium.getCurrentVersion())
-            HttpUriRequest request=RequestBuilder.get("https://api.uraniummc.cc/softs/json/soft_list.json")
+            val gson=new Gson();
+            val client=HttpClientBuilder.create().setUserAgent("Uranium "+Uranium.getCurrentVersion()).build();
+            val request=RequestBuilder.get("https://api.uraniummc.cc/softs/json/soft_list.json")
                     .setCharset(UTF_8)
                     .build();
-            int sid=Uranium.getBranch().equals("dev")?2:1;
+            Integer sid=Uranium.getBranch().equals("dev")?2:1;
+            try(val req=client.execute(request)){
+                val R=new InputStreamReader(req.getEntity().getContent(),UTF_8);
+                val list=gson.fromJson(R,JsonObject.class);
+                val obj=list.getAsJsonObject(sid.toString());
+                if(obj!=null){
+                    val soft=gson.fromJson(obj,UraniumAPISoft.class);
+                    try {
+                        val B = Uranium.getCurrentVersion().split("-")[3];
+                        val build = Integer.valueOf(B.substring(1));
+                        if(build<soft.getLeast_build()){
+                            mCallback.newVersion(Uranium.getBranch()+" B"+soft.getVersion());
+                        }else{
+                            mCallback.upToDate();
+                        }
+                    }catch (Exception e){
+                        mCallback.error(new Exception("Invaild local version",e));
+                    }
+                }
+            }catch (IOException e){
+                mCallback.error(e);
+            }
 
             /*
             HttpUriRequest request = RequestBuilder

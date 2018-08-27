@@ -156,6 +156,7 @@ dependencies {
     libraries 'colt:colt:1.2.0'
     libraries 'java3d:vecmath:1.3.1'
     libraries 'org.jetbrains.kotlin:kotlin-runtime:1.1.4-2'
+    compile 'org.projectlombok:lombok:1.16.18'
 }
 
 packageUniversal {
@@ -186,7 +187,7 @@ def generateManifest(boolean legacy = false) {
             'Uranium-Version'     : project.version,
             'Uranium-Legacy'      : legacy,
             'Uranium-Official'    : System.getProperty('officialBuild')!=null,
-            'Implementation-Vendor' : 'Prototik',
+            'Implementation-Vendor' : 'imcc xjboss',
             'Implementation-Title'  : project.name,
             'Implementation-Version': '1.7.10-R0.1-SNAPSHOT',
             'Specification-Vendor'  : 'Bukkit Team',
