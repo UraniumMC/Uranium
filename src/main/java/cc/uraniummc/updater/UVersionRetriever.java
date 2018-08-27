@@ -1,19 +1,19 @@
 package cc.uraniummc.updater;
 
-import java.io.InputStreamReader;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import cc.uraniummc.Uranium;
 import cc.uraniummc.ULog;
 import net.minecraft.server.MinecraftServer;
 
-import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
     private static final boolean DEBUG;
     private static final ULog sLogger;
@@ -78,6 +78,13 @@ public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
     @Deprecated
     private void check() {
         try {
+            HttpClient client=HttpClientBuilder.create().setUserAgent("Uranium "+Uranium.getBranch()+" B"+Uranium.getCurrentVersion())
+            HttpUriRequest request=RequestBuilder.get("https://api.uraniummc.cc/softs/json/soft_list.json")
+                    .setCharset(UTF_8)
+                    .build();
+            int sid=Uranium.getBranch().equals("dev")?2:1;
+
+            /*
             HttpUriRequest request = RequestBuilder
                     .get()
                     .setUri("https://api.prok.pw/repo/version/" + mGroup + "/"
@@ -103,6 +110,7 @@ public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
             } else {
                 mCallback.upToDate();
             }
+            */
         } catch (Exception e) {
             uncaughtException(null, e);
         }
