@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/entity/Player.java
 +++ ../src-work/minecraft/org/bukkit/entity/Player.java
-@@ -1035,4 +1035,121 @@
+@@ -1035,4 +1035,149 @@
       * @see Player#setHealthScaled(boolean)
       */
      public double getHealthScale();
@@ -22,7 +22,6 @@
 +
 +        public void playEffect(Location location, Effect effect, int id, int data, float offsetX, float offsetY, float offsetZ, float speed, int particleCount, int radius)
 +        {
-+
 +            throw new UnsupportedOperationException( "Not supported yet." );
 +        }
 +
@@ -74,10 +73,39 @@
 +        {
 +            throw new UnsupportedOperationException( "Not supported yet." );
 +        }
++
++        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent component) {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++
++        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent... components) {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++
 +        /**
++         * Sends the component to the specified screen position of this player
 +         *
-+         * @return
++         * @param position the screen position
++         * @param component the components to send
 +         */
++        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent component) {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++
++        /**
++         * Sends an array of components as a single message to the specified screen position of this player
++         *
++         * @param position the screen position
++         * @param components the components to send
++         */
++        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++
++        public int getPing()
++        {
++            throw new UnsupportedOperationException( "Not supported yet." );
++        }
 +    }
 +
 +    Spigot spigot();
