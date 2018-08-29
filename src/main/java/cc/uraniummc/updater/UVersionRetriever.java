@@ -10,14 +10,10 @@ import cc.uraniummc.Uranium;
 import cc.uraniummc.ULog;
 import cc.uraniummc.entity.UraniumAPISoft;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.val;
 import net.minecraft.server.MinecraftServer;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.simple.parser.JSONParser;
@@ -93,7 +89,8 @@ public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
                     .setCharset(UTF_8)
                     .build();
             Integer sid=Uranium.getBranch().equals("dev")?2:1;
-            try(val req=client.execute(request)){
+            val req=client.execute(request);
+            try{
                 val R=new InputStreamReader(req.getEntity().getContent(),UTF_8);
                 val list=gson.fromJson(R,JsonObject.class);
                 val obj=list.getAsJsonObject(sid.toString());
@@ -113,6 +110,8 @@ public class UVersionRetriever implements Runnable, UncaughtExceptionHandler {
                 }
             }catch (IOException e){
                 mCallback.error(e);
+            }finally {
+                if(req!=null)req.close();
             }
 
             /*
