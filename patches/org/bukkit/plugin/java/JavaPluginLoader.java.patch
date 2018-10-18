@@ -48,8 +48,8 @@
 +
 +import cc.uraniummc.eventexecutor.ASMEventExecutorGenerate;
 +import cc.uraniummc.eventexecutor.EventExecutorImp;
++import cc.uraniummc.eventexecutor.MethodHandleEventExecutor;
 +import cc.uraniummc.eventexecutor.ReflectEventExecutor;
-+import cc.uraniummc.eventexecutor.StaticMethodEventExecutor;
 +import net.md_5.specialsource.InheritanceMap;
 +import net.md_5.specialsource.JarMapping;
 +import net.md_5.specialsource.transformer.MavenShade;
@@ -209,7 +209,7 @@
 -            if (useTimings) {
 +            EventExecutorImp executor = null;
 +            if(Modifier.isStatic(method.getModifiers())){
-+                executor=new StaticMethodEventExecutor(eventClass,method);
++                executor=new MethodHandleEventExecutor(eventClass,listener,method);
 +            }else executor = ASMEventExecutorGenerate.createWrapperInstance(plugin,listener,method);
 +            if(executor == null){
 +                executor = new ReflectEventExecutor(method);
