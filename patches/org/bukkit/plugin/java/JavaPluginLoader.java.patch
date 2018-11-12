@@ -9,10 +9,9 @@
  import java.io.FileNotFoundException;
  import java.io.IOException;
  import java.io.InputStream;
--import java.lang.reflect.InvocationTargetException;
 +import java.io.InputStreamReader;
+ import java.lang.reflect.InvocationTargetException;
  import java.lang.reflect.Method;
-+import java.lang.reflect.Modifier;
  import java.util.Arrays;
  import java.util.HashMap;
  import java.util.HashSet;
@@ -21,21 +20,7 @@
  import java.util.Map;
  import java.util.Set;
  import java.util.jar.JarEntry;
-@@ -24,13 +28,11 @@
- import org.bukkit.configuration.serialization.ConfigurationSerializable;
- import org.bukkit.configuration.serialization.ConfigurationSerialization;
- import org.bukkit.event.Event;
--import org.bukkit.event.EventException;
- import org.bukkit.event.EventHandler;
- import org.bukkit.event.Listener;
- import org.bukkit.event.server.PluginDisableEvent;
- import org.bukkit.event.server.PluginEnableEvent;
- import org.bukkit.plugin.AuthorNagException;
--import org.bukkit.plugin.EventExecutor;
- import org.bukkit.plugin.InvalidDescriptionException;
- import org.bukkit.plugin.InvalidPluginException;
- import org.bukkit.plugin.Plugin;
-@@ -39,8 +41,22 @@
+@@ -39,8 +43,20 @@
  import org.bukkit.plugin.RegisteredListener;
  import org.bukkit.plugin.TimedRegisteredListener;
  import org.bukkit.plugin.UnknownDependencyException;
@@ -48,8 +33,6 @@
 +
 +import cc.uraniummc.eventexecutor.ASMEventExecutorGenerate;
 +import cc.uraniummc.eventexecutor.EventExecutorImp;
-+import cc.uraniummc.eventexecutor.MethodHandleEventExecutor;
-+import cc.uraniummc.eventexecutor.ReflectEventExecutor;
 +import net.md_5.specialsource.InheritanceMap;
 +import net.md_5.specialsource.JarMapping;
 +import net.md_5.specialsource.transformer.MavenShade;
@@ -188,7 +171,7 @@
              for (Method method : publicMethods) {
                  methods.add(method);
              }
-@@ -283,21 +323,16 @@
+@@ -283,21 +323,41 @@
                  }
              }
  
@@ -197,30 +180,53 @@
 -                    try {
 -                        if (!eventClass.isAssignableFrom(event.getClass())) {
 -                            return;
--                        }
++            EventExecutor executor = ASMEventExecutorGenerate.createWrapperInstance(plugin,listener,method);
++            if(executor == null){
++                final CustomTimingsHandler timings = new CustomTimingsHandler("Plugin: " + plugin.getDescription().getFullName()
++                        + " Event: " + listener.getClass().getName() + "::"
++                        + method.getName()
++                        + "(" + eventClass.getSimpleName() + ")", pluginParentTimer);
++                executor = new EventExecutor() {
++
++                    public void execute(Listener listener, Event event) throws EventException {
++                        try {
++                            if (!eventClass.isAssignableFrom(event.getClass())) {
++                                return;
++                            }
++                            // Spigot start
++                            boolean isAsync = event.isAsynchronous();
++                            if (!isAsync) timings.startTiming();
++                            method.invoke(listener, event);
++                            if (!isAsync) timings.stopTiming();
++                            // Spigot end
++                        } catch (InvocationTargetException ex) {
++                            throw new EventException(ex.getCause());
++                        } catch (Throwable t) {
++                            throw new EventException(t);
+                         }
 -                        method.invoke(listener, event);
 -                    } catch (InvocationTargetException ex) {
 -                        throw new EventException(ex.getCause());
 -                    } catch (Throwable t) {
 -                        throw new EventException(t);
--                    }
+                     }
 -                }
 -            };
 -            if (useTimings) {
-+            EventExecutorImp executor = null;
-+            if(Modifier.isStatic(method.getModifiers())){
-+                executor=new MethodHandleEventExecutor(eventClass,listener,method);
-+            }else executor = ASMEventExecutorGenerate.createWrapperInstance(plugin,listener,method);
-+            if(executor == null){
-+                executor = new ReflectEventExecutor(method);
++                };
++            } else {
++                CustomTimingsHandler tTiming = new CustomTimingsHandler("Plugin: " + plugin.getDescription().getFullName()
++                        + " Event: " + listener.getClass().getName() + "::"
++                        + method.getName() + "_ASM"
++                        + "(" + eventClass.getSimpleName() + ")", pluginParentTimer);
++                ((EventExecutorImp)executor).initExecute(eventClass, tTiming);
 +            }
 +
-+            executor.initExecute(eventClass,new CustomTimingsHandler("Plugin: " + plugin.getDescription().getFullName() + " Event: " + listener.getClass().getName() + "::" + method.getName()+"("+eventClass.getSimpleName()+")", pluginParentTimer));
 +            if (false) { // Spigot - RL handles useTimings check now
                  eventSet.add(new TimedRegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled()));
              } else {
                  eventSet.add(new RegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled()));
-@@ -362,4 +397,44 @@
+@@ -362,4 +422,44 @@
              }
          }
      }
