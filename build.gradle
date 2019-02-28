@@ -339,7 +339,10 @@ tasks.generateProjectCauldron {
             name 'minecraft'
             url 'https://libraries.minecraft.net/'
         }
-        
+        maven {
+            name 'aikar\'
+            url 'https://repo.aikar.co/content/groups/aikar/\'
+        }
     }
 
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

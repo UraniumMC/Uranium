@@ -1,5 +1,6 @@
 package cc.uraniummc.dstats;
 
+import cc.uraniummc.ULog;
 import cc.uraniummc.Uranium;
 import lombok.Getter;
 import net.minecraft.server.MinecraftServer;
@@ -35,6 +36,10 @@ public class DStatsUranium extends DStatsBukkitCommon {
                 guid=UUID.randomUUID();
                 saveConfig();
             }catch (IOException ee){}
+        }
+        if(enabled){
+            loadDStats();
+            ULog.get().info("DStats Enabled");
         }
     }
     public void restart(){
