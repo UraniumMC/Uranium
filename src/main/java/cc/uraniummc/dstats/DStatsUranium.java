@@ -5,6 +5,7 @@ import cc.uraniummc.Uranium;
 import lombok.Getter;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -95,5 +96,6 @@ public class DStatsUranium extends DStatsBukkitCommon {
         getStats().setMinecraftVersion(MinecraftForge.MC_VERSION);
         getStats().setServerSoftware(Uranium.name);
         getStats().setServerVersion(Uranium.getCurrentVersion());
+        getStats().setPort(Bukkit.getPort());
     }
 }
