@@ -36,7 +36,7 @@ repositories {
     mavenCentral()
     maven {
         name 'uraniummc'
-        url 'https://repo.uraniummc.cc/content/groups/public/'
+        url 'https://repo.uraniummc.cc/repository/maven-public/'
     }
     maven {
         name 'forge'
@@ -50,7 +50,6 @@ repositories {
         name 'aikar'
         url 'https://repo.aikar.co/content/groups/aikar/'
     }
-    mavenCentral()
 }
 
 
@@ -329,7 +328,7 @@ tasks.generateProjectCauldron {
         mavenCentral()
         maven {
             name 'uraniummc\'
-            url 'https://repo.uraniummc.cc/content/groups/public/\'
+            url 'https://repo.uraniummc.cc/repository/maven-public/\'
         }
         maven {
             name 'forge'
