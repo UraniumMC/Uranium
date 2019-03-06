@@ -1,5 +1,6 @@
 package cc.uraniummc.dstats;
 
+import cc.uraniummc.ULog;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -42,14 +43,14 @@ public abstract class DStatsBukkitCommon {
         }
         parseDetails();
         findServerDetails();
-        getServerId();
         val t=new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(60000 * 5); //等待五分钟等插件和模组 加载完成
+                    //Thread.sleep(60000 * 5); //等待五分钟等插件和模组 加载完成
                     parseDetails();
                     while (true) {
+                        getStats().setServerId(getServerId().toString());
                         getStats().setTps(Double.valueOf(getTPS()).floatValue());
                         getStats().setOnlinePlayers(Bukkit.getOnlinePlayers().size());
                         DStatsMetricsCommon.DstatsRetModel ret=DStatsMetricsCommon.sendToServer("https://dstats.xyz/api/v1/ServerSoftwareData/Parse",getStats());
@@ -59,7 +60,7 @@ public abstract class DStatsBukkitCommon {
                                 updateServerId(UUID.fromString(ret.getExtraDetails()));
                                 break;
                             default:
-                                //getLogger().info("Remote server result\n Code:"+ret.getStatus()+"\n"+ret.getExtraDetails());
+                                handleLog("Remote server result\n Code:"+ret.getStatus()+"\n"+ret.getExtraDetails());
                                 break;
                         }
                         Thread.sleep(60000 * 20); //每20分钟发送一次数据
@@ -97,7 +98,9 @@ public abstract class DStatsBukkitCommon {
     public abstract UUID getServerId();
     public abstract void updateServerId(UUID uuid);
     public abstract void findServerDetails();
+    public abstract void handleLog(String info);
     public boolean checkIsBungee(){
         return SpigotConfig.bungee;
     }
+
 }

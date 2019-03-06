@@ -5,6 +5,7 @@ import cc.uraniummc.Uranium;
 import lombok.Getter;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
+import org.apache.logging.log4j.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -89,6 +90,11 @@ public class DStatsUranium extends DStatsBukkitCommon {
         }catch (IOException e){
 
         }
+    }
+
+    @Override
+    public void handleLog(String info) {
+        ULog.get().log(Level.DEBUG,null,info);
     }
 
     @Override

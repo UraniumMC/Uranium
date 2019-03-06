@@ -94,7 +94,7 @@ public class DStatsMetricsCommon {
         if(code==200){
             return g.fromJson(retVal,DstatsRetModel.class);
         }else{
-            return DstatsRetModel.builder().Status(Error_ServerBoom).ExtraDetails("Sever Error"+g.toJson(retVal)).build();
+            return DstatsRetModel.builder().Status(Error_ServerBoom).ExtraDetails("Sever Error : "+retVal).build();
         }
     }
     public static Object[] post(String url,String param){
@@ -104,7 +104,7 @@ public class DStatsMetricsCommon {
             final URL realUrl = new URL(url);
             final HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Accept", "Application/Json");
+            conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("User-Agent", "DStatsBukkitCommon/"+version);
             conn.setReadTimeout(60000);
@@ -113,8 +113,12 @@ public class DStatsMetricsCommon {
             out = new PrintWriter(conn.getOutputStream());
             out.write(param);
             out.flush();
-            result = stream2String(conn.getInputStream(), Charsets.UTF_8);
-            return new Object[]{conn,conn.getResponseCode()};
+            if(conn.getResponseCode()!=200){
+                result = stream2String(conn.getErrorStream(), Charsets.UTF_8);
+            }else{
+                result = stream2String(conn.getInputStream(), Charsets.UTF_8);
+            }
+            return new Object[]{result,conn.getResponseCode()};
         } catch (final Exception e) {
         } finally {
             if (out != null) {

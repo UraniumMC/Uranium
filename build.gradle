@@ -9,8 +9,8 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven {
-            name 'yumc'
-            url 'http://repo.yumc.pw/content/groups/public/'
+            name 'uraniummc'
+            url 'http://repo.uraniummc.cc/content/groups/public/'
         }
         maven {
             name 'forge'
@@ -35,8 +35,8 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name 'yumc'
-        url 'http://repo.yumc.pw/content/groups/public/'
+        name 'uraniummc'
+        url 'https://repo.uraniummc.cc/content/groups/public/'
     }
     maven {
         name 'forge'
@@ -328,8 +328,8 @@ tasks.generateProjectCauldron {
         mavenLocal()
         mavenCentral()
         maven {
-            name 'yumc\'
-            url 'http://repo.yumc.pw/content/groups/public/\'
+            name 'uraniummc\'
+            url 'https://repo.uraniummc.cc/\'
         }
         maven {
             name 'forge'
