@@ -53,7 +53,7 @@ public abstract class DStatsBukkitCommon {
                         getStats().setServerId(getServerId().toString());
                         getStats().setTps(Double.valueOf(getTPS()).floatValue());
                         getStats().setOnlinePlayers(Bukkit.getOnlinePlayers().size());
-                        DStatsMetricsCommon.DstatsRetModel ret=DStatsMetricsCommon.sendToServer("https://dstats.xyz/api/v1/ServerSoftwareData/Parse",getStats());
+                        DStatsMetricsCommon.DstatsRetModel ret=DStatsMetricsCommon.sendToServer("https://api.dstats.xyz/v1/ServerSoftwareData/Parse",getStats());
                         if(ret==null)continue;
                         switch (ret.getStatus()){
                             case 1:

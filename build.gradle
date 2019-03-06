@@ -329,7 +329,7 @@ tasks.generateProjectCauldron {
         mavenCentral()
         maven {
             name 'uraniummc\'
-            url 'https://repo.uraniummc.cc/\'
+            url 'http://repo.uraniummc.cc/content/groups/public/\'
         }
         maven {
             name 'forge'
