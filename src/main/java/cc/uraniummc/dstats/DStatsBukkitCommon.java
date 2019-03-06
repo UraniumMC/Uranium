@@ -47,7 +47,7 @@ public abstract class DStatsBukkitCommon {
             @Override
             public void run() {
                 try {
-                    //Thread.sleep(60000 * 5); //等待五分钟等插件和模组 加载完成
+                    Thread.sleep(60000 * 5); //等待五分钟等插件和模组 加载完成
                     parseDetails();
                     while (true) {
                         getStats().setServerId(getServerId().toString());
