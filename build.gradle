@@ -127,7 +127,7 @@ configurations {
 }
 
 dependencies {
-    bootstrap 'pw.prok:KBootstrapX:0.2.+'
+    bootstrap 'cc.uraniummc:KBootstrapX:0.2.+'
     libraries 'net.minecraft:launchwrapper:1.12@jar'
     libraries 'org.ow2.asm:asm-all:5.0.3'
     libraries 'com.typesafe.akka:akka-actor_2.11:2.3.3'
@@ -243,14 +243,18 @@ task installBundle(type: InstallBundle, dependsOn: packageUniversal) {
     serverJar tasks.packageUniversal.archivePath
     bootstrapClasspath configurations.bootstrap
     bootstrapMain 'pw.prok.bootstrap.Main'
+    reposList=repositories
+}
+
+task packageLibraries(type: Zip, dependsOn: installBundle) {
+    classifier = 'libraries'
+    from fileTree(installBundle.installLocation)
 }
 
 task packageBundle(type: Zip, dependsOn: installBundle) {
     classifier = 'bundle'
     from fileTree(installBundle.installLocation)
     from packageUniversal
-    // from bundleStub
-    // rename bundleStub.archiveName, 'Uranium.jar'
 }
 
 task signJars(type: Sign, dependsOn: [packageChangelog, packageBundle, packageUniversal, 'generatePomFileForMavenPublication']) {
