@@ -109,6 +109,8 @@ ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unk
 ext.branch = getGitBranch()
 ext.uranium_version = 4
 version = "${mcVersion}-${branch}-${uranium_version}-B${build}"
+ext.hash=gitInfo('hash');
+if(ext.hash!=null)version+="-"+ext.hash
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 def getGitBranch(){
     def branch=gitInfo("branch");
