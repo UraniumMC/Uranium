@@ -2,7 +2,8 @@ import groovy.json.JsonSlurper
 import cc.uraniummc.CreateChangelog
 import cc.uraniummc.InstallBundle
 import cc.uraniummc.VersionParser
-import net.minecraftforge.gradle.delayed.DelayedFile;
+import net.minecraftforge.gradle.delayed.DelayedFile
+import net.minecraftforge.gradle.dev.UraniumDevPlugin
 
 buildscript {
     repositories {
@@ -27,7 +28,7 @@ tasks.whenTaskAdded {
 }
 
 apply plugin: 'maven'
-apply plugin: 'cauldron'
+apply plugin: UraniumDevPlugin
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -109,12 +110,12 @@ ext.build = System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : "Unk
 ext.branch = getGitBranch()
 ext.uranium_version = 4
 version = "${mcVersion}-${branch}-${uranium_version}-B${build}"
-ext.hash=gitInfo('hash');
+ext.hash=gitInfo('hash')
 if(ext.hash!=null)version+="-"+ext.hash
 if (System.getenv('officialBuild')!=null) println "Updated Uranium version: ${version}"
 def getGitBranch(){
-    def branch=gitInfo("branch");
-    if (branch.equals("master")) return "stable";
+    def branch=gitInfo("branch")
+    if (branch.equals("master")) return "stable"
     return branch;
 }
 
@@ -126,6 +127,7 @@ configurations {
     compile.extendsFrom exported
     libraries
     bootstrap
+    compile
 }
 
 dependencies {
@@ -245,7 +247,8 @@ task installBundle(type: InstallBundle, dependsOn: packageUniversal) {
     serverJar tasks.packageUniversal.archivePath
     bootstrapClasspath configurations.bootstrap
     bootstrapMain 'pw.prok.bootstrap.Main'
-    reposList=repositories
+    repos=repositories
+    //reposList=repositories
 }
 
 task packageLibraries(type: Zip, dependsOn: installBundle) {
@@ -326,6 +329,7 @@ tasks.generateProjectCauldron {
         main.addSource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/java"))
         main.addResource(new DelayedFile((Project)main.project,"UraniumPlus/src/main/resources"))
     }
+    /*
     doLast {
         def file = new File('eclipse/cauldron/build.gradle')
         file.append('''
@@ -363,6 +367,7 @@ tasks.generateProjectCauldron {
         file.append("    compile 'org.projectlombok:lombok:1.16.18'\n")
         file.append('}')
     }
+    */
 }
 
 tasks.packageUniversal {

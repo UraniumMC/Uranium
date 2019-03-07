@@ -21,7 +21,8 @@ class InstallBundle extends DefaultTask {
     @Input
     String bootstrapMain
 
-    RepositoryHandler reposList
+    RepositoryHandler repos
+
     InstallBundle() {
         bootstrapClasspath = project.files()
     }
@@ -42,7 +43,7 @@ class InstallBundle extends DefaultTask {
         def sb = new StringBuilder();
         def cp = bootstrapClasspath
 
-        for(def repo:reposList){
+        for(def repo:repos){
             if(repo instanceof MavenArtifactRepository){
                 if(repo.getUrl().scheme.startsWith("http"))
                 sb.append(repo.name).append('\n').append(repo.getUrl().toURL()).append("\n")
