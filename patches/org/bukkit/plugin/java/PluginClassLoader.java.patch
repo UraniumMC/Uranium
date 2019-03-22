@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,30 +1,161 @@
+@@ -1,30 +1,165 @@
  package org.bukkit.plugin.java;
  
 +import java.io.BufferedReader;
@@ -23,6 +23,8 @@
 +import java.util.concurrent.ConcurrentMap;
 +import java.util.regex.Pattern;
  
++import com.google.common.io.Files;
++import com.google.gson.GsonBuilder;
 +import lombok.val;
 +import org.apache.commons.io.IOUtils;
  import org.apache.commons.lang.Validate;
@@ -42,6 +44,8 @@
 +import net.md_5.specialsource.transformer.MavenShade;
 +import net.minecraft.server.MinecraftServer;
 +import net.minecraftforge.cauldron.CauldronUtils;
++
++import static org.apache.commons.codec.Charsets.UTF_8;
 +
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
@@ -165,7 +169,7 @@
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +165,127 @@
+@@ -34,6 +169,145 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -289,11 +293,29 @@
 +        // Cauldron end
 +        //Uranium start
 +
++        if(debug) {
++            try {
++                val um=(UraniumMapping)jarMapping;
++                val fp=new File("remap-maps");
++                if(!fp.exists())fp.mkdirs();
++                val fm= new File(fp,pluginName+".tmp.methods");
++                val ff= new File(fp,pluginName+".tmp.fields");
++                val fc=new File(fp,pluginName+".tmp.classes");
++                val frm= new File(fp,pluginName+".tmp.rmethods");
++                val frc=new File(fp,pluginName+".tmp.rclasses");
++                val g = new GsonBuilder().setPrettyPrinting().create();
++                Files.write(g.toJson(jarMapping.methods),fm, UTF_8);
++                Files.write(g.toJson(jarMapping.fields),ff, UTF_8);
++                Files.write(g.toJson(jarMapping.classes),fc,UTF_8);
++                Files.write(g.toJson(um.mMethodsNR),frm,UTF_8);
++                Files.write(g.toJson(um.mRclasses),frc,UTF_8);
++            }catch (Exception e){}
++        }
 +        //Uranium end
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +310,326 @@
+@@ -58,34 +332,326 @@
      }
  
      @Override

@@ -51,8 +51,11 @@ public class UraniumMapping extends JarMapping{
     }
 
     public void loadRClasses(){
-        for(Map.Entry<String,String> METHOD : classes.entrySet()){
-            mRclasses.put(METHOD.getValue(),METHOD.getKey());
+        for(Map.Entry<String,String> CLASS : classes.entrySet()){
+            if(!CLASS.getKey().startsWith("net/minecraft/server/v1_7_R4")){
+                continue;
+            }
+            mRclasses.put(CLASS.getValue(),CLASS.getKey());
         }
     }
     
@@ -87,7 +90,7 @@ public class UraniumMapping extends JarMapping{
      * 
      * @param pOwner
      * @param pName
-     * @param pDesc 方法签名格式为 名字(参数类型)
+     * @param pParamDescWithName 方法签名格式为 名字(参数类型)
      * @param pDeclared
      * @return
      */
@@ -101,6 +104,9 @@ public class UraniumMapping extends JarMapping{
 
     public void loadMethodsNR(){
         for(Map.Entry<String,String> METHOD : methods.entrySet()){
+            if(!METHOD.getKey().startsWith("net/minecraft/server/v1_7_R4")){
+                continue;
+            }
             String[] key=METHOD.getKey().split(" ");
             String types=key[1].substring(0,key[1].lastIndexOf(')')+1);
             boolean obj=false;
