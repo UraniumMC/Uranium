@@ -315,7 +315,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +332,326 @@
+@@ -58,34 +332,335 @@
      }
  
      @Override
@@ -401,6 +401,7 @@
 +        // remap bouncycastle to Forge's included copy, not the vanilla obfuscated copy (not in Cauldron), see #133
 +        //jarMapping.packages.put("net/minecraft/"+obfVersion+"/org/bouncycastle", "org/bouncycastle"); No longer needed
 +    }
++    // Added future version of NMS remap, limited support some new plugins.
 +    private void loadFuture(JarMapping jarMapping, String[] obfVersion) throws IOException{
 +        Map<String, String> relocations = new HashMap<String, String>();
 +        // mc-dev jar to CB, apply version shading (aka plugin safeguard)
@@ -410,6 +411,14 @@
 +        jarMapping.loadMappings(
 +                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("uranium_data/mappings/new.srg"))),
 +                new MavenShade(relocations),
++                null, false);
++        jarMapping.loadMappings(
++                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/v1_7_R4/cb2numpkg.srg"))),
++                new MavenShade(relocations),
++                null, false);
++        jarMapping.loadMappings(
++                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/v1_7_R4/obf2numpkg.srg"))),
++                null, // no version relocation for obf
 +                null, false);
 +    }
 +    private JarMapping getJarMapping(int flags) {
