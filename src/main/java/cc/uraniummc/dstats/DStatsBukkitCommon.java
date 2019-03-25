@@ -30,6 +30,7 @@ public abstract class DStatsBukkitCommon {
     private Thread thread_dstats;
     @Getter
     private DStatsMetricsCommon.DstatsModel stats=new DStatsMetricsCommon.DstatsModel();
+    private String apiURL="https://api.dstats.xyz/v1/ServerSoftwareData/Parse";
     public abstract double getTPS();
     protected void loadDStats(){
         if(Bukkit.getOnlineMode()){
@@ -46,24 +47,37 @@ public abstract class DStatsBukkitCommon {
         val t=new Thread(new Runnable() {
             @Override
             public void run() {
+                val sleepT=60000*20+1;
+                val oneMin=60000;
+                int nextSleepTime=sleepT;
                 try {
                     Thread.sleep(60000 * 5); //等待五分钟等插件和模组 加载完成
                     parseDetails();
                     while (true) {
-                        getStats().setServerId(getServerId().toString());
-                        getStats().setTps(Double.valueOf(getTPS()).floatValue());
-                        getStats().setOnlinePlayers(Bukkit.getOnlinePlayers().size());
-                        DStatsMetricsCommon.DstatsRetModel ret=DStatsMetricsCommon.sendToServer("https://api.dstats.xyz/v1/ServerSoftwareData/Parse",getStats());
-                        if(ret==null)continue;
-                        switch (ret.getStatus()){
-                            case 1:
-                                updateServerId(UUID.fromString(ret.getExtraDetails()));
-                                break;
-                            default:
-                                handleLog("Remote server result\n Code:"+ret.getStatus()+"\n"+ret.getExtraDetails());
-                                break;
+                        try {
+                            DStatsMetricsCommon.DstatsRetModel ret = null;
+                            while (nextSleepTime > 1) {
+                                getStats().setServerId(getServerId().toString());
+                                getStats().setTps(Double.valueOf(getTPS()).floatValue());
+                                getStats().setOnlinePlayers(Bukkit.getOnlinePlayers().size());
+                                ret = DStatsMetricsCommon.sendToServer(apiURL, getStats());
+                                if(ret!=null)break;
+                                nextSleepTime -= oneMin;
+                                Thread.sleep(oneMin);
+                            }
+                            if (ret == null) continue;
+                            switch (ret.getStatus()) {
+                                case 1:
+                                    updateServerId(UUID.fromString(ret.getExtraDetails()));
+                                    break;
+                                default:
+                                    handleLog("Remote server result\n Code:" + ret.getStatus() + "\n" + ret.getExtraDetails());
+                                    break;
+                            }
+                            Thread.sleep(nextSleepTime); //每20分钟发送一次数据
+                        }finally {
+                            nextSleepTime=sleepT;
                         }
-                        Thread.sleep(60000 * 20); //每20分钟发送一次数据
                     }
                 }catch (Exception e){
                 }
