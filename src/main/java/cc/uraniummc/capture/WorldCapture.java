@@ -53,6 +53,7 @@ public class WorldCapture{
             T tCapture=pStack.lastElement();
             if(tCapture.mHandled){
                 pStack.pop();
+                continue;
             }
             return tCapture;
         }
