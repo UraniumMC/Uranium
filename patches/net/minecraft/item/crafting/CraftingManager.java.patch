@@ -40,7 +40,7 @@
 +        @Override
 +        public boolean addAll(Collection c) {
 +            Iterator iterator = c.iterator();
-+            while(iterator().hasNext()){
++            while(iterator.hasNext()){
 +                if(!doCheck(iterator.next())) iterator.remove();
 +            }
 +            
@@ -50,7 +50,7 @@
 +        @Override
 +        public boolean addAll(int index, Collection c) {
 +            Iterator iterator = c.iterator();
-+            while(iterator().hasNext()){
++            while(iterator.hasNext()){
 +                if(!doCheck(iterator.next())) iterator.remove();
 +            }
 +            return super.addAll(index, c);
