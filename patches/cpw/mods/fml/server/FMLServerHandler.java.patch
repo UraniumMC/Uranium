@@ -14,7 +14,7 @@
      public String getCurrentLanguage()
      {
 -        return "en_US";
-+        return MinecraftServer.uraniumConfig.language.getValue();
++        return (MinecraftServer.uraniumConfig==null||MinecraftServer.uraniumConfig.language==null)?"en_US":MinecraftServer.uraniumConfig.language.getValue();
      }
  
      @Override
