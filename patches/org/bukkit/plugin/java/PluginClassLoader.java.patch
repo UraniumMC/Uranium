@@ -220,7 +220,7 @@
 +        reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-field", reflectFields, false);
 +        reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-class", reflectClass, false);
 +        allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-allow-future", allowFuture, false);
-+        remapToSqlite321 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-to-sqlite321",remapToSqlite321,false);
++        remapToSqlite321 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings."+pluginName+".remap-to-sqlite321",remapToSqlite321,false);
 +        // Uranium start
 +        boolean remapGuava17= MinecraftServer.uraniumConfig.enableGuava17.getValue();
 +        boolean remapGuava21= MinecraftServer.uraniumConfig.enableGuava21.getValue();
@@ -460,7 +460,7 @@
 +            }
 +            //Uranium start
 +            //Remap SQLite for some new plugins.
-+            if((flags & F_REMAP_SQLITE321)==0) {
++            if((flags & F_REMAP_SQLITE321)!=0) {
 +                jarMapping.packages.put("org/sqlite", "sqlite321/org/sqlite");
 +            }
 +            //Uranium end
