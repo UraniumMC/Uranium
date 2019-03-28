@@ -450,7 +450,7 @@
 +            // Most plugins should keep this enabled, unless they want a newer Guava
 +            // Uranium using guava17 when config enable
 +            if((flags & F_REMAP_GUAVA17)==0) {
-+                if((flags & F_REMAP_GUAVA21)==0){
++                if((flags & F_REMAP_GUAVA21)!=0){
 +                    jarMapping.packages.put("com/google/common", "guava21/com/google/common");
 +                }else{
 +                    jarMapping.packages.put("com/google/common", "guava10/com/google/common");
