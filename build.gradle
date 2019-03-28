@@ -82,7 +82,7 @@ def buildInfo(String key) {
     return key ? buildInfoCached[key] : buildInfoCached;
 }
 
-ext.gitInfoCached = null;
+ext.gitInfoCached = null
 
 def gitInfo(String key) {
     if (!gitInfoCached) {
