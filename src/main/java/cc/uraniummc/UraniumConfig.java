@@ -20,6 +20,7 @@ import net.minecraftforge.cauldron.configuration.StringSetting;
 public class UraniumConfig extends ConfigBase {
     public BoolSetting commandEnable = new BoolSetting(this, "command.enable",
             true, "Enable Uranium command");
+    public StringSetting language = new StringSetting(this,"language","en_US","Set server i18n language (You can show any different language such as Chinese(zh_CN), Japanese(ja_JP) like client.)");
     public BoolSetting updatecheckerEnable = new BoolSetting(this,
             "updatechecker.enable", false, "Enable Uranium update checker");
     public StringSetting updatecheckerSymlinks = new StringSetting(this,
