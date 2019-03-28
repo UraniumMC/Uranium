@@ -1,16 +1,21 @@
 package cc.uraniummc;
 
-import cc.uraniummc.command.UraniumCommand;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import cc.uraniummc.command.UraniumCommand;
+import net.minecraft.block.Block;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.cauldron.configuration.BoolSetting;
 import net.minecraftforge.cauldron.configuration.ConfigBase;
 import net.minecraftforge.cauldron.configuration.IntSetting;
 import net.minecraftforge.cauldron.configuration.Setting;
 import net.minecraftforge.cauldron.configuration.StringSetting;
-
-import java.util.ArrayList;
 
 public class UraniumConfig extends ConfigBase {
     public BoolSetting commandEnable = new BoolSetting(this, "command.enable",
@@ -55,6 +60,8 @@ public class UraniumConfig extends ConfigBase {
      * offline uuid mode
      */
     public BoolSetting captureBlockOnItemRightClick=new BoolSetting(this,"capture.captureBlockOnItemRightClick",true,"Capture block to prevent brush things.");
+    public BoolSetting captureBlockOnMetaChange=new BoolSetting(this,"capture.captureBlockOnMetaChange",true,
+            "Capture block to prevent such wrench change direction of block.");
     public IntSetting uuidMode=new IntSetting(this,"uuid.mode",0,"Offline UUID Mode 0 is normal mode 1 is lowercase mode 2 is upcase mode");
     public BoolSetting usingCustomOnlineModeServer=new BoolSetting(this,"onlinemode.usingCustomServer",false,"Using custom online mode server like netease \"\u6211\u7684\u4e16\u754c\"");
     public StringSetting customOnlineModeServer =new StringSetting(this,"onlinemode.customServer","https://sessionserver.mojang.com/session/minecraft/join","Custom online mode server URL");
@@ -68,34 +75,24 @@ public class UraniumConfig extends ConfigBase {
     public BoolSetting enableSQLite321=new BoolSetting(this,"experimental.remap-to-sqlite321",false,"EXPERIMENTAL! Using new sqlite to replace old sqlite. Lots of old plugins will not working.");
     public static boolean tileEntityListRecreation;
     
+    private List<String> mBlockNoCaptureMetaStr=new ArrayList();
+    private HashSet mBlockNoCaptureMeta=null;
+    
     public UraniumConfig() {
         super("uranium.yml", "um");
-        register(commandEnable);
-        register(updatecheckerEnable);
-        register(updatecheckerSymlinks);
-        register(updatecheckerAutoinstall);
-        register(updatecheckerAutorestart);
-        register(updatecheckerQuiet);
-        register(loggingMaterialInjection);
-        register(loggingClientModList);
-        register(commonAllowNetherPortal);
-        register(commonFastLeavesDecayEnable);
-        register(commonFastLeavesDecayMinTickTime);
-        register(commonFastLeavesDecayMaxTickTime);
-        register(experimentalTileEntityListRecreation);
-        register(forceuseOfflineUUID);
-        register(uuidMode);
-        register(usingCustomOnlineModeServer);
-        register(customOnlineModeServer);
-        register(onlyConsoleOP);
-        register(allowShowCommandThrowableOnClient);
-        register(enableGuava17);
-        register(uraniumName);
-        register(remapReflection);
-        //register(fakeVanillaMode);
-        register(captureBlockOnItemRightClick);
-        register(enableGuava21);
-        register(enableSQLite321);
+        for(Field sField : UraniumConfig.class.getDeclaredFields()){
+            if(!Setting.class.isAssignableFrom(sField.getType())||sField.getAnnotation(Deprecated.class)!=null)
+                continue;
+            
+            sField.setAccessible(true);
+            try {
+                Setting tValue = (Setting)FieldUtils.readField(sField, this);
+                if(tValue!=null)
+                    register(tValue);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
         load();
     }
 
@@ -124,11 +121,19 @@ public class UraniumConfig extends ConfigBase {
         addd("plugin-settings.LuckPerms.remap-guava17",true);
         addd("plugin-settings.ProtocolLib.remap-Reflection",false);
         addd("plugin-settings.MyPet.remap-Reflection",true);
+
+        addd("capture.blockNotCaptureOnMetaChange",new String[]{"minecraft:stone_button","minecraft:wooden_button",
+                "minecraft:wooden_door","minecraft:iron_door","minecraft:trapdoor",
+                "minecraft:wooden_pressure_plate","minecraft:stone_pressure_plate",
+                "minecraft:light_weighted_pressure_plate","minecraft:heavy_weighted_pressure_plate",
+                "minecraft:lever","minecraft:fence_gate"});
     }
     @Override
     protected void load() {
         try {
             config = YamlConfiguration.loadConfiguration(configFile);
+            setExtraDefault();
+
             String header = "";
             for (Setting<?> toggle : settings.values()) {
                 if (!toggle.description.equals(""))
@@ -139,7 +144,10 @@ public class UraniumConfig extends ConfigBase {
                 settings.get(toggle.path).setValue(
                         config.getString(toggle.path));
             }
-            setExtraDefault();
+
+            this.mBlockNoCaptureMetaStr=config.getStringList("capture.blockNotCaptureOnMetaChange");
+            this.mBlockNoCaptureMeta=null;
+
             config.options().header(header);
             config.options().copyDefaults(true);
             save();
@@ -149,5 +157,17 @@ public class UraniumConfig extends ConfigBase {
             ex.printStackTrace();
         }
         tileEntityListRecreation = experimentalTileEntityListRecreation.getValue();
+    }
+    
+    public boolean shouldBlockCaptureOnMetaChange(Block pBlock,int pMeta){
+        if(this.mBlockNoCaptureMeta==null){
+            this.mBlockNoCaptureMeta=new HashSet();
+            for(String sStr: this.mBlockNoCaptureMetaStr){
+                Object t = Block.blockRegistry.getObject(sStr);
+                if(t!=null) this.mBlockNoCaptureMeta.add(t);
+            }
+        }
+
+        return !this.mBlockNoCaptureMeta.contains(pBlock);
     }
 }
