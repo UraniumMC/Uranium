@@ -8,6 +8,9 @@ import net.minecraftforge.cauldron.CauldronHooks;
 import net.minecraftforge.cauldron.EntityCache;
 import net.minecraftforge.cauldron.command.EntityCommand;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EntityConfig extends ConfigBase{
 
     private final String HEADER="Made By Imcc,to skip entity tick";
@@ -17,6 +20,7 @@ public class EntityConfig extends ConfigBase{
      */
     public final BoolSetting skipEntityTicks=new BoolSetting(this,"settings.skip-entity-ticks",true,
             "If enabled, turns on entity tick skip feature");
+    public List<String> entitiesBlacklist;
     /*
      * ========================================================================
      */
@@ -44,11 +48,13 @@ public class EntityConfig extends ConfigBase{
                     header+="Setting: "+toggle.path+" Default: "+toggle.def+"   # "+toggle.description+"\n";
 
                 config.addDefault(toggle.path,toggle.def);
+                config.addDefault("EntitiesBlacklist",new String[]{});
                 settings.get(toggle.path).setValue(config.getString(toggle.path));
+
             }
             config.options().header(header);
             config.options().copyDefaults(true);
-
+            entitiesBlacklist=config.getStringList("EntitiesBlacklist");
             version=getInt("config-version",1);
             set("config-version",1);
 
