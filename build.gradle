@@ -233,6 +233,13 @@ task packageChangelog(type: CreateChangelog) {
     */
 }
 
+task api(type: Zip, dependsOn: packageUniversal){
+    classifier = 'api'
+    from (zipTree(tasks.packageUniversal.archivePath)){
+        include ("org/bukkit/**")
+        exclude ("org/bukkit/craftbukkit/**")
+    }
+}
 /*
 task bundleStub(type: Jar) {
     classifier = 'stub'
@@ -261,7 +268,6 @@ task packageBundle(type: Zip, dependsOn: installBundle) {
     from fileTree(installBundle.installLocation)
     from packageUniversal
 }
-
 task signJars(type: Sign, dependsOn: [packageChangelog, packageBundle, packageUniversal, 'generatePomFileForMavenPublication']) {
     sign packageChangelog
     sign packageBundle
