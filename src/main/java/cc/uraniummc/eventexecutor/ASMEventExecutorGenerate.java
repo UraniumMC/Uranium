@@ -1,17 +1,11 @@
 package cc.uraniummc.eventexecutor;
 
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACC_SUPER;
-import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.V1_6;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import lombok.val;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.objectweb.asm.ClassWriter;
@@ -19,6 +13,8 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
+
+import static org.objectweb.asm.Opcodes.*;
 
 public class ASMEventExecutorGenerate{
 
@@ -102,11 +98,15 @@ public class ASMEventExecutorGenerate{
         tMethodGenerator.endMethod();
 
         tMethodGenerator=new GeneratorAdapter(tCW.visitMethod(1,"invoke",EXECUTE_METHOD_DESC,null,null),1,"execute",EXECUTE_METHOD_DESC);
+        val staticMethod=(pMethod.getModifiers()&Modifier.STATIC)==0;
         tMethodGenerator.loadArg(0);
-        tMethodGenerator.checkCast(Type.getType(tOwner));
-        tMethodGenerator.loadArg(1);
+        if(!staticMethod){
+            tMethodGenerator.checkCast(Type.getType(tOwner));
+            tMethodGenerator.loadArg(1);
+        }
         tMethodGenerator.checkCast(Type.getType(pMethod.getParameterTypes()[0]));
-        tMethodGenerator.visitMethodInsn(tOwner.isInterface()?INVOKEINTERFACE:INVOKEVIRTUAL,
+        tMethodGenerator.visitMethodInsn(
+                staticMethod?INVOKESTATIC:(tOwner.isInterface()?INVOKEINTERFACE:INVOKEVIRTUAL),
                 Type.getInternalName(tOwner),pMethod.getName(),Type.getMethodDescriptor(pMethod),tOwner.isInterface());
         if(pMethod.getReturnType()!=Void.TYPE){
             tMethodGenerator.pop();
