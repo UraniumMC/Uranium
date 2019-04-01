@@ -234,6 +234,7 @@ task packageChangelog(type: CreateChangelog) {
 }
 
 task api(type: Zip, dependsOn: packageUniversal){
+    setExtension('jar')
     classifier = 'api'
     from (zipTree(tasks.packageUniversal.archivePath)){
         include ("org/bukkit/**")
