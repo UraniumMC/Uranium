@@ -237,6 +237,8 @@ task api(type: Zip, dependsOn: packageUniversal){
     classifier = 'api'
     from (zipTree(tasks.packageUniversal.archivePath)){
         include ("org/bukkit/**")
+        include ("org/spigotmc/event/**")
+        include ("org/spigotmc/CustomTimingsHandler*")
         exclude ("org/bukkit/craftbukkit/**")
     }
 }
