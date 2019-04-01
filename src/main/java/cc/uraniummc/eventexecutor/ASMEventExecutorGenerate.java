@@ -98,15 +98,15 @@ public class ASMEventExecutorGenerate{
         tMethodGenerator.endMethod();
 
         tMethodGenerator=new GeneratorAdapter(tCW.visitMethod(1,"invoke",EXECUTE_METHOD_DESC,null,null),1,"execute",EXECUTE_METHOD_DESC);
-        val staticMethod=(pMethod.getModifiers()&Modifier.STATIC)==0;
-        tMethodGenerator.loadArg(0);
-        if(!staticMethod){
+        val nonStaticMethod=(pMethod.getModifiers()&Modifier.STATIC)==0;
+        if(nonStaticMethod){
+            tMethodGenerator.loadArg(0);
             tMethodGenerator.checkCast(Type.getType(tOwner));
-            tMethodGenerator.loadArg(1);
         }
+        tMethodGenerator.loadArg(1);
         tMethodGenerator.checkCast(Type.getType(pMethod.getParameterTypes()[0]));
         tMethodGenerator.visitMethodInsn(
-                staticMethod?INVOKESTATIC:(tOwner.isInterface()?INVOKEINTERFACE:INVOKEVIRTUAL),
+                nonStaticMethod?(tOwner.isInterface()?INVOKEINTERFACE:INVOKEVIRTUAL):INVOKESTATIC,
                 Type.getInternalName(tOwner),pMethod.getName(),Type.getMethodDescriptor(pMethod),tOwner.isInterface());
         if(pMethod.getReturnType()!=Void.TYPE){
             tMethodGenerator.pop();
