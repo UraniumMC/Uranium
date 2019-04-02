@@ -1,6 +1,3 @@
-**[加入Uranium官方钦定交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
-
-**[Join UraniumMC offical discord chat room](https://discord.gg/dCjehb3)**
 # Uranium
 ### Uranium - continuation of KCauldron minecraft server
 ![GitHub stars](https://img.shields.io/github/stars/UraniumMC/Uranium.svg?style=social)
@@ -10,6 +7,9 @@
 [![Download Uranium][download_img]][download_url]
  
 [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+
+**[![discord img]](https://discord.gg/dCjehb3)** **[![qqgroup img]](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
+
 
 ## Building Uranium
 * Ensure you are using Java JDK 8u101 or higher.
@@ -54,3 +54,5 @@ If you're once checkout source - you not need to do it again
 [yumc_Stats]: https://img.shields.io/badge/yumc-Uranium-blue.svg
 [yumc_Stats_link]: http://www.yumc.pw/Home/Statistics/Plugin.html?name=Uranium
 [GitHub issues]: https://img.shields.io/github/issues/UraniumMC/Uranium.svg
+[discord img]: https://img.shields.io/discord/345828466047844362.svg
+[qqgroup img]: https://pub.idqqimg.com/wpa/images/group.png
