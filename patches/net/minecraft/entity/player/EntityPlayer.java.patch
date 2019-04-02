@@ -1,6 +1,13 @@
 --- ../src-base/minecraft/net/minecraft/entity/player/EntityPlayer.java
 +++ ../src-work/minecraft/net/minecraft/entity/player/EntityPlayer.java
-@@ -57,6 +57,7 @@
+@@ -1,5 +1,6 @@
+ package net.minecraft.entity.player;
+ 
++import cc.uraniummc.UraniumUUIDManager;
+ import com.google.common.base.Charsets;
+ import com.mojang.authlib.GameProfile;
+ 
+@@ -57,6 +58,7 @@
  import net.minecraft.scoreboard.ScorePlayerTeam;
  import net.minecraft.scoreboard.Scoreboard;
  import net.minecraft.scoreboard.Team;
@@ -8,7 +15,7 @@
  import net.minecraft.stats.AchievementList;
  import net.minecraft.stats.StatBase;
  import net.minecraft.stats.StatList;
-@@ -92,6 +93,22 @@
+@@ -92,6 +94,22 @@
  import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
  import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
  
@@ -31,7 +38,7 @@
  public abstract class EntityPlayer extends EntityLivingBase implements ICommandSender
  {
      public static final String PERSISTED_NBT_TAG = "PlayerPersisted";
-@@ -102,7 +119,7 @@
+@@ -102,7 +120,7 @@
      private InventoryEnderChest theInventoryEnderChest = new InventoryEnderChest();
      public Container inventoryContainer;
      public Container openContainer;
@@ -40,7 +47,7 @@
      protected int flyToggleTimer;
      public float prevCameraYaw;
      public float cameraYaw;
-@@ -113,9 +130,19 @@
+@@ -113,9 +131,19 @@
      public double field_71094_bP;
      public double field_71095_bQ;
      public double field_71085_bR;
@@ -62,7 +69,7 @@
      public float field_71079_bU;
      @SideOnly(Side.CLIENT)
      public float field_71082_cx;
-@@ -124,6 +151,7 @@
+@@ -124,6 +152,7 @@
      private boolean spawnForced;
      private ChunkCoordinates startMinecartRidingCoordinate;
      public PlayerCapabilities capabilities = new PlayerCapabilities();
@@ -70,7 +77,7 @@
      public int experienceLevel;
      public int experienceTotal;
      public float experience;
-@@ -416,6 +444,42 @@
+@@ -416,6 +445,42 @@
          {
              this.updateItemUse(this.itemInUse, 16);
              int i = this.itemInUse.stackSize;
@@ -113,7 +120,7 @@
              ItemStack itemstack = this.itemInUse.onFoodEaten(this.worldObj, this);
  
              itemstack = ForgeEventFactory.onItemUseFinish(this, itemInUse, itemInUseCount, itemstack);
-@@ -452,6 +516,7 @@
+@@ -452,6 +517,7 @@
          return this.getHealth() <= 0.0F || this.isPlayerSleeping();
      }
  
@@ -121,7 +128,7 @@
      public void closeScreen()
      {
          this.openContainer = this.inventoryContainer;
-@@ -459,23 +524,40 @@
+@@ -459,23 +525,40 @@
  
      public void mountEntity(Entity p_70078_1_)
      {
@@ -171,7 +178,7 @@
          }
      }
  
-@@ -532,7 +614,8 @@
+@@ -532,7 +615,8 @@
  
          if (this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL && this.getHealth() < this.getMaxHealth() && this.worldObj.getGameRules().getGameRuleBooleanValue("naturalRegeneration") && this.ticksExisted % 20 * 12 == 0)
          {
@@ -181,7 +188,7 @@
          }
  
          this.inventory.decrementAnimations();
-@@ -554,7 +637,8 @@
+@@ -554,7 +638,8 @@
  
          this.setAIMoveSpeed((float)iattributeinstance.getAttributeValue());
          float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -191,7 +198,7 @@
  
          if (f > 0.1F)
          {
-@@ -589,7 +673,7 @@
+@@ -589,7 +674,7 @@
  
              List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb);
  
@@ -200,7 +207,7 @@
              {
                  for (int i = 0; i < list.size(); ++i)
                  {
-@@ -687,12 +771,14 @@
+@@ -687,12 +772,14 @@
      public void addToPlayerScore(Entity p_70084_1_, int p_70084_2_)
      {
          this.addScore(p_70084_2_);
@@ -217,7 +224,7 @@
          }
          else
          {
-@@ -703,8 +789,7 @@
+@@ -703,8 +790,7 @@
  
          while (iterator.hasNext())
          {
@@ -227,7 +234,7 @@
              score.func_96648_a();
          }
      }
-@@ -777,6 +862,36 @@
+@@ -777,6 +863,36 @@
                  entityitem.motionZ += Math.sin((double)f1) * (double)f;
              }
  
@@ -264,7 +271,7 @@
              this.joinEntityItemWithWorld(entityitem);
              this.addStat(StatList.dropStat, 1);
              return entityitem;
-@@ -881,6 +996,15 @@
+@@ -881,6 +997,15 @@
              this.wakeUpPlayer(true, true, false);
          }
  
@@ -280,7 +287,7 @@
          if (p_70037_1_.hasKey("SpawnX", 99) && p_70037_1_.hasKey("SpawnY", 99) && p_70037_1_.hasKey("SpawnZ", 99))
          {
              this.spawnChunk = new ChunkCoordinates(p_70037_1_.getInteger("SpawnX"), p_70037_1_.getInteger("SpawnY"), p_70037_1_.getInteger("SpawnZ"));
-@@ -925,6 +1049,7 @@
+@@ -925,6 +1050,7 @@
              p_70014_1_.setInteger("SpawnY", this.spawnChunk.posY);
              p_70014_1_.setInteger("SpawnZ", this.spawnChunk.posZ);
              p_70014_1_.setBoolean("SpawnForced", this.spawnForced);
@@ -288,7 +295,7 @@
          }
  
          NBTTagList spawnlist = new NBTTagList();
-@@ -1003,7 +1128,7 @@
+@@ -1003,7 +1129,7 @@
                  {
                      if (this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL)
                      {
@@ -297,7 +304,7 @@
                      }
  
                      if (this.worldObj.difficultySetting == EnumDifficulty.EASY)
-@@ -1017,7 +1142,7 @@
+@@ -1017,7 +1143,7 @@
                      }
                  }
  
@@ -306,7 +313,7 @@
                  {
                      return false;
                  }
-@@ -1039,9 +1164,40 @@
+@@ -1039,9 +1165,40 @@
  
      public boolean canAttackPlayer(EntityPlayer p_96122_1_)
      {
@@ -350,7 +357,7 @@
      }
  
      protected void damageArmor(float p_70675_1_)
-@@ -1073,19 +1229,34 @@
+@@ -1073,19 +1230,34 @@
          return (float)i / (float)this.inventory.armorInventory.length;
      }
  
@@ -387,7 +394,7 @@
              p_70665_2_ = this.applyPotionDamageCalculations(p_70665_1_, p_70665_2_);
              float f1 = p_70665_2_;
              p_70665_2_ = Math.max(p_70665_2_ - this.getAbsorptionAmount(), 0.0F);
-@@ -1099,6 +1270,7 @@
+@@ -1099,6 +1271,7 @@
                  this.func_110142_aN().func_94547_a(p_70665_1_, f2, p_70665_2_);
              }
          }
@@ -395,7 +402,7 @@
      }
  
      public void func_146101_a(TileEntityFurnace p_146101_1_) {}
-@@ -1134,7 +1306,8 @@
+@@ -1134,7 +1307,8 @@
  
                  if (itemstack.interactWithEntity(this, (EntityLivingBase)p_70998_1_))
                  {
@@ -405,7 +412,7 @@
                      {
                          this.destroyCurrentEquippedItem();
                      }
-@@ -1281,7 +1454,8 @@
+@@ -1281,7 +1455,8 @@
                          {
                              itemstack.hitEntity((EntityLivingBase)object, this);
  
@@ -415,7 +422,7 @@
                              {
                                  this.destroyCurrentEquippedItem();
                              }
-@@ -1293,7 +1467,17 @@
+@@ -1293,7 +1468,17 @@
  
                              if (j > 0)
                              {
@@ -434,7 +441,7 @@
                              }
                          }
  
-@@ -1322,6 +1506,10 @@
+@@ -1322,6 +1507,10 @@
  
          if (this.openContainer != null)
          {
@@ -445,7 +452,7 @@
              this.openContainer.onContainerClosed(this);
          }
      }
-@@ -1381,6 +1569,20 @@
+@@ -1381,6 +1570,20 @@
              this.mountEntity((Entity)null);
          }
  
@@ -466,7 +473,7 @@
          this.setSize(0.2F, 0.2F);
          this.yOffset = 0.2F;
  
-@@ -1476,6 +1678,26 @@
+@@ -1476,6 +1679,26 @@
              this.worldObj.updateAllPlayersSleepingFlag();
          }
  
@@ -493,7 +500,7 @@
          if (p_70999_1_)
          {
              this.sleepTimer = 0;
-@@ -1606,11 +1828,13 @@
+@@ -1606,11 +1829,13 @@
          {
              this.spawnChunk = new ChunkCoordinates(p_71063_1_);
              this.spawnForced = p_71063_2_;
@@ -507,7 +514,7 @@
          }
      }
  
-@@ -2035,7 +2259,7 @@
+@@ -2035,7 +2260,7 @@
          {
              getEntityData().setTag(PERSISTED_NBT_TAG, old.getCompoundTag(PERSISTED_NBT_TAG));
          }
@@ -516,23 +523,12 @@
      }
  
      protected boolean canTriggerWalking()
-@@ -2152,7 +2376,18 @@
+@@ -2152,7 +2377,7 @@
  
          if (uuid == null)
          {
 -            uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + p_146094_0_.getName()).getBytes(Charsets.UTF_8));
-+            final String name;
-+            switch (MinecraftServer.uraniumConfig.uuidMode.getValue()){
-+                case 1:
-+                    name=p_146094_0_.getName().toLowerCase();
-+                    break;
-+                case 2:
-+                    name=p_146094_0_.getName().toUpperCase();
-+                    break;
-+                default:
-+                    name=p_146094_0_.getName();
-+            }
-+            uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" +name).getBytes(Charsets.UTF_8));
++            uuid = UraniumUUIDManager.getOfflineUUID(p_146094_0_.getName());
          }
  
          return uuid;

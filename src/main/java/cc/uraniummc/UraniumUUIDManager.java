@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import java.util.UUID;
 
 public class UraniumUUIDManager {
-    public UUID getOfflineUUID(String name){
+    public static UUID getOfflineUUID(String name){
         switch (MinecraftServer.uraniumConfig.uuidMode.getValue()){
             case 1:
                 name=name.toLowerCase();
