@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.util.List;
 
 import cc.uraniummc.Uranium;
+import cc.uraniummc.updater.CommandSenderUpdateCallback;
+import cc.uraniummc.updater.UVersionRetriever;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -36,7 +38,7 @@ public class UraniumCommand extends Command {
         super(NAME);
         NAME=name;
         StringBuilder builder = new StringBuilder();
-        //builder.append(String.format("/%s check - Check to update\n", NAME));
+        builder.append(String.format("/%s check - Check to update\n", NAME));
         //builder.append(String.format("/%s update [version] - Update to specified or latest version\n", NAME));
         builder.append(String.format("/%s tps - Show tps statistics\n", NAME));
         builder.append(String.format("/%s restart - Restart server\n", NAME));
@@ -78,10 +80,8 @@ public class UraniumCommand extends Command {
         if ("check".equals(action)) {
             if (!testPermission(sender, CHECK))
                 return true;
-            /*
             sender.sendMessage(ChatColor.GREEN + "Initiated version check...");
             UVersionRetriever.startServer(new CommandSenderUpdateCallback(sender), false);
-            */
         } else if ("update".equals(action)) {
             /*
             UraniumUpdater.initUpdate(sender, args.length > 1 ? args[1] : null);

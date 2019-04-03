@@ -1,6 +1,15 @@
 --- ../src-base/minecraft/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ ../src-work/minecraft/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -33,6 +33,13 @@
+@@ -10,6 +10,8 @@
+ import java.util.List;
+ import java.util.Set;
+ 
++import cc.uraniummc.Uranium;
++import cc.uraniummc.UraniumConfig;
+ import net.minecraft.block.Block;
+ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.EntityList;
+@@ -33,6 +35,13 @@
  import org.apache.logging.log4j.Logger;
  
  import cpw.mods.fml.common.FMLLog;
@@ -14,7 +23,7 @@
  
  public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
  {
-@@ -41,6 +48,7 @@
+@@ -41,6 +50,7 @@
      private Set pendingAnvilChunksCoordinates = new HashSet();
      private Object syncLockObject = new Object();
      public final File chunkSaveLocation;
@@ -22,7 +31,7 @@
      private static final String __OBFID = "CL_00000384";
  
      public AnvilChunkLoader(File p_i2003_1_)
-@@ -73,13 +81,16 @@
+@@ -73,13 +83,16 @@
  
      public Chunk loadChunk(World p_75815_1_, int p_75815_2_, int p_75815_3_) throws IOException
      {
@@ -39,7 +48,7 @@
              return chunk;
          }
  
-@@ -156,8 +167,8 @@
+@@ -156,8 +169,8 @@
              if (!chunk.isAtLocation(p_75822_2_, p_75822_3_))
              {
                  logger.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is in the wrong location; relocating. (Expected " + p_75822_2_ + ", " + p_75822_3_ + ", got " + chunk.xPosition + ", " + chunk.zPosition + ")");
@@ -50,7 +59,7 @@
                  // Have to move tile entities since we don't load them at this stage
                  NBTTagList tileEntities = p_75822_4_.getCompoundTag("Level").getTagList("TileEntities", 10);
  
-@@ -187,8 +198,18 @@
+@@ -187,8 +200,18 @@
  
      public void saveChunk(World p_75816_1_, Chunk p_75816_2_) throws MinecraftException, IOException
      {
@@ -70,7 +79,7 @@
          try
          {
              NBTTagCompound nbttagcompound = new NBTTagCompound();
-@@ -230,7 +251,7 @@
+@@ -230,7 +253,7 @@
  
      public boolean writeNextIO()
      {
@@ -79,7 +88,7 @@
          Object object = this.syncLockObject;
  
          synchronized (this.syncLockObject)
-@@ -240,15 +261,15 @@
+@@ -240,15 +263,15 @@
                  return false;
              }
  
@@ -99,7 +108,7 @@
              }
              catch (Exception exception)
              {
-@@ -259,7 +280,7 @@
+@@ -259,7 +282,7 @@
          return true;
      }
  
@@ -108,7 +117,7 @@
      {
          DataOutputStream dataoutputstream = RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, p_75821_1_.chunkCoordinate.chunkXPos, p_75821_1_.chunkCoordinate.chunkZPos);
          CompressedStreamTools.write(p_75821_1_.nbtTags, dataoutputstream);
-@@ -307,19 +328,19 @@
+@@ -307,19 +330,19 @@
  
                  if (extendedblockstorage.getBlockMSBArray() != null)
                  {
@@ -133,7 +142,7 @@
                  }
  
                  nbttaglist.appendTag(nbttagcompound1);
-@@ -379,7 +400,7 @@
+@@ -379,7 +402,7 @@
          }
  
          p_75820_3_.setTag("TileEntities", nbttaglist3);
@@ -142,7 +151,7 @@
  
          if (list != null)
          {
-@@ -389,13 +410,13 @@
+@@ -389,13 +412,13 @@
  
              while (iterator.hasNext())
              {
@@ -162,7 +171,7 @@
                  nbttagcompound2.setInteger("p", nextticklistentry.priority);
                  nbttaglist1.appendTag(nbttagcompound2);
              }
-@@ -455,6 +476,7 @@
+@@ -455,6 +478,7 @@
  
      public void loadEntities(World p_75823_1_, NBTTagCompound p_75823_2_, Chunk chunk)
      {
@@ -170,7 +179,7 @@
          NBTTagList nbttaglist1 = p_75823_2_.getTagList("Entities", 10);
  
          if (nbttaglist1 != null)
-@@ -468,24 +490,31 @@
+@@ -468,24 +492,31 @@
                  if (entity2 != null)
                  {
                      chunk.addEntity(entity2);
@@ -211,7 +220,7 @@
          NBTTagList nbttaglist2 = p_75823_2_.getTagList("TileEntities", 10);
  
          if (nbttaglist2 != null)
-@@ -497,11 +526,35 @@
+@@ -497,11 +528,35 @@
  
                  if (tileentity != null)
                  {
@@ -247,7 +256,7 @@
          if (p_75823_2_.hasKey("TileTicks", 9))
          {
              NBTTagList nbttaglist3 = p_75823_2_.getTagList("TileTicks", 10);
-@@ -511,10 +564,12 @@
+@@ -511,10 +566,12 @@
                  for (int j1 = 0; j1 < nbttaglist3.tagCount(); ++j1)
                  {
                      NBTTagCompound nbttagcompound5 = nbttaglist3.getCompoundTagAt(j1);

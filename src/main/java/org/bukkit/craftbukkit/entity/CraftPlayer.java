@@ -21,13 +21,19 @@ import java.util.logging.Logger;
 
 import com.mojang.authlib.GameProfile;
 
+import lombok.val;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.EntityTrackerEntry;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.network.play.server.S33PacketUpdateSign;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 
 import org.apache.commons.lang.Validate;
@@ -1340,6 +1346,48 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         public String getLocale()
         {
            return getHandle().translator;
+        }
+
+        @Override
+        public void sendMessage(BaseComponent component) {
+            sendMessage( new BaseComponent[] { component } );
+        }
+
+        @Override
+        public void sendMessage(BaseComponent... components) {
+            if ( getHandle().playerNetServerHandler == null ) return;
+            val ichat=IChatComponent.Serializer.func_150699_a(ComponentSerializer.toString(components));
+            S02PacketChat packet = new S02PacketChat(ichat);
+            getHandle().playerNetServerHandler.sendPacket(packet);
+        }
+
+        @Override
+        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, BaseComponent component) {
+            sendMessage( position, new BaseComponent[] { component } );
+        }
+
+        @Override
+        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, BaseComponent... components) {
+            if ( getHandle().playerNetServerHandler == null ) return;
+            switch (position){
+                case CHAT:
+                    sendMessage(components);
+                    return;
+                case SYSTEM:
+                    return;
+                case ACTION_BAR:
+                    break;
+            }
+            if ( getHandle().playerNetServerHandler == null ) return;
+            val ichat=IChatComponent.Serializer.func_150699_a(ComponentSerializer.toString(components));
+            S45PacketTitle packet = new S45PacketTitle(S45PacketTitle.Type.ACTIONBAR,ichat);
+            getHandle().playerNetServerHandler.sendPacket(packet);
+        }
+
+        @Override
+        public int getPing()
+        {
+            return getHandle().ping;
         }
     };
 

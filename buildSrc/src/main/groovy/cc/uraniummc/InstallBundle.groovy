@@ -2,18 +2,26 @@ package cc.uraniummc
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.artifacts.dsl.RepositoryHandler
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.*
 
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
+
 class InstallBundle extends DefaultTask {
     @InputFile
-    def File serverJar
+    File serverJar
 
     @InputFiles
-    def ConfigurableFileCollection bootstrapClasspath
+    ConfigurableFileCollection bootstrapClasspath
 
     @Input
-    def String bootstrapMain
+    String bootstrapMain
+
+    RepositoryHandler repos
 
     InstallBundle() {
         bootstrapClasspath = project.files()
@@ -32,8 +40,18 @@ class InstallBundle extends DefaultTask {
     def install() {
         installLocation.deleteDir()
         installLocation.mkdirs()
-        
+        def sb = new StringBuilder();
         def cp = bootstrapClasspath
+
+        for(def repo:repos){
+            if(repo instanceof MavenArtifactRepository){
+                if(repo.getUrl().scheme.startsWith("http"))
+                sb.append(repo.name).append('\n').append(repo.getUrl().toURL()).append("\n")
+            }
+        }
+        def reposIndex = Paths.get(installLocation.canonicalPath,"kBootstrapX.reposList")
+        Files.deleteIfExists(reposIndex)
+        Files.write(reposIndex, sb.toString().getBytes("UTF-8"),StandardOpenOption.CREATE_NEW)
         for (int i = 0; i < 3; i++) {
             def result = project.javaexec { it ->
                 workingDir installLocation

@@ -112,7 +112,7 @@ public class UraniumUpdater implements Runnable, IVersionCheckCallback {
         try {
             if (!quiet) {
                 mSender.sendMessage(ChatColor.DARK_PURPLE
-                        + "Downloading KBootstrap " + kbootstrapVersion + "...");
+                        + "Downloading KBootstrapX " + kbootstrapVersion + "...");
             }
             File kbootstrap = File.createTempFile("kbootstrap",
                     String.valueOf(System.currentTimeMillis()));

@@ -14,7 +14,6 @@ public class Uranium {
     public static final ThreadGroup sKCauldronThreadGroup = new ThreadGroup("Uranium");
     public static final String name="Uranium";
     private static boolean sManifestParsed = false;
-
     private static void parseManifest() {
         if (sManifestParsed)
             return;

@@ -924,6 +924,15 @@
      }
  
      @SideOnly(Side.CLIENT)
+@@ -1163,7 +1491,7 @@
+ 
+     public World getEntityWorld()
+     {
+-        return this.worldServers[0];
++        return this.worldServers.length==0?null:this.worldServers[0];
+     }
+ 
+     public int getSpawnProtectionSize()
 @@ -1259,8 +1587,11 @@
      {
          Bootstrap.func_151354_b();

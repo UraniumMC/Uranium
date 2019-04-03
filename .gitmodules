@@ -1,10 +1,10 @@
 [submodule "bukkit"]
 	path = bukkit
-	url = https://git.xjboss.net/UraniumDev/KCauldron-Bukkit.git
+	url = https://github.com/UraniumMC/KCauldron-Bukkit
 [submodule "forge"]
 	path = forge
-	url = https://git.xjboss.net/UraniumDev/MinecraftForge.git
+	url = https://github.com/MinecraftForge/MinecraftForge
 	branch = 1.7.10
 [submodule "UraniumPlus"]
 	path = UraniumPlus
-	url = https://git.xjboss.net/UraniumDev/UraniumPlus.git
+	url = https://github.com/UraniumMC/UraniumPlus

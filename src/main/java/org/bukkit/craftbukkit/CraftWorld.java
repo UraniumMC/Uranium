@@ -1446,8 +1446,14 @@ public class CraftWorld implements World {
 
         final net.minecraft.world.gen.ChunkProviderServer cps = world.theChunkProviderServer;
         List tLoadedChunk = world.theChunkProviderServer.loadedChunks;
-        for(Object sObj : tLoadedChunk){
-            net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk)sObj;
+        List<net.minecraft.world.chunk.Chunk> tToUnloadChunk=new ArrayList<net.minecraft.world.chunk.Chunk>();
+        for(int i=tLoadedChunk.size()-1;i>=0;i--){
+            net.minecraft.world.chunk.Chunk chunk = null;
+            try{
+                chunk=(net.minecraft.world.chunk.Chunk)tLoadedChunk.get(i);
+            }catch(IndexOutOfBoundsException ignore){
+                continue;
+            }
             // If in use, skip it
             if (isChunkInUse(chunk.xPosition, chunk.zPosition)) {
                 continue;
@@ -1459,7 +1465,11 @@ public class CraftWorld implements World {
             }
 
             // Add unload request
-            cps.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+            tToUnloadChunk.add(chunk);
+        }
+        
+        for(net.minecraft.world.chunk.Chunk sChunk : tToUnloadChunk){
+            cps.unloadChunksIfNotNearSpawn(sChunk.xPosition, sChunk.zPosition);
         }
     }
 

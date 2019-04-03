@@ -1,9 +1,15 @@
-**[加入Uranium官方钦定交流群!](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
-
-**[Join UraniumMC offical discord chat room](https://discord.gg/dCjehb3)**
 # Uranium
 ### Uranium - continuation of KCauldron minecraft server
-[![Build Status][build_status]](https://ci.aimc.vip/job/Uranium) [![Download Uranium][download_img]][download_url] [![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+![GitHub stars](https://img.shields.io/github/stars/UraniumMC/Uranium.svg?style=social)
+
+[![build_status]](https://ci.uraniummc.cc/job/Uranium/)
+ 
+[![Download Uranium][download_img]][download_url]
+ 
+[![bStats][bStats]][bStats_link] [![yumc Stats][yumc_Stats]][yumc_Stats_link]
+
+**[![discord img]](https://discord.gg/dCjehb3)** **[![qqgroup img]](https://jq.qq.com/?_wv=1027&k=4BEK1SI)**
+
 
 ## Building Uranium
 * Ensure you are using Java JDK 8u101 or higher.
@@ -35,16 +41,18 @@ If you're once checkout source - you not need to do it again
   * Reset all configs to default
   If bug present - mod compatibility issue
 * If you're using beta-release of Uranium - check on latest stable
-  * All versions situated [there](https://ci.aimc.vip/job/Uranium)
+  * All versions situated [there](https://ci.uraniummc.cc/job/Uranium)
 * If bug still present - Uranium issue
   * Make sure that similar issue not exists already
-  * Please fill [issue form](https://git.aimc.vip/UraniumDev/Uranium/issues/new) else
+  * Please fill [![issue form][GitHub issues]](https://github.com/UraniumMC/Uranium/issues/new) else
 
-[donate_img]: https://git.aimc.vip/static/donate-Bitcoin.svg
 [download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
-[download_img]: https://git.aimc.vip/static/download-latest.svg
-[build_status]: https://ci.aimc.vip/job/Uranium/badge/icon
-[bStats]: https://git.aimc.vip/static/bStats-Uranium.svg
+[download_img]: https://img.shields.io/badge/download-BaiduCloud-blue.svg
+[build_status]: https://ci.uraniummc.cc/job/Uranium-dev/badge/icon
+[bStats]: https://img.shields.io/bstats/players/1372.svg?label=bstats%20players
 [bStats_link]: https://bstats.org/plugin/bukkit/Uranium
-[yumc_Stats]: https://git.aimc.vip/static/yumc-UM.svg
+[yumc_Stats]: https://img.shields.io/badge/yumc-Uranium-blue.svg
 [yumc_Stats_link]: http://www.yumc.pw/Home/Statistics/Plugin.html?name=Uranium
+[GitHub issues]: https://img.shields.io/github/issues/UraniumMC/Uranium.svg
+[discord img]: https://img.shields.io/discord/345828466047844362.svg
+[qqgroup img]: https://pub.idqqimg.com/wpa/images/group.png

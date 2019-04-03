@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import cc.uraniummc.BMetrics;
+import cc.uraniummc.dstats.DStatsBukkitCommon;
+import cc.uraniummc.dstats.DStatsMetricsCommon;
+import cc.uraniummc.dstats.DStatsUranium;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -44,7 +47,7 @@ public class SpigotConfig
     /*========================================================================*/
     private static Metrics metrics;
     private static BMetrics bstats;
-
+    private static DStatsUranium dstats;
     public static void init()
     {
         config = YamlConfiguration.loadConfiguration( CONFIG_FILE );
@@ -79,6 +82,12 @@ public class SpigotConfig
         if ( bstats == null )
         {
             bstats = new BMetrics();
+        }
+        if(dstats ==null){
+            dstats=new DStatsUranium();
+            dstats.start();
+        }else{
+            dstats.restart();
         }
     }
 
