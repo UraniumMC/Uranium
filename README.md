@@ -48,7 +48,7 @@ If you're once checkout source - you not need to do it again
 
 [download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
 [download_img]: https://img.shields.io/badge/download-BaiduCloud-blue.svg
-[build_status]: https://ci.uraniummc.cc/job/Uranium-dev/badge/icon
+[build_status]: https://ci.uraniummc.cc/job/Uranium/badge/icon
 [bStats]: https://img.shields.io/bstats/players/1372.svg?label=bstats%20players
 [bStats_link]: https://bstats.org/plugin/bukkit/Uranium
 [yumc_Stats]: https://img.shields.io/badge/yumc-Uranium-blue.svg
