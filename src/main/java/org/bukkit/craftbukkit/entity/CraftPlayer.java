@@ -36,6 +36,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 
+import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.*;
@@ -114,9 +115,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     public boolean isOnline() {
+        if(this.getHandle() instanceof FakePlayer)return true;
         for (Object obj : server.getHandle().playerEntityList) {
+            if(obj==null)continue;
             net.minecraft.entity.player.EntityPlayerMP player = (net.minecraft.entity.player.EntityPlayerMP) obj;
-            if (player.getCommandSenderName().equalsIgnoreCase(getName())) {
+            if (player.getCommandSenderName().equalsIgnoreCase(getName())||player.getUniqueID().equals(getUniqueId())) {
                 return true;
             }
         }
