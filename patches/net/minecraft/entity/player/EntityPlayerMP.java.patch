@@ -262,7 +262,7 @@
 +        }
  
 -        if (!this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
-+        java.util.List<org.bukkit.inventory.ItemStack> loot = new java.util.ArrayList<org.bukkit.inventory.ItemStack>();
++        ArrayList<org.bukkit.inventory.ItemStack> loot = new java.util.ArrayList<org.bukkit.inventory.ItemStack>();
 +        boolean keepInventory = this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory");
 +
 +        if (!keepInventory)
@@ -272,6 +272,7 @@
              capturedDrops.clear();
 -
              this.inventory.dropAllItems();
++            loot.ensureCapacity(capturedDrops.size());
 +            for (int i = 0; i < capturedDrops.size(); ++i)
 +            {
 +                if (capturedDrops.get(i) != null)
@@ -282,6 +283,9 @@
 +            // Cauldron end
 +        }
  
+-            captureDrops = false;
+-            PlayerDropsEvent event = new PlayerDropsEvent(this, p_70645_1_, capturedDrops, recentlyHit > 0);
+-            if (!MinecraftForge.EVENT_BUS.post(event))
 +        IChatComponent chatmessage = this.func_110142_aN().func_151521_b();
 +        String deathmessage = chatmessage.getUnformattedText();
 +        org.bukkit.event.entity.PlayerDeathEvent event = CraftEventFactory.callPlayerDeathEvent(this, loot, deathmessage, keepInventory);
@@ -290,7 +294,7 @@
 +        if (deathMessage != null && deathMessage.length() > 0)
 +        {
 +            if (deathMessage.equals(deathmessage))
-+            {
+             {
 +                this.mcServer.getConfigurationManager().sendChatMsg(chatmessage);
 +            }
 +            else
@@ -298,18 +302,15 @@
 +                this.mcServer.getConfigurationManager().sendMessage(org.bukkit.craftbukkit.util.CraftChatMessage.fromString(deathMessage));
 +            }
 +        }
-+
-+        if (!event.getKeepInventory())
++        captureDrops=event.getKeepInventory();
++        if (!captureDrops)
 +        {
 +            // Cauldron start - rework CraftBukkit logic to support Forge better
 +            this.inventory.clearInventory(null, -1); // CraftBukkit - we clean the player's inventory after the EntityDeathEvent is called so plugins can get the exact state of the inventory.
-             captureDrops = false;
--            PlayerDropsEvent event = new PlayerDropsEvent(this, p_70645_1_, capturedDrops, recentlyHit > 0);
--            if (!MinecraftForge.EVENT_BUS.post(event))
 +            PlayerDropsEvent forgeEvent = new PlayerDropsEvent(this, p_70645_1_, capturedDrops, recentlyHit > 0);
 +
 +            if (!MinecraftForge.EVENT_BUS.post(forgeEvent))
-             {
++            {
                  for (EntityItem item : capturedDrops)
                  {
                      joinEntityItemWithWorld(item);
@@ -317,8 +318,9 @@
              }
 +            // Cauldron end
          }
- 
+-
 -        Collection collection = this.worldObj.getScoreboard().func_96520_a(IScoreObjectiveCriteria.deathCount);
++        capturedDrops.clear();
 +        this.closeScreen();
 +        // CraftBukkit end
 +        // CraftBukkit - Get our scores instead
