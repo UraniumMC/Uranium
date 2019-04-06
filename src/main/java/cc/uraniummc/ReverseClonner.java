@@ -1,6 +1,8 @@
 package cc.uraniummc;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public enum ReverseClonner {
     ;
@@ -18,6 +20,8 @@ public enum ReverseClonner {
         }
         MinecraftForge.EVENT_BUS.post(new PlayerEvent.Clone(player, shadowCopy, wasDeath));
          */
+        //Send clone event................Fix some issues
+        MinecraftForge.EVENT_BUS.post(new PlayerEvent.Clone(player, player, wasDeath));
         return player;
     }
 }

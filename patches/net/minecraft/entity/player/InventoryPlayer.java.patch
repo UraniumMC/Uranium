@@ -99,6 +99,15 @@
      public int getFirstEmptyStack()
      {
          for (int i = 0; i < this.mainInventory.length; ++i)
+@@ -171,7 +245,7 @@
+             }
+ 
+             j += this.itemStack.stackSize;
+-            this.setItemStack((ItemStack)null);
++            this.setItemStack(null);
+         }
+ 
+         return j;
 @@ -350,6 +424,15 @@
      {
          if (p_70441_1_ != null && p_70441_1_.stackSize != 0 && p_70441_1_.getItem() != null)

@@ -59,6 +59,17 @@
      // -- BEGIN FORGE PATCHES --
      /**
       * Determines if this TileEntity requires update calls.
+@@ -317,8 +339,8 @@
+      * Called from Chunk.setBlockIDWithMetadata, determines if this tile entity should be re-created when the ID, or Metadata changes.
+      * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
+      *
+-     * @param oldID The old ID of the block
+-     * @param newID The new ID of the block (May be the same)
++     * @param oldBlock The old ID of the block
++     * @param newBlock The new ID of the block (May be the same)
+      * @param oldMeta The old metadata of the block
+      * @param newMeta The new metadata of the block (May be the same)
+      * @param world Current world
 @@ -370,4 +392,6 @@
          }
          return bb;
