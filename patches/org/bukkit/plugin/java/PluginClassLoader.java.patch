@@ -199,7 +199,7 @@
 +        boolean reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-field", true);
 +        boolean reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-class", true);
 +        boolean allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-allow-future", false);
-+        boolean remapToSqlite321 = MinecraftServer.uraniumConfig.enableSQLite321.getValue();
++        //boolean remapToSqlite321 = MinecraftServer.uraniumConfig.enableSQLite321.getValue();
 +        // plugin-specific overrides
 +        useCustomClassLoader = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".custom-class-loader", useCustomClassLoader, false);
 +        debug = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".debug", debug, false);
@@ -220,7 +220,7 @@
 +        reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-field", reflectFields, false);
 +        reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-class", reflectClass, false);
 +        allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-allow-future", allowFuture, false);
-+        remapToSqlite321 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings."+pluginName+".remap-to-sqlite321",remapToSqlite321,false);
++        //remapToSqlite321 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings."+pluginName+".remap-to-sqlite321",remapToSqlite321,false);
 +        // Uranium start
 +        boolean remapGuava17= MinecraftServer.uraniumConfig.enableGuava17.getValue();
 +        boolean remapGuava21= MinecraftServer.uraniumConfig.enableGuava21.getValue();
@@ -273,7 +273,7 @@
 +        if (remapGuava17) flags |= F_REMAP_GUAVA17;
 +        if (remapReflection) flags |=F_REMAP_REFLECTION;
 +        if (allowFuture) flags |=F_REMAP_FUTURE;
-+        if (remapToSqlite321) flags |= F_REMAP_SQLITE321;
++        //if (remapToSqlite321) flags |= F_REMAP_SQLITE321;
 +        if (remapGuava21) flags |= F_REMAP_GUAVA21;
 +        //Uranium end
 +        remapFlags = flags; // used in findClass0
@@ -327,7 +327,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +344,345 @@
+@@ -58,34 +344,349 @@
      }
  
      @Override
@@ -424,10 +424,12 @@
 +                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("uranium_data/mappings/new.srg"))),
 +                new MavenShade(relocations),
 +                null, false);
++        /*
 +        jarMapping.loadMappings(
 +                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/v1_7_R4/cb2numpkg.srg"))),
 +                new MavenShade(relocations),
 +                null, false);
++        */
 +        jarMapping.loadMappings(
 +                new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/v1_7_R4/obf2numpkg.srg"))),
 +                null, // no version relocation for obf
@@ -460,9 +462,11 @@
 +            }
 +            //Uranium start
 +            //Remap SQLite for some new plugins.
++            /*
 +            if((flags & F_REMAP_SQLITE321)!=0) {
 +                jarMapping.packages.put("org/sqlite", "sqlite321/org/sqlite");
 +            }
++            */
 +            //Uranium end
 +            jarMapping.packages.put(org_bukkit_craftbukkit + "/libs/com/google/gson", "com/google/gson"); // Handle Gson being in a "normal" place
 +            // Bukkit moves these packages to nms while we keep them in root so we must relocate them for plugins that rely on them
