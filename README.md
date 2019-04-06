@@ -15,7 +15,7 @@
 * Ensure you are using Java JDK 8u101 or higher.
 * Checkout project
   * You can use IDE or clone from console:
-  `git clone https://github.com/UraniumMC/Uranium.git`
+  `git clone https://git.aimc.vip/UraniumDev/Uranium.git`
 * Init submodules
   * Since this project is merger of two other we need both.
   `git submodule update --init --recursive`
