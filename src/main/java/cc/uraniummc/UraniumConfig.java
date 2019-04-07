@@ -73,6 +73,7 @@ public class UraniumConfig extends ConfigBase {
     public StringSetting uraniumName=new StringSetting(this,"experimental.UraniumName","","EXPERIMENTAL! Some plugins not support Uranium as server name, you can change it to KCauldron or Cauldron to improve compatibility");
     public BoolSetting remapReflection=new BoolSetting(this,"plugin-settings.default.remap-Reflection",true,"This options can remap Class.forName getMethod getField to support plugins which using the net.minecraft.server.Rxxx package, but it will make some plugin work slow, if server is slow, can disable this option or only enabled for some plugins.");
     //public BoolSetting fakeVanillaMode= new BoolSetting(this,"experimental.fakeVanillaMode",false,"EXPERIMENTAL! Make client think this is a Vanilla server.");
+    @Deprecated
     public BoolSetting enableSQLite321=new BoolSetting(this,"experimental.remap-to-sqlite321",false,"EXPERIMENTAL! Using new sqlite to replace old sqlite. Lots of old plugins will not working.");
     public static boolean tileEntityListRecreation;
     

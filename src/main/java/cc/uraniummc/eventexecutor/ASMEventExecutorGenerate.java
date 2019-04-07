@@ -89,7 +89,7 @@ public class ASMEventExecutorGenerate{
 
         ClassWriter tCW=new ClassWriter(3);
         tCW.visit(V1_6,ACC_PUBLIC|ACC_SUPER,tDesc,null,Type.getInternalName(EventExecutorImp.class),new String[]{EXECUTE_DESC});
-        tCW.visitSource("Uranium",null);
+        tCW.visitSource("Uranium_ASMEventExecutorGenerate.java",null);
 
         GeneratorAdapter tMethodGenerator=new GeneratorAdapter(tCW.visitMethod(ACC_PUBLIC,"<init>","()V",null,null),ACC_PUBLIC,"<init>","()V");
         tMethodGenerator.loadThis();
