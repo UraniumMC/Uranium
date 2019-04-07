@@ -1,9 +1,13 @@
 package net.minecraftforge.cauldron.configuration;
 
+import cc.uraniummc.UraniumConfig;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.cauldron.command.CauldronCommand;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.lang.reflect.Field;
 
 public class CauldronConfig extends ConfigBase
 {
@@ -77,48 +81,47 @@ public class CauldronConfig extends ConfigBase
 
     public void init()
     {
-        settings.put(dumpMaterials.path, dumpMaterials);
-        settings.put(disableWarnings.path, disableWarnings);
-        settings.put(worldLeakDebug.path, worldLeakDebug);
-        settings.put(connectionLogging.path, connectionLogging);
-        settings.put(tickIntervalLogging.path, tickIntervalLogging);
-        settings.put(chunkLoadLogging.path, chunkLoadLogging);
-        settings.put(chunkUnloadLogging.path, chunkUnloadLogging);
-        settings.put(entitySpawnLogging.path, entitySpawnLogging);
-        settings.put(entityDespawnLogging.path, entityDespawnLogging);
-        settings.put(entityDeathLogging.path, entityDeathLogging);
-        settings.put(logWithStackTraces.path, logWithStackTraces);
-        settings.put(dumpChunksOnDeadlock.path, dumpChunksOnDeadlock);
-        settings.put(dumpHeapOnDeadlock.path, dumpHeapOnDeadlock);
-        settings.put(dumpThreadsOnWarn.path, dumpThreadsOnWarn);
-        settings.put(logEntityCollisionChecks.path, logEntityCollisionChecks);
-        settings.put(logEntitySpeedRemoval.path, logEntitySpeedRemoval);
-        settings.put(largeCollisionLogSize.path, largeCollisionLogSize);
-        settings.put(largeEntityCountLogSize.path, largeEntityCountLogSize);
-        settings.put(loadChunkOnRequest.path, loadChunkOnRequest);
-        settings.put(loadChunkOnForgeTick.path, loadChunkOnForgeTick);
-        settings.put(checkEntityBoundingBoxes.path, checkEntityBoundingBoxes);
-        settings.put(checkEntityMaxSpeeds.path, checkEntityMaxSpeeds);
-        settings.put(largeBoundingBoxLogSize.path, largeBoundingBoxLogSize);
-        settings.put(enableThreadContentionMonitoring.path, enableThreadContentionMonitoring);
-        settings.put(infiniteWaterSource.path, infiniteWaterSource);
-        settings.put(flowingLavaDecay.path, flowingLavaDecay);
-        settings.put(fakePlayerLogin.path, fakePlayerLogin);
-        settings.put(remapPluginFile.path, remapPluginFile);
-        settings.put(userLogin.path, userLogin);
-        settings.put(allowTntPunishment.path, allowTntPunishment);
-        settings.put(maxPlayersVisible.path, maxPlayersVisible);
+        // Uranium start
+        for(Field sField : CauldronConfig.class.getDeclaredFields()){
+            if(!Setting.class.isAssignableFrom(sField.getType())||sField.getAnnotation(Deprecated.class)!=null)
+                continue;
 
-        settings.put(modPacketPlace.path,modPacketPlace);
-        settings.put(modPacketInteract.path,modPacketInteract);
-
-        settings.put(removeErroringBlocks.path,removeErroringBlocks);
-
-        settings.put(playerChunkLoadDelay.path,playerChunkLoadDelay);
-
+            sField.setAccessible(true);
+            try {
+                Setting tValue = (Setting) FieldUtils.readField(sField, this);
+                if(tValue!=null)
+                    register(tValue);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        addDefaults();
+        //Uranium end
         load();
     }
+    private void disableLegacyRemap(String pluginName){
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R4", true);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R1", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_6_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_5_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-pre", "false");
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R4", true);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R1", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_6_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_5_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-pre", false);
+    }
+    //Uranium start
+    public void addDefaults(){
+        disableLegacyRemap("WorldEdit");
+    }
 
+    private void register(Setting<?> setting) {
+        settings.put(setting.path, setting);
+    }
+    //Uranium end
     public void addCommands()
     {
         commands.put(this.commandName, new CauldronCommand());

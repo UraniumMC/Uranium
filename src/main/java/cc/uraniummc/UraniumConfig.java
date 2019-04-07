@@ -84,7 +84,7 @@ public class UraniumConfig extends ConfigBase {
         for(Field sField : UraniumConfig.class.getDeclaredFields()){
             if(!Setting.class.isAssignableFrom(sField.getType())||sField.getAnnotation(Deprecated.class)!=null)
                 continue;
-            
+
             sField.setAccessible(true);
             try {
                 Setting tValue = (Setting)FieldUtils.readField(sField, this);
