@@ -707,7 +707,29 @@
      public void addChatComponentMessage(IChatComponent p_146105_1_)
      {
          this.playerNetServerHandler.sendPacket(new S02PacketChat(p_146105_1_));
-@@ -1037,6 +1363,114 @@
+@@ -883,6 +1209,21 @@
+         this.lastHealth = -1.0F;
+         this.lastFoodLevel = -1;
+         this.destroyedItemsNetCache.addAll(((EntityPlayerMP)p_71049_1_).destroyedItemsNetCache);
++        if(!p_71049_2_ || !(p_71049_1_ instanceof EntityPlayerMP))return;
++        //Thermos direct copy the right properties
++        EntityPlayerMP m = (EntityPlayerMP)p_71049_1_;
++        this.lastExperience = m.lastExperience;
++        this.lastHealth = m.lastHealth;
++        this.lastFoodLevel = m.lastFoodLevel;
++        this.listName = m.listName;
++        this.compassTarget = m.compassTarget;
++        this.newExp = m.newExp;
++        this.newLevel = m.newLevel;
++        this.newTotalExp = m.newTotalExp;
++        this.keepLevel = m.keepLevel;
++        this.maxHealthCache = m.maxHealthCache;
++        this.lastFoodLevel = m.lastFoodLevel;
++        this.xpCooldown = m.xpCooldown;
+     }
+ 
+     protected void onNewPotionEffect(PotionEffect p_70670_1_)
+@@ -1037,6 +1378,114 @@
          return this.field_143005_bX;
      }
  

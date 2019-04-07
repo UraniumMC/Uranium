@@ -78,7 +78,7 @@ public class UraniumConfig extends ConfigBase {
     
     private List<String> mBlockNoCaptureMetaStr=new ArrayList();
     private HashSet mBlockNoCaptureMeta=null;
-    
+    public BoolSetting enableForgeRespawnClone =new BoolSetting(this,"forge.clone-player-on-respawn",false,"Original forge will clone a new player when player respawn, some mods needs this feature.");
     public UraniumConfig() {
         super("uranium.yml", "um");
         for(Field sField : UraniumConfig.class.getDeclaredFields()){
