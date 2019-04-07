@@ -48,7 +48,14 @@
  public abstract class ServerConfigurationManager
  {
      public static final File field_152613_a = new File("banned-players.json");
-@@ -82,8 +107,8 @@
+@@ -76,14 +101,14 @@
+     private static final Logger logger = LogManager.getLogger();
+     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
+     private final MinecraftServer mcServer;
+-    public final List playerEntityList = new ArrayList();
++    public final List playerEntityList = Collections.synchronizedList(new ArrayList());
+     private final UserListBans bannedPlayers;
+     private final BanList bannedIPs;
      private final UserListOps ops;
      private final UserListWhitelist whiteListedPlayers;
      private final Map field_148547_k;

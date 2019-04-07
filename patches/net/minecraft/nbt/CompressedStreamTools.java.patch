@@ -1,0 +1,64 @@
+--- ../src-base/minecraft/net/minecraft/nbt/CompressedStreamTools.java
++++ ../src-work/minecraft/net/minecraft/nbt/CompressedStreamTools.java
+@@ -19,6 +19,7 @@
+ import net.minecraft.crash.CrashReport;
+ import net.minecraft.crash.CrashReportCategory;
+ import net.minecraft.util.ReportedException;
++import org.apache.commons.io.IOUtils;
+ 
+ public class CompressedStreamTools
+ {
+@@ -26,33 +27,34 @@
+ 
+     public static NBTTagCompound readCompressed(InputStream p_74796_0_) throws IOException
+     {
+-        DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(p_74796_0_)));
+-        NBTTagCompound nbttagcompound;
++        try {
++            DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(p_74796_0_)));
++            NBTTagCompound nbttagcompound;
+ 
+-        try
+-        {
+-            nbttagcompound = func_152456_a(datainputstream, NBTSizeTracker.field_152451_a);
++            try {
++                nbttagcompound = func_152456_a(datainputstream, NBTSizeTracker.field_152451_a);
++            } finally {
++                datainputstream.close();
++            }
++            return nbttagcompound;
++        }finally {
++            IOUtils.closeQuietly(p_74796_0_);
+         }
+-        finally
+-        {
+-            datainputstream.close();
+-        }
+-
+-        return nbttagcompound;
+     }
+ 
+     public static void writeCompressed(NBTTagCompound p_74799_0_, OutputStream p_74799_1_) throws IOException
+     {
+-        DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(p_74799_1_)));
++        try {
++            DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(p_74799_1_)));
+ 
+-        try
+-        {
+-            write(p_74799_0_, dataoutputstream);
++            try {
++                write(p_74799_0_, dataoutputstream);
++            } finally {
++                dataoutputstream.close();
++            }
++        }finally {
++            IOUtils.closeQuietly(p_74799_1_);
+         }
+-        finally
+-        {
+-            dataoutputstream.close();
+-        }
+     }
+ 
+     public static NBTTagCompound func_152457_a(byte[] p_152457_0_, NBTSizeTracker p_152457_1_) throws IOException

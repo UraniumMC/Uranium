@@ -165,8 +165,8 @@ dependencies {
     libraries 'java3d:vecmath:1.3.1'
     libraries 'org.jetbrains.kotlin:kotlin-runtime:1.1.4-2'
     libraries 'co.aikar:minecraft-timings:1.0.4'
+    libraries group: 'com.koloboke', name: 'koloboke-impl-common-jdk8', version: '1.0.0'
     compile 'org.projectlombok:lombok:1.16.18'
-    compile group: 'com.koloboke', name: 'koloboke-impl-common-jdk8', version: '1.0.0'
 }
 
 packageUniversal {
