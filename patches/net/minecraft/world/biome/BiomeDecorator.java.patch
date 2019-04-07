@@ -172,7 +172,7 @@
 +        while (iter.hasNext())
 +        {
 +            val chunk=iter.next();
-+            if(chunk.bukkitChunk!=null) this.currentWorld.getWorld().unloadChunk(iter.next().bukkitChunk);
++            if(chunk.bukkitChunk!=null) this.currentWorld.getWorld().unloadChunk(chunk.bukkitChunk);
 +            iter.remove();
 +        }
 +    }
