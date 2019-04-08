@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 
+import lombok.Setter;
 import net.minecraftforge.cauldron.CauldronUtils;
 
 import org.apache.commons.lang.Validate;
@@ -17,6 +18,7 @@ import org.bukkit.Material;
 
 
 public class CraftInventory implements Inventory {
+    @Setter
     protected final net.minecraft.inventory.IInventory inventory;
 
     public CraftInventory(net.minecraft.inventory.IInventory inventory) {

@@ -53,7 +53,7 @@
      private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
      private final MinecraftServer mcServer;
 -    public final List playerEntityList = new ArrayList();
-+    public final List playerEntityList = Collections.synchronizedList(new ArrayList());
++    public final List playerEntityList = Collections.synchronizedList(new ArrayList()); // Prevent netty thread to
      private final UserListBans bannedPlayers;
      private final BanList bannedIPs;
      private final UserListOps ops;
@@ -502,7 +502,7 @@
 +
 +        // Phase 3 - remove current player from current dimension
 +        par1EntityPlayerMP.getServerForPlayer().getEntityTracker().removePlayerFromTrackers(par1EntityPlayerMP);
-+        // par1EntityPlayerMP.getServerForPlayer().getEntityTracker().removeEntityFromAllTrackingPlayers(par1EntityPlayerMP); // CraftBukkit
++        par1EntityPlayerMP.getServerForPlayer().getEntityTracker().removeEntityFromAllTrackingPlayers(par1EntityPlayerMP); // CraftBukkit
 +        par1EntityPlayerMP.getServerForPlayer().getPlayerManager().removePlayer(par1EntityPlayerMP);
 +        this.playerEntityList.remove(par1EntityPlayerMP);
 +        this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension).removePlayerEntityDangerously(par1EntityPlayerMP);

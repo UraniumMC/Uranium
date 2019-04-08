@@ -3,6 +3,7 @@ package org.bukkit.craftbukkit.entity;
 import java.util.Set;
 
 
+import lombok.Setter;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +29,9 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
 public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+    @Setter
     private CraftInventoryPlayer inventory;
+    @Setter
     private CraftInventory enderChest;
     protected final PermissibleBase perm = new PermissibleBase(this);
     private boolean op;
