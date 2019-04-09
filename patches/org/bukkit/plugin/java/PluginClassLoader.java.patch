@@ -231,7 +231,7 @@
 +            remapGuava17 = umcl.checkVer(remap_guava17_ver);
 +        }
 +        remapGuava21 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings." + pluginName + ".remap-guava21", remapGuava21, false);
-+        if(remap_guava17_ver!=null&&!remapGuava17) {
++        if(remap_guava21_ver!=null&&!remapGuava21) {
 +            remapGuava21 = umcl.checkVer(remap_guava21_ver);
 +        }
 +        boolean remapReflection=MinecraftServer.uraniumConfig.remapReflection.getValue();
