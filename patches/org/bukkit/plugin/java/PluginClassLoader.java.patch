@@ -289,7 +289,7 @@
 +            jarMapping.setFallbackInheritanceProvider(new ClassLoaderProvider(this));
 +        }
 +
-+        remapper = new cc.uraniummc.UraniumRemapper(jarMapping,this,remapReflection);
++        remapper = new cc.uraniummc.UraniumRemapper((UraniumMapping) jarMapping,this,remapReflection);
 +        ((UraniumRemapper)remapper).setDebug(true);
 +        if (pluginInherit || reflectFields || reflectClass) {
 +            remapperProcessor = new RemapperProcessor(

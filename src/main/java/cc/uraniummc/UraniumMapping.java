@@ -2,10 +2,9 @@ package cc.uraniummc;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import lombok.val;
 import net.md_5.specialsource.InheritanceMap;
 import net.md_5.specialsource.JarComparer;
 import net.md_5.specialsource.JarMapping;
@@ -15,6 +14,8 @@ public class UraniumMapping extends JarMapping{
 
     public final Map<String,String> mRclasses=new HashMap<String,String>();
     public final Map<String,String> mMethodsNR=new HashMap<String,String>();
+    public final Map<String,String> mMethodsExtends=new HashMap<String, String>();
+    public final Set<String> mNMSClasses=new HashSet<String>();
     public InheritanceMap inheritanceMap;
     public InheritanceProvider fallbackInheritanceProvider;
 
@@ -85,7 +86,11 @@ public class UraniumMapping extends JarMapping{
         }
         return pDef;
     }
-    
+
+    public String remapExtendsMethod(String pOwner,String pName,String pParamDescWithName,boolean pDeclared){
+        return this.remapFieldOrMethod(this.mMethodsExtends,pOwner,pName,pParamDescWithName,pDeclared);
+    }
+
     /**
      * 
      * @param pOwner
@@ -104,15 +109,14 @@ public class UraniumMapping extends JarMapping{
 
     public void loadMethodsNR(){
         for(Map.Entry<String,String> METHOD : methods.entrySet()){
-            if(!METHOD.getKey().startsWith("net/minecraft/server/v1_7_R4")){
+            if(!METHOD.getKey().startsWith("net/minecraft/server")){
                 continue;
             }
             String[] key=METHOD.getKey().split(" ");
-            String types=key[1].substring(0,key[1].lastIndexOf(')')+1);
             boolean obj=false;
-            StringBuilder newkey=new StringBuilder(key[0]+" ");
+            StringBuilder newkey=new StringBuilder(" ");
             StringBuilder obj_name=new StringBuilder();
-            for(char i : types.toCharArray()){
+            for(char i : key[1].toCharArray()){
                 if(i=='L'){
                     obj=true;
                 }else if(obj){
@@ -128,7 +132,14 @@ public class UraniumMapping extends JarMapping{
                 }
                 newkey.append(i);
             }
-            mMethodsNR.put(newkey.toString(),METHOD.getValue());
+            val newkeyy=newkey.toString();
+            int args_end=newkeyy.lastIndexOf(')')+1;
+            String types=newkeyy.substring(0,args_end);
+            int class_end=key[0].lastIndexOf('/');
+            mMethodsExtends.put(classes.get(key[0].substring(0,class_end))+key[0].substring(class_end)+newkeyy,METHOD.getValue());
+            if(METHOD.getKey().startsWith("net/minecraft/server/v1_7_R4")){
+                mMethodsNR.put(key[0]+types,METHOD.getValue());
+            }
         }
     }
 }
