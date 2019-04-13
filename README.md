@@ -2,7 +2,7 @@
 ### Uranium - continuation of KCauldron minecraft server
 ![GitHub stars](https://img.shields.io/github/stars/UraniumMC/Uranium.svg?style=social)
 
-[![build_status]](https://ci.uraniummc.cc/job/Uranium/)
+[![build_status]](https://ci.uraniummc.cc/job/Uranium-dev/)
  
 [![Download Uranium][download_img]][download_url]
  
@@ -41,14 +41,14 @@ If you're once checkout source - you not need to do it again
   * Reset all configs to default
   If bug present - mod compatibility issue
 * If you're using beta-release of Uranium - check on latest stable
-  * All versions situated [there](https://ci.uraniummc.cc/job/Uranium)
+  * All versions situated [there](https://ci.uraniummc.cc/job/Uranium-dev)
 * If bug still present - Uranium issue
   * Make sure that similar issue not exists already
   * Please fill [![issue form][GitHub issues]](https://github.com/UraniumMC/Uranium/issues/new) else
 
-[download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=/Uranium/%23lastSuccessfulBuild
+[download_url]: https://pan.baidu.com/s/1jI42BHG#list/path=%2Fci%2FUranium-dev&parentPath=%2F
 [download_img]: https://img.shields.io/badge/download-BaiduCloud-blue.svg
-[build_status]: https://ci.uraniummc.cc/job/Uranium/badge/icon
+[build_status]: https://ci.uraniummc.cc/job/Uranium-dev/badge/icon
 [bStats]: https://img.shields.io/bstats/players/1372.svg?label=bstats%20players
 [bStats_link]: https://bstats.org/plugin/bukkit/Uranium
 [yumc_Stats]: https://img.shields.io/badge/yumc-Uranium-blue.svg
