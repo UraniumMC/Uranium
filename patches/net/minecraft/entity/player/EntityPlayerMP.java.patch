@@ -715,15 +715,9 @@
      public void addChatComponentMessage(IChatComponent p_146105_1_)
      {
          this.playerNetServerHandler.sendPacket(new S02PacketChat(p_146105_1_));
-@@ -879,10 +1206,29 @@
-     public void clonePlayer(EntityPlayer p_71049_1_, boolean p_71049_2_)
-     {
-         super.clonePlayer(p_71049_1_, p_71049_2_);
-+        /* NMSL
-         this.lastExperience = -1;
+@@ -883,6 +1210,23 @@
          this.lastHealth = -1.0F;
          this.lastFoodLevel = -1;
-+        */
          this.destroyedItemsNetCache.addAll(((EntityPlayerMP)p_71049_1_).destroyedItemsNetCache);
 +        if(!p_71049_2_ || !(p_71049_1_ instanceof EntityPlayerMP))return;
 +        //Thermos direct copy the right properties
@@ -741,11 +735,11 @@
 +        this.lastFoodLevel = m.lastFoodLevel;
 +        this.xpCooldown = m.xpCooldown;
 +
-+        MinecraftForge.EVENT_BUS.post(new PlayerEvent.Clone(p_71049_1_, this, p_71049_2_));
++        MinecraftForge.EVENT_BUS.post(new PlayerEvent.Clone(p_71049_1_, this, true));
      }
  
      protected void onNewPotionEffect(PotionEffect p_70670_1_)
-@@ -1037,6 +1383,114 @@
+@@ -1037,6 +1381,114 @@
          return this.field_143005_bX;
      }
  

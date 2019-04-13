@@ -1,5 +1,6 @@
 package cc.uraniummc;
 
+import lombok.val;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -33,7 +34,8 @@ public class ReverseClonner {
                 shadowCopy.bukkitEntity=craftPlayer;
                 craftPlayer.setHandle(shadowCopy);
             }
-            shadowCopy.clonePlayer(player, !wasDeath);
+            val alive=!wasDeath;
+            shadowCopy.clonePlayer(player, alive);
             if(!wasDeath){
                 shadowCopy.activePotionsMap.clear();
                 shadowCopy.activePotionsMap.putAll(player.activePotionsMap);
