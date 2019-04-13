@@ -99,18 +99,18 @@ public class CauldronConfig extends ConfigBase
         load();
     }
     private void disableLegacyRemap(String pluginName){
-        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R4", new Boolean(true));
-        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R3", new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R1", new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_6_R3", new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_5_R3", new Boolean(false));
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R4", true);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_7_R1", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_6_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-nms-v1_5_R3", false);
         config.addDefault("plugin-settings."+pluginName+".remap-nms-pre", "false");
-        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R4", new Boolean(true));
-        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R3",new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R1", new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_6_R3",new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_5_R3",new Boolean(false));
-        config.addDefault("plugin-settings."+pluginName+".remap-obc-pre", new Boolean(false));
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R4", true);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_7_R1", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_6_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-v1_5_R3", false);
+        config.addDefault("plugin-settings."+pluginName+".remap-obc-pre", false);
     }
     //Uranium start
     public void addDefaults(){
