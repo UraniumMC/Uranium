@@ -1,13 +1,15 @@
 --- ../src-base/minecraft/org/bukkit/configuration/MemoryConfiguration.java
 +++ ../src-work/minecraft/org/bukkit/configuration/MemoryConfiguration.java
-@@ -36,7 +36,9 @@
+@@ -36,7 +36,11 @@
          if (defaults == null) {
              defaults = new MemoryConfiguration();
          }
 -
++        /*
 +        if(value.getClass()==boolean.class){
 +            value=Boolean.valueOf(value.toString());
 +        }
++        */
          defaults.set(path, value);
      }
  
