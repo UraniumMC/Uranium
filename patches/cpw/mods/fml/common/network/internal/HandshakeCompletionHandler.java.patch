@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/cpw/mods/fml/common/network/internal/HandshakeCompletionHandler.java
 +++ ../src-work/minecraft/cpw/mods/fml/common/network/internal/HandshakeCompletionHandler.java
-@@ -8,13 +8,29 @@
+@@ -8,13 +8,25 @@
  import io.netty.channel.SimpleChannelInboundHandler;
  import io.netty.channel.ChannelHandler.Sharable;
  
@@ -10,7 +10,6 @@
 +
  @Sharable
  public class HandshakeCompletionHandler extends SimpleChannelInboundHandler<FMLMessage.CompleteHandshake> {
-+    private ExecutorService pool= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
      @Override
 -    protected void channelRead0(ChannelHandlerContext ctx, CompleteHandshake msg) throws Exception
 +    protected void channelRead0(ChannelHandlerContext ctx, final CompleteHandshake msg) throws Exception
@@ -22,12 +21,9 @@
 +        if (attr != null)
 +        {
 +            final NetworkDispatcher dispatcher = attr.getAndRemove();
-+            if (dispatcher != null) pool.execute(new Runnable() {
-+                @Override
-+                public void run() {
-+                    dispatcher.completeHandshake(msg.target);
-+                }
-+            });
++            if (dispatcher != null){
++                dispatcher.completeHandshake(msg.target);
++            }
 +        }
 +        // Cauldron end
      }
