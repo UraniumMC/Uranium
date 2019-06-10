@@ -16,6 +16,8 @@ import net.minecraftforge.cauldron.configuration.ConfigBase;
 import net.minecraftforge.cauldron.configuration.IntSetting;
 import net.minecraftforge.cauldron.configuration.Setting;
 import net.minecraftforge.cauldron.configuration.StringSetting;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
 
 public class UraniumConfig extends ConfigBase {
     public BoolSetting commandEnable = new BoolSetting(this, "command.enable",
@@ -80,6 +82,8 @@ public class UraniumConfig extends ConfigBase {
     private List<String> mBlockNoCaptureMetaStr=new ArrayList();
     private HashSet mBlockNoCaptureMeta=null;
     public BoolSetting enableForgeRespawnClone =new BoolSetting(this,"forge.clone-player-on-respawn",false,"Original forge will clone a new player when player respawn, some mods needs this feature.");
+    public BoolSetting enableEndlessLoopCheck =new BoolSetting(this,"EndlessLoopCheck.enable",false,"enable a check to prevent endless loop");
+    public IntSetting endlessLoopCheckDeep =new IntSetting(this,"EndlessLoopCheck.deep",2,"same event type,default loop deep");
     public UraniumConfig() {
         super("uranium.yml", "um");
         for(Field sField : UraniumConfig.class.getDeclaredFields()){
@@ -159,6 +163,7 @@ public class UraniumConfig extends ConfigBase {
             ex.printStackTrace();
         }
         tileEntityListRecreation = experimentalTileEntityListRecreation.getValue();
+        MinecraftForge.EVENT_BUS.mEventStackDeep.clear();
     }
     
     public boolean shouldBlockCaptureOnMetaChange(Block pBlock,int pMeta){
