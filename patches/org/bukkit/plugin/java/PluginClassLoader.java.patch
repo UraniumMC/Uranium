@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,30 +1,167 @@
+@@ -1,30 +1,174 @@
  package org.bukkit.plugin.java;
  
 +import java.io.BufferedReader;
@@ -23,7 +23,6 @@
 +import java.util.concurrent.ConcurrentMap;
 +import java.util.regex.Pattern;
  
-+import cc.uraniummc.Uranium;
 +import com.google.common.io.Files;
 +import com.google.gson.GsonBuilder;
 +import lombok.val;
@@ -138,40 +137,48 @@
 +                    return ver.equals(pTargetVer);
 +            }
 +        }
++
 +        public String remapClass(String pClass){
-+            String tPacket="net.minecraft.util.";
-+            if(pClass.startsWith(tPacket)&&pClass.indexOf('.',tPacket.length())!=-1){
++            // remap shaded lib class
++            String tPacket = "net.minecraft.util.";
++            if (pClass.startsWith(tPacket) && pClass.indexOf('.', tPacket.length()) != -1) {
 +                return pClass.substring(tPacket.length());
-+            }else
-+            if(pClass.startsWith("net.minecraft.server")) {
++            } else if (pClass.startsWith("net.minecraft.server")) {
 +                JarMapping jarMapping = getJarMapping(remapFlags); // grab from SpecialSource
 +                String remappedClass = jarMapping.classes.get(pClass.replaceAll("\\.", "/")); // get remapped pkgmcp class name
-+                return remappedClass;
++                return remappedClass == null ? pClass : remappedClass;
 +            }
 +            return pClass;
 +        }
++
 +        public String remapMethod(Class<?> pClass,String pName, Class<?>[]parameterTypes,boolean pDeclared){
-+            UraniumMapping jarMapping = (UraniumMapping) getJarMapping(remapFlags); // grab from SpecialSource
-+            StringBuilder keyF=new StringBuilder(pName+" (");
-+            if(parameterTypes!=null&&parameterTypes.length>0){
-+                for(Class<?> type : parameterTypes){
++            UraniumMapping jarMapping = (UraniumMapping)getJarMapping(remapFlags); // grab from SpecialSource
++            String tOwner = jarMapping.mRclasses.get(pClass.getName().replace('.', '/'));
++            if (tOwner == null) return pName;
++
++            StringBuilder keyF = new StringBuilder(pName + " (");
++            if (parameterTypes != null && parameterTypes.length > 0) {
++                for (Class<?> type : parameterTypes) {
 +                    keyF.append(Type.getType(type).getDescriptor());
 +                }
 +            }
 +            keyF.append(")");
-+            return jarMapping.remapMethod(jarMapping.mRclasses.get(pClass.getName().replace('.', '/')),pName,keyF.toString(),pDeclared);
++            return jarMapping.remapMethod(tOwner, pName, keyF.toString(), pDeclared);
 +        }
 +
-+        public String remapField(Class<?> pClass,String pName,boolean pDeclared){
-+            UraniumMapping jarMapping=(UraniumMapping)getJarMapping(remapFlags); // grab from SpecialSource
-+            return jarMapping.remapField(jarMapping.mRclasses.get(pClass.getName().replace('.', '/')),pName,pDeclared);
++        public String remapField(Class<?> pClass, String pName, boolean pDeclared) {
++            UraniumMapping jarMapping = (UraniumMapping)getJarMapping(remapFlags); // grab from SpecialSource
++            String tOwner = jarMapping.mRclasses.get(pClass.getName().replace('.', '/'));
++            if (tOwner == null) return pName;
++
++            return jarMapping.remapField(tOwner, pName, pDeclared);
 +        }
 +    }
 +    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +171,155 @@
+@@ -34,6 +178,155 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -180,46 +187,46 @@
 +        String pluginName = this.description.getName();
 +
 +        // configure default remapper settings
-+        boolean useCustomClassLoader = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.custom-class-loader", true);
-+        debug = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.debug", false);
-+        boolean remapNMS1710 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R4", true);
-+        boolean remapNMS179 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R3", true);
-+        boolean remapNMS172 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R1", true);
-+        boolean remapNMS164 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_6_R3", true);
-+        boolean remapNMS152 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_5_R3", true);
-+        String remapNMSPre = MinecraftServer.getServer().cauldronConfig.getString("plugin-settings.default.remap-nms-pre", "false");
-+        boolean remapOBC1710 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R4", true);
-+        boolean remapOBC179 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R3", true);
-+        boolean remapOBC172 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R1", true);
-+        boolean remapOBC164 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_6_R3", true);
-+        boolean remapOBC152 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_5_R3", true);
-+        boolean remapOBCPre = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-obc-pre", false);
-+        boolean globalInherit = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.global-inheritance", true);
-+        boolean pluginInherit = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.plugin-inheritance", true);
-+        boolean reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-field", true);
-+        boolean reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-class", true);
-+        boolean allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings.default.remap-allow-future", false);
++        boolean useCustomClassLoader = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.custom-class-loader", true);
++        debug = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.debug", false);
++        boolean remapNMS1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R4", true);
++        boolean remapNMS179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R3", true);
++        boolean remapNMS172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R1", true);
++        boolean remapNMS164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_6_R3", true);
++        boolean remapNMS152 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_5_R3", true);
++        String remapNMSPre = MinecraftServer.cauldronConfig.getString("plugin-settings.default.remap-nms-pre", "false");
++        boolean remapOBC1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R4", true);
++        boolean remapOBC179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R3", true);
++        boolean remapOBC172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R1", true);
++        boolean remapOBC164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_6_R3", true);
++        boolean remapOBC152 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_5_R3", true);
++        boolean remapOBCPre = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-pre", false);
++        boolean globalInherit = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.global-inheritance", true);
++        boolean pluginInherit = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.plugin-inheritance", true);
++        boolean reflectFields = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-field", true);
++        boolean reflectClass = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-reflect-class", true);
++        boolean allowFuture = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-allow-future", false);
 +        //boolean remapToSqlite321 = MinecraftServer.uraniumConfig.enableSQLite321.getValue();
 +        // plugin-specific overrides
-+        useCustomClassLoader = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".custom-class-loader", useCustomClassLoader, false);
-+        debug = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".debug", debug, false);
-+        remapNMS1710 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R4", remapNMS1710, false);
-+        remapNMS179 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R3", remapNMS179, false);
-+        remapNMS172 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R1", remapNMS172, false);
-+        remapNMS164 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_6_R3", remapNMS164, false);
-+        remapNMS152 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_5_R3", remapNMS152, false);
-+        remapNMSPre = MinecraftServer.getServer().cauldronConfig.getString("plugin-settings."+pluginName+".remap-nms-pre", remapNMSPre, false);
-+        remapOBC1710 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R4", remapOBC1710, false);
-+        remapOBC179 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R3", remapOBC179, false);
-+        remapOBC172 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R1", remapOBC172, false);
-+        remapOBC164 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_6_R3", remapOBC164, false);
-+        remapOBC152 = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_5_R3", remapOBC152, false);
-+        remapOBCPre = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-pre", remapOBCPre, false);
-+        globalInherit = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".global-inheritance", globalInherit, false);
-+        pluginInherit = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".plugin-inheritance", pluginInherit, false);
-+        reflectFields = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-field", reflectFields, false);
-+        reflectClass = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-class", reflectClass, false);
-+        allowFuture = MinecraftServer.getServer().cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-allow-future", allowFuture, false);
++        useCustomClassLoader = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".custom-class-loader", useCustomClassLoader, false);
++        debug = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".debug", debug, false);
++        remapNMS1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R4", remapNMS1710, false);
++        remapNMS179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R3", remapNMS179, false);
++        remapNMS172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R1", remapNMS172, false);
++        remapNMS164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_6_R3", remapNMS164, false);
++        remapNMS152 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_5_R3", remapNMS152, false);
++        remapNMSPre = MinecraftServer.cauldronConfig.getString("plugin-settings."+pluginName+".remap-nms-pre", remapNMSPre, false);
++        remapOBC1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R4", remapOBC1710, false);
++        remapOBC179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R3", remapOBC179, false);
++        remapOBC172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R1", remapOBC172, false);
++        remapOBC164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_6_R3", remapOBC164, false);
++        remapOBC152 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_5_R3", remapOBC152, false);
++        remapOBCPre = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-pre", remapOBCPre, false);
++        globalInherit = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".global-inheritance", globalInherit, false);
++        pluginInherit = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".plugin-inheritance", pluginInherit, false);
++        reflectFields = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-field", reflectFields, false);
++        reflectClass = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-reflect-class", reflectClass, false);
++        allowFuture = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-allow-future", allowFuture, false);
 +        //remapToSqlite321 = MinecraftServer.uraniumConfig.getBoolean("plugin-settings."+pluginName+".remap-to-sqlite321",remapToSqlite321,false);
 +        // Uranium start
 +        boolean remapGuava17= MinecraftServer.uraniumConfig.enableGuava17.getValue();
@@ -327,7 +334,7 @@
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +344,349 @@
+@@ -58,34 +351,349 @@
      }
  
      @Override

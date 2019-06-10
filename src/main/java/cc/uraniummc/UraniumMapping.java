@@ -12,6 +12,10 @@ import net.md_5.specialsource.provider.InheritanceProvider;
 
 public class UraniumMapping extends JarMapping{
 
+    /**
+     * key = mcp class name<br />
+     * value= cb class name
+     */
     public final Map<String,String> mRclasses=new HashMap<String,String>();
     public final Map<String,String> mMethodsNR=new HashMap<String,String>();
     public final Map<String,String> mMethodsExtends=new HashMap<String, String>();
