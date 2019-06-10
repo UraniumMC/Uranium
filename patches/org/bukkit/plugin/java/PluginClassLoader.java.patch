@@ -136,7 +136,7 @@
 +            }else
 +            if(pClass.startsWith("net.minecraft.server")) {
 +                JarMapping jarMapping = getJarMapping(remapFlags); // grab from SpecialSource
-+                String remappedClass = jarMapping.classes.get(pClass.replaceAll("\\.", "/")); // get remapped pkgmcp class name
++                String remappedClass = jarMapping.classes.getOrDefault(pClass.replaceAll("\\.", "/"), pClass); // get remapped pkgmcp class name
 +                return remappedClass;
 +            }
 +            return pClass;
