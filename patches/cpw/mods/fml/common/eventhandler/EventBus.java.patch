@@ -37,7 +37,7 @@
 +                }
 +                return false;
 +            }
-+            this.mEventStackDeep.put(tClazz, tDeep==null?1:tDeep++);
++            this.mEventStackDeep.put(tClazz, tDeep==null?1:++tDeep);
 +        }
 +
          IEventListener[] listeners = event.getListenerList().getListeners(busID);
