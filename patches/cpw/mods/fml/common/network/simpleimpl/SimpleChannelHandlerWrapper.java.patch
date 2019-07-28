@@ -34,7 +34,7 @@
 +        CaptureBlock tCapture=null;
 +        if(MinecraftServer.cauldronConfig.modPacketPlace.getValue()&&iNetHandler instanceof NetHandlerPlayServer){
 +            EntityPlayerMP tPlayer=((NetHandlerPlayServer)iNetHandler).playerEntity;
-+            tCapture=tPlayer.worldObj.mCapture.startCapture(tPlayer);
++            tCapture=tPlayer.worldObj.mCapture.get().startCapture(tPlayer);
 +        }
 +
 +        REPLY result=messageHandler.onMessage(msg,context);

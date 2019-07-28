@@ -136,13 +136,13 @@
 -        {
 -            world.captureBlockSnapshots = true;
 +        if(!(itemstack.getItem() instanceof ItemBucket)){ // if not bucket
-+            tCapture=world.mCapture.startCapture(player,itemstack);
++            tCapture=world.mCapture.get().startCapture(player,itemstack);
 +            tCapture.setAgaistPostionAndSide(side,x,y,z);
 +            // Cauldron start
 +            if(itemstack.getItem() instanceof net.minecraft.item.ItemDye&&itemstack.getItemDamage()==15){
 +                Block block=world.getBlock(x,y,z);
 +                if(block!=null&&(block instanceof net.minecraft.block.BlockSapling||block instanceof net.minecraft.block.BlockMushroom)){
-+                    tTreeGenCapture=world.mCapture.startTreeGenCapture(player,x,y,z);
++                    tTreeGenCapture=world.mCapture.get().startTreeGenCapture(player,x,y,z);
 +                    tTreeGenCapture.setAgaistPostionAndSide(x,y,z,side);
 +                }
 +            }

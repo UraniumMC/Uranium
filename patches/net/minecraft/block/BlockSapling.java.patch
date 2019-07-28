@@ -32,7 +32,7 @@
 +            if (p_149674_1_.getBlockLightValue(p_149674_2_, p_149674_3_ + 1, p_149674_4_) >= 9 && (p_149674_5_.nextInt(Math.max(2, (int)((p_149674_1_.growthOdds / p_149674_1_.getSpigotConfig().saplingModifier * 7) + 0.5F))) == 0))    // Spigot // Cauldron
              {
 +                // Cauldron start
-+                CaptureTree tCapture=p_149674_1_.mCapture.startTreeGenCapture(null,p_149674_2_,p_149674_3_,p_149674_4_);
++                CaptureTree tCapture=p_149674_1_.mCapture.get().startTreeGenCapture(null,p_149674_2_,p_149674_3_,p_149674_4_);
                  this.func_149879_c(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_, p_149674_5_);
 +                tCapture.endCapture();
 +                // Cauldron end

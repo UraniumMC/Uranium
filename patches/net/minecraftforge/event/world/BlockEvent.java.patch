@@ -65,7 +65,7 @@
 +                    this.setCanceled(true);
 +                }
 +                
-+                CaptureBlock tCapture=world.mCapture.getLastBlockCapture();
++                CaptureBlock tCapture=world.mCapture.get().getLastBlockCapture();
 +                if(tCapture!=null&&tCapture.mEnable){
 +                    tCapture.addCheckedBlock(world,x,y,z);
 +                }

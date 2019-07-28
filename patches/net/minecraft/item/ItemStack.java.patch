@@ -93,7 +93,7 @@
      {
 -        return this.getItem().onItemRightClick(this, p_77957_1_, p_77957_2_);
 +        if(MinecraftServer.uraniumConfig.captureBlockOnItemRightClick.getValue()) {
-+            CaptureBlock tCapture = p_77957_1_.mCapture.startCapture(p_77957_2_, this);
++            CaptureBlock tCapture = p_77957_1_.mCapture.get().startCapture(p_77957_2_, this);
 +            ItemStack tResult = this.getItem().onItemRightClick(this, p_77957_1_, p_77957_2_);
 +            return !tCapture.endCapture() ? this : tResult;
 +        }else{

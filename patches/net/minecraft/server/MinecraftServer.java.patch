@@ -794,7 +794,7 @@
 +                worldserver.timings.tracker.startTiming(); // Spigot
                  worldserver.getEntityTracker().updateTrackedEntities();
 +                worldserver.timings.tracker.stopTiming(); // Spigot
-+                worldserver.mCapture.clearAllData();
++                worldserver.mCapture.get().clearAllData();
                  this.theProfiler.endSection();
                  this.theProfiler.endSection();
 -            }

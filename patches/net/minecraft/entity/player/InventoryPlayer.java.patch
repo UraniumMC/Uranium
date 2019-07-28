@@ -112,7 +112,7 @@
      {
          if (p_70441_1_ != null && p_70441_1_.stackSize != 0 && p_70441_1_.getItem() != null)
          {
-+            CaptureBlock tBlockCapture=player.worldObj.mCapture.getLastBlockCapture();
++            CaptureBlock tBlockCapture=player.worldObj.mCapture.get().getLastBlockCapture();
 +            if(tBlockCapture!=null&&tBlockCapture.mEnable){
 +                tBlockCapture.addCaptureItem(player,ItemStack.copyItemStack(p_70441_1_));
 +                p_70441_1_.stackSize=0;

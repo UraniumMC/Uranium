@@ -222,7 +222,7 @@
 +                if (item != null)
 +                {
 +                    CaptureBlock tCapture=null;
-+                    if(MinecraftServer.uraniumConfig.captureBlockOnItemRightClick.getValue()) tCapture=p_73078_2_.mCapture.startCapture(thisPlayerMP,p_73078_3_);
++                    if(MinecraftServer.uraniumConfig.captureBlockOnItemRightClick.getValue()) tCapture=p_73078_2_.mCapture.get().startCapture(thisPlayerMP,p_73078_3_);
 +                    boolean tResult=item.onItemUseFirst(p_73078_3_,p_73078_1_,p_73078_2_,p_73078_4_,p_73078_5_,p_73078_6_,p_73078_7_,p_73078_8_,p_73078_9_,p_73078_10_);
 +                    if(tCapture!=null&&!tCapture.endCapture()) return false;
 +
@@ -246,7 +246,7 @@
 +            else if (!p_73078_1_.isSneaking() || p_73078_3_ == null || p_73078_1_.getHeldItem().getItem().doesSneakBypassUse(p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_1_))
 +            {
 +                CaptureBlock tCapture=null;
-+                if(MinecraftServer.uraniumConfig.captureBlockOnItemRightClick.getValue()) tCapture=p_73078_2_.mCapture.startCapture(thisPlayerMP,p_73078_3_);
++                if(MinecraftServer.uraniumConfig.captureBlockOnItemRightClick.getValue()) tCapture=p_73078_2_.mCapture.get().startCapture(thisPlayerMP,p_73078_3_);
 +                denyResult |= block.onBlockActivated(p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_1_, p_73078_7_, p_73078_8_, p_73078_9_, p_73078_10_);
 +                if(tCapture!=null&&!tCapture.endCapture()) return false;
 +                // Cauldron start - if bukkitView is null, create one. Required for Ender Chests since they do not use NetworkRegistry.openRemoteGUI

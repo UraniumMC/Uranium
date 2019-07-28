@@ -563,7 +563,7 @@ public class CraftWorld implements World {
             break;
         }
 
-        CaptureTree tCapture=world.mCapture.startTreeGenCapture(null,loc);
+        CaptureTree tCapture=world.mCapture.get().startTreeGenCapture(null,loc);
         boolean grownTree = gen.generate(world, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         tCapture.markHandled();
         if (grownTree) { // Copy block data to delegate
