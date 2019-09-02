@@ -1,8 +1,10 @@
 --- ../src-base/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
 +++ ../src-work/minecraft/org/bukkit/plugin/java/PluginClassLoader.java
-@@ -1,30 +1,174 @@
+@@ -1,30 +1,162 @@
  package org.bukkit.plugin.java;
  
++import static org.apache.commons.codec.Charsets.UTF_8;
++
 +import java.io.BufferedReader;
  import java.io.File;
 +import java.io.FileOutputStream;
@@ -23,29 +25,27 @@
 +import java.util.concurrent.ConcurrentMap;
 +import java.util.regex.Pattern;
  
-+import com.google.common.io.Files;
-+import com.google.gson.GsonBuilder;
-+import lombok.val;
 +import org.apache.commons.io.IOUtils;
  import org.apache.commons.lang.Validate;
  import org.bukkit.plugin.InvalidPluginException;
  import org.bukkit.plugin.PluginDescriptionFile;
-+import org.objectweb.asm.Type;
  
++import com.google.common.io.Files;
++import com.google.gson.GsonBuilder;
++
 +import cc.uraniummc.UraniumMapping;
 +import cc.uraniummc.UraniumRemapper;
++import cc.uraniummc.remap.UraniumSigleRepo;
 +import lombok.Getter;
++import lombok.val;
 +//import org.bouncycastle.util.io.Streams;
 +import net.md_5.specialsource.JarMapping;
 +import net.md_5.specialsource.JarRemapper;
 +import net.md_5.specialsource.RemapperProcessor;
 +import net.md_5.specialsource.provider.ClassLoaderProvider;
-+import net.md_5.specialsource.repo.RuntimeRepo;
 +import net.md_5.specialsource.transformer.MavenShade;
 +import net.minecraft.server.MinecraftServer;
 +import net.minecraftforge.cauldron.CauldronUtils;
-+
-+import static org.apache.commons.codec.Charsets.UTF_8;
 +
  /**
   * A ClassLoader for plugins, to allow shared classes across multiple plugins
@@ -64,6 +64,7 @@
      private JavaPlugin pluginInit;
      private IllegalStateException pluginState;
 +    // Cauldron start
++    @Getter
 +    private JarRemapper remapper;     // class remapper for this plugin, or null
 +    private RemapperProcessor remapperProcessor; // secondary; for inheritance & remapping reflection
 +    private boolean debug;            // classloader debugging
@@ -144,41 +145,28 @@
 +            if (pClass.startsWith(tPacket) && pClass.indexOf('.', tPacket.length()) != -1) {
 +                return pClass.substring(tPacket.length());
 +            } else if (pClass.startsWith("net.minecraft.server")) {
-+                JarMapping jarMapping = getJarMapping(remapFlags); // grab from SpecialSource
++                JarMapping jarMapping = getRemapper().jarMapping; // grab from SpecialSource
 +                String remappedClass = jarMapping.classes.get(pClass.replaceAll("\\.", "/")); // get remapped pkgmcp class name
 +                return remappedClass == null ? pClass : remappedClass;
 +            }
 +            return pClass;
 +        }
 +
-+        public String remapMethod(Class<?> pClass,String pName, Class<?>[]parameterTypes,boolean pDeclared){
-+            UraniumMapping jarMapping = (UraniumMapping)getJarMapping(remapFlags); // grab from SpecialSource
-+            String tOwner = jarMapping.mRclasses.get(pClass.getName().replace('.', '/'));
-+            if (tOwner == null) return pName;
-+
-+            StringBuilder keyF = new StringBuilder(pName + " (");
-+            if (parameterTypes != null && parameterTypes.length > 0) {
-+                for (Class<?> type : parameterTypes) {
-+                    keyF.append(Type.getType(type).getDescriptor());
-+                }
-+            }
-+            keyF.append(")");
-+            return jarMapping.remapMethod(tOwner, pName, keyF.toString(), pDeclared);
++        public String remapMethod(Class<?> pClass,String pName, Class<?>[] pParamTypes,boolean pDeclared){
++            UraniumMapping jarMapping = (UraniumMapping)getRemapper().jarMapping; // grab from SpecialSource
++            return jarMapping.remapMethod(pClass, pName, pParamTypes, pDeclared);
 +        }
 +
 +        public String remapField(Class<?> pClass, String pName, boolean pDeclared) {
-+            UraniumMapping jarMapping = (UraniumMapping)getJarMapping(remapFlags); // grab from SpecialSource
-+            String tOwner = jarMapping.mRclasses.get(pClass.getName().replace('.', '/'));
-+            if (tOwner == null) return pName;
-+
-+            return jarMapping.remapField(tOwner, pName, pDeclared);
++            UraniumMapping jarMapping = (UraniumMapping)getRemapper().jarMapping; // grab from SpecialSource
++            return jarMapping.remapField(pClass, pName, pDeclared);
 +        }
 +    }
 +    // Uranium end
      PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws InvalidPluginException, MalformedURLException {
          super(new URL[] {file.toURI().toURL()}, parent);
          Validate.notNull(loader, "Loader cannot be null");
-@@ -34,6 +178,155 @@
+@@ -34,6 +166,155 @@
          this.dataFolder = dataFolder;
          this.file = file;
  
@@ -284,7 +272,7 @@
 +        if (remapGuava21) flags |= F_REMAP_GUAVA21;
 +        //Uranium end
 +        remapFlags = flags; // used in findClass0
-+        JarMapping jarMapping = getJarMapping(flags);
++        JarMapping jarMapping = getJarMapping(flags,true);
 +
 +        // Load inheritance map
 +        if ((flags & F_GLOBAL_INHERIT) != 0) {
@@ -326,15 +314,15 @@
 +                Files.write(g.toJson(jarMapping.methods),fm, UTF_8);
 +                Files.write(g.toJson(jarMapping.fields),ff, UTF_8);
 +                Files.write(g.toJson(jarMapping.classes),fc,UTF_8);
-+                Files.write(g.toJson(um.mMethodsNR),frm,UTF_8);
-+                Files.write(g.toJson(um.mRclasses),frc,UTF_8);
++                Files.write(g.toJson(um.getMMethodsNR()),frm,UTF_8);
++                Files.write(g.toJson(um.getMRclasses()),frc,UTF_8);
 +            }catch (Exception e){}
 +        }
 +        //Uranium end
          try {
              Class<?> jarClass;
              try {
-@@ -58,34 +351,349 @@
+@@ -58,34 +339,353 @@
      }
  
      @Override
@@ -442,16 +430,21 @@
 +                null, // no version relocation for obf
 +                null, false);
 +    }
++    
 +    private JarMapping getJarMapping(int flags) {
-+        UraniumMapping jarMapping = jarMappings.get(flags);
-+        if (jarMapping != null) {
++        return getJarMapping(flags, false);
++    }
++    
++    private JarMapping getJarMapping(int flags,boolean doCopy) {
++        UraniumMapping jarMapping = new UraniumMapping();
++        UraniumMapping tMappingExist = jarMappings.get(flags);
++        if (tMappingExist != null) {
 +            if (debug) {
 +                System.out.println("Mapping reused for "+Integer.toHexString(flags));
              }
-+            return jarMapping;
++            return doCopy?tMappingExist.doCopy():tMappingExist;
 +        }
  
-+        jarMapping = new UraniumMapping();
 +        try {
 +
 +            // Guava 10 is part of the Bukkit API, so plugins can use it, but FML includes Guava 15
@@ -562,10 +555,10 @@
 +
 +            System.out.println("Mapping loaded "+jarMapping.packages.size()+" packages, "+jarMapping.classes.size()+" classes, "+jarMapping.fields.size()+" fields, "+jarMapping.methods.size()+" methods, flags "+Integer.toHexString(flags));
 +
-+            if(jarMapping.mMethodsNR.isEmpty()&&!jarMapping.methods.isEmpty()){
++            if(jarMapping.getMMethodsNR().isEmpty()&&!jarMapping.methods.isEmpty()){
 +                jarMapping.loadMethodsNR();
 +            }
-+            if(jarMapping.mRclasses.isEmpty()&&!jarMapping.classes.isEmpty()){
++            if(jarMapping.getMRclasses().isEmpty()&&!jarMapping.classes.isEmpty()){
 +                jarMapping.loadRClasses();
 +            }
 +            JarMapping currentJarMapping = jarMappings.putIfAbsent(flags, jarMapping);
@@ -580,8 +573,7 @@
 +        // Cauldron start - remap any calls for classes with packaged nms version
 +        if (name.startsWith("net.minecraft."))
 +        {
-+            JarMapping jarMapping = this.getJarMapping(remapFlags); // grab from SpecialSource
-+            String remappedClass = jarMapping.classes.get(name.replaceAll("\\.", "/")); // get remapped pkgmcp class name
++            String remappedClass = umcl.remapClass(name); // get remapped pkgmcp class name
 +            Class<?> clazz = ((net.minecraft.launchwrapper.LaunchClassLoader)MinecraftServer.getServer().getClass().getClassLoader()).findClass(remappedClass);
 +            return clazz;
 +        }
@@ -601,6 +593,8 @@
 +                    result = loader.getClassByName(name); // Don't warn on deprecation, but maintain overridability
 +                }
  
+-                if (result != null) {
+-                    loader.setClass(name, result);
 +                if (result == null) {
 +                    if (remapper == null) {
 +                        result = super.findClass(name);
@@ -611,15 +605,14 @@
 +                    if (result != null) {
 +                        loader.setClass(name, result);
 +                    }
-+                }
-                 if (result != null) {
--                    loader.setClass(name, result);
+                 }
++                if (result != null) {
 +                    Class<?> old = classes.putIfAbsent(name, result);
 +                    if (old != null && old != result) {
 +                        System.err.println("Defined class " + name + " twice as different classes, " + result + " and " + old);
 +                        result = old;
 +                    }
-                 }
++                } else throw new ClassNotFoundException(name);
              }
  
 -            classes.put(name, result);
@@ -651,7 +644,7 @@
 +                    }*/
 +
 +                    // Remap the classes
-+                    byte[] remappedBytecode = remapper.remapClassFile(bytecode, RuntimeRepo.getInstance());
++                    byte[] remappedBytecode = remapper.remapClassFile(bytecode, new UraniumSigleRepo(name, bytecode));
 +
 +                    if (debug) {
 +                        File file = new File("remapped-plugin-classes/"+name+".class");

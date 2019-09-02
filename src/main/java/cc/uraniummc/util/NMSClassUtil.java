@@ -83,4 +83,9 @@ public class NMSClassUtil{
         return pOwnClazz.getDeclaredField(pFieldName);
     }
 
+    @CallerSensitive
+    public static Class remapClass(ClassLoader pLoader,String pName,Class<?> pCaller)throws ClassNotFoundException{
+        return pLoader.loadClass(((PluginClassLoader)pCaller.getClassLoader()).umcl.remapClass(pName));
+    }
+
 }
