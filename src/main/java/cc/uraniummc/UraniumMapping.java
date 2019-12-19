@@ -240,6 +240,7 @@ public class UraniumMapping extends JarMapping{
         tNew.mMethodsNR = this.mMethodsNR;
         tNew.mRclasses = this.mRclasses;
         tNew.mMethodsExtends = this.mMethodsExtends;
+        tNew.mReverseMethods = this.mReverseMethods;
 
         ReflectUtil.setFinalFieldValue(Jarmapping_packages, tNew, this.packages);
         ReflectUtil.setFinalFieldValue(Jarmapping_classes, tNew, this.classes);
