@@ -18,6 +18,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -112,12 +113,22 @@ public class UraniumRemapper extends JarRemapper implements Opcodes {
                         int tIndex = mi.desc.indexOf(')');
                         mi.desc = mi.desc.substring(0, tIndex) + "Ljava/lang/Class;" + (mi.desc.substring(tIndex));
                     } else if (mi.owner.equals("java/lang/ClassLoader") && mi.name.equals("loadClass")){
+                        boolean tBooleanArgs=mi.desc.contains("Z)");
+                        if(tBooleanArgs){
+                            tMNode.instructions.insertBefore(mi,new InsnNode(Opcodes.SWAP));
+                            j++;
+                        }
+
                         tMNode.instructions.insertBefore(mi, new LdcInsnNode(Type.getObjectType(mLoader.getDescription().getMain().replace(".", "/"))));
-                        mi.owner = Type.getType(NMSClassUtil.class).getInternalName();
-                        mi.name = "remapClass";
-                        mi.desc = "(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Class;";
-                        mi.setOpcode(INVOKESTATIC);
-                        j++;
+                        tMNode.instructions.insertBefore(mi, new MethodInsnNode(INVOKESTATIC, 
+                                Type.getType(NMSClassUtil.class).getInternalName(),
+                                "remapClass", "(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/String;",false));
+                        
+                        if(tBooleanArgs){
+                            tMNode.instructions.insertBefore(mi,new InsnNode(Opcodes.SWAP));
+                            j++;
+                        }
+                        j+=2;
                     }
                 }
             }

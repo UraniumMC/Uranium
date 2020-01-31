@@ -84,8 +84,8 @@ public class NMSClassUtil{
     }
 
     @CallerSensitive
-    public static Class remapClass(ClassLoader pLoader,String pName,Class<?> pCaller)throws ClassNotFoundException{
-        return pLoader.loadClass(((PluginClassLoader)pCaller.getClassLoader()).umcl.remapClass(pName));
+    public static String remapClass(String pName,Class<?> pCaller){
+        return ((PluginClassLoader)pCaller.getClassLoader()).umcl.remapClass(pName);
     }
 
 }
