@@ -51,7 +51,7 @@
  @SideOnly(Side.SERVER)
  public class DedicatedServer extends MinecraftServer implements IServer
  {
-@@ -44,18 +61,21 @@
+@@ -44,18 +61,23 @@
      public final List pendingCommandList = Collections.synchronizedList(new ArrayList());
      private RConThreadQuery theRConThreadQuery;
      private RConThreadMain theRConThreadMain;
@@ -65,7 +65,9 @@
      private static final String __OBFID = "CL_00001784";
 -
 -    public DedicatedServer(File p_i1508_1_)
++    // Uranium start
 +    private YUMCStatistics yumc_statistics;
++    // Uranium end
 +    // CraftBukkit start - Signature changed
 +    public DedicatedServer(joptsimple.OptionSet options)
      {
@@ -78,7 +80,7 @@
          {
              private static final String __OBFID = "CL_00001787";
              {
-@@ -82,31 +102,77 @@
+@@ -82,31 +104,77 @@
          };
      }
  
@@ -163,7 +165,7 @@
          field_155771_h.info("Starting minecraft server version 1.7.10");
  
          if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L)
-@@ -115,26 +181,19 @@
+@@ -115,26 +183,19 @@
          }
  
          FMLCommonHandler.instance().onServerStart(this);
@@ -193,7 +195,7 @@
                  this.setHostname(this.settings.getStringProperty("server-ip", ""));
              }
  
-@@ -172,6 +231,18 @@
+@@ -172,6 +233,18 @@
                  this.setServerPort(this.settings.getIntProperty("server-port", 25565));
              }
  
@@ -212,7 +214,7 @@
              field_155771_h.info("Generating keypair");
              this.setKeyPair(CryptManager.createNewKeyPair());
              field_155771_h.info("Starting Minecraft server on " + (this.getServerHostname().length() == 0 ? "*" : this.getServerHostname()) + ":" + this.getServerPort());
-@@ -180,7 +251,7 @@
+@@ -180,7 +253,7 @@
              {
                  this.func_147137_ag().addLanEndpoint(inetaddress, this.getServerPort());
              }
@@ -221,7 +223,7 @@
              {
                  field_155771_h.warn("**** FAILED TO BIND TO PORT!");
                  field_155771_h.warn("The exception was: {}", new Object[] {ioexception.toString()});
-@@ -194,12 +265,36 @@
+@@ -194,12 +267,36 @@
                  field_155771_h.warn("The server will make no attempt to authenticate usernames. Beware.");
                  field_155771_h.warn("While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.");
                  field_155771_h.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
@@ -260,7 +262,7 @@
  
              if (!PreYggdrasilConverter.func_152714_a(this.settings))
              {
-@@ -208,7 +303,8 @@
+@@ -208,7 +305,8 @@
              else
              {
                  FMLCommonHandler.instance().onServerStarted();
@@ -270,7 +272,7 @@
                  long j = System.nanoTime();
  
                  if (this.getFolderName() == null)
-@@ -274,11 +370,40 @@
+@@ -274,11 +372,40 @@
                      this.theRConThreadMain.startThread();
                  }
  
@@ -311,7 +313,7 @@
      public boolean canStructuresSpawn()
      {
          return this.canSpawnStructures;
-@@ -364,11 +489,19 @@
+@@ -364,11 +491,19 @@
  
      public void executePendingCommands()
      {
