@@ -1,6 +1,6 @@
 --- ../src-base/minecraft/cpw/mods/fml/common/registry/LanguageRegistry.java
 +++ ../src-work/minecraft/cpw/mods/fml/common/registry/LanguageRegistry.java
-@@ -316,6 +316,7 @@
+@@ -314,6 +314,7 @@
                  FMLLog.fine("Injecting found translation assets for lang %s at %s into language system", lang, currPath);
                  LanguageRegistry.instance().injectLanguage(lang, StringTranslate.parseLangFile(new FileInputStream(file)));
                  // Ensure en_US is available to StringTranslate on the server

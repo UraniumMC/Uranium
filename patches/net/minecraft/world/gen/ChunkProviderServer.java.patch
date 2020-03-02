@@ -137,7 +137,7 @@
          }
      }
  
-@@ -96,6 +158,10 @@
+@@ -96,6 +158,14 @@
          }
      }
  
@@ -145,10 +145,14 @@
 +        return (Chunk)this.loadedChunkHashMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(x, z));
 +    }
 +
++    public boolean checkChunkIsLoaded(int x, int z){
++        return this.loadedChunkHashMap.containsItem(ChunkCoordIntPair.chunkXZ2Int(x, z));
++    }
++
      public Chunk loadChunk(int p_73158_1_, int p_73158_2_)
      {
          return loadChunk(p_73158_1_, p_73158_2_, null);
-@@ -103,9 +169,9 @@
+@@ -103,9 +173,9 @@
  
      public Chunk loadChunk(int par1, int par2, Runnable runnable)
      {
@@ -161,7 +165,7 @@
          AnvilChunkLoader loader = null;
  
          if (this.currentChunkLoader instanceof AnvilChunkLoader)
-@@ -113,6 +179,8 @@
+@@ -113,6 +183,8 @@
              loader = (AnvilChunkLoader) this.currentChunkLoader;
          }
  
@@ -170,7 +174,7 @@
          // We can only use the queue for already generated chunks
          if (chunk == null && loader != null && loader.chunkExists(this.worldObj, par1, par2))
          {
-@@ -128,6 +196,12 @@
+@@ -128,6 +200,12 @@
          }
          else if (chunk == null)
          {
@@ -183,7 +187,7 @@
              chunk = this.originalLoadChunk(par1, par2);
          }
  
-@@ -142,18 +216,20 @@
+@@ -142,18 +220,20 @@
  
      public Chunk originalLoadChunk(int p_73158_1_, int p_73158_2_)
      {
@@ -209,7 +213,7 @@
              if (chunk == null)
              {
                  chunk = this.safeLoadChunk(p_73158_1_, p_73158_2_);
-@@ -176,30 +252,84 @@
+@@ -176,30 +256,84 @@
                          CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Exception generating new chunk");
                          CrashReportCategory crashreportcategory = crashreport.makeCategory("Chunk to be generated");
                          crashreportcategory.addCrashSection("Location", String.format("%d,%d", new Object[] {Integer.valueOf(p_73158_1_), Integer.valueOf(p_73158_2_)}));
@@ -302,7 +306,7 @@
      {
          if (this.currentChunkLoader == null)
          {
-@@ -209,6 +339,7 @@
+@@ -209,6 +343,7 @@
          {
              try
              {
@@ -310,7 +314,7 @@
                  Chunk chunk = this.currentChunkLoader.loadChunk(this.worldObj, p_73239_1_, p_73239_2_);
  
                  if (chunk != null)
-@@ -217,8 +348,11 @@
+@@ -217,8 +352,11 @@
  
                      if (this.currentChunkProvider != null)
                      {
@@ -322,7 +326,7 @@
                  }
  
                  return chunk;
-@@ -231,7 +365,7 @@
+@@ -231,7 +369,7 @@
          }
      }
  
@@ -331,7 +335,7 @@
      {
          if (this.currentChunkLoader != null)
          {
-@@ -246,7 +380,7 @@
+@@ -246,7 +384,7 @@
          }
      }
  
@@ -340,7 +344,7 @@
      {
          if (this.currentChunkLoader != null)
          {
-@@ -254,15 +388,18 @@
+@@ -254,15 +392,18 @@
              {
                  p_73242_1_.lastSaveTime = this.worldObj.getTotalWorldTime();
                  this.currentChunkLoader.saveChunk(this.worldObj, p_73242_1_);
@@ -360,7 +364,7 @@
          }
      }
  
-@@ -276,9 +413,40 @@
+@@ -276,9 +417,40 @@
  
              if (this.currentChunkProvider != null)
              {
@@ -401,7 +405,7 @@
              }
          }
      }
-@@ -286,11 +454,13 @@
+@@ -286,11 +458,13 @@
      public boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_)
      {
          int i = 0;
@@ -418,7 +422,7 @@
  
              if (p_73151_1_)
              {
-@@ -325,36 +495,73 @@
+@@ -325,36 +499,73 @@
      {
          if (!this.worldObj.levelSaving)
          {
@@ -511,7 +515,7 @@
              if (this.currentChunkLoader != null)
              {
                  this.currentChunkLoader.chunkTick();
-@@ -371,7 +578,7 @@
+@@ -371,7 +582,7 @@
  
      public String makeString()
      {
@@ -520,7 +524,7 @@
      }
  
      public List getPossibleCreatures(EnumCreatureType p_73155_1_, int p_73155_2_, int p_73155_3_, int p_73155_4_)
-@@ -390,4 +597,49 @@
+@@ -390,4 +601,49 @@
      }
  
      public void recreateStructures(int p_82695_1_, int p_82695_2_) {}
