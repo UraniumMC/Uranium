@@ -86,6 +86,7 @@ public class UraniumConfig extends ConfigBase {
     public IntSetting endlessLoopCheckDeep =new IntSetting(this,"EndlessLoopCheck.deep",2,"same event type,default loop deep");
     public BoolSetting enablePreventChunkLoad = new BoolSetting(this, "experimental.PerventChunkLoad",false,"EXPERIMENTAL ! Prevent tile to load chunk, it will borken lots mods," +
             "but it maybe can prevent server crash!");
+    public BoolSetting enableBukkitForgeEvent = new BoolSetting(this,"experimental.BukkitForgeEvent",false,"EXPERIMENTAL ! Send forge event with bukkit api. Not tested, may be it not working.");
     public UraniumConfig() {
         super("uranium.yml", "um");
         for(Field sField : UraniumConfig.class.getDeclaredFields()){

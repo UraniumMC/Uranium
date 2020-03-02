@@ -1537,7 +1537,7 @@
          {
              dest.add(entity);
          }
-@@ -4029,4 +4752,124 @@
+@@ -4029,4 +4752,125 @@
          }
          return count;
      }
@@ -1659,6 +1659,7 @@
 +        if(this.chunkProvider instanceof ChunkProviderServer){
 +            return ((ChunkProviderServer) this.chunkProvider).checkChunkIsLoaded(x, z);
 +        }
-+        return false;
++        //When chunkProvider is not ChunkProviderServer return true
++        return true;
 +    }
  }
