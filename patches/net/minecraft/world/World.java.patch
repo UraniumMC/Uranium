@@ -505,7 +505,7 @@
  
      private static MapStorage s_mapStorage;
      private static ISaveHandler s_savehandler;
-@@ -336,6 +645,19 @@
+@@ -336,12 +645,28 @@
  
      public Block getBlock(int p_147439_1_, int p_147439_2_, int p_147439_3_)
      {
@@ -525,7 +525,16 @@
          if (p_147439_1_ >= -30000000 && p_147439_3_ >= -30000000 && p_147439_1_ < 30000000 && p_147439_3_ < 30000000 && p_147439_2_ >= 0 && p_147439_2_ < 256)
          {
              Chunk chunk = null;
-@@ -404,7 +726,7 @@
+ 
+             try
+             {
++                if(MinecraftServer.uraniumConfig.enablePreventChunkLoad.getValue()){
++                   return Blocks.air;
++                }
+                 chunk = this.getChunkFromChunkCoords(p_147439_1_ >> 4, p_147439_3_ >> 4);
+                 return chunk.getBlock(p_147439_1_ & 15, p_147439_2_, p_147439_3_ & 15);
+             }
+@@ -404,7 +729,7 @@
          }
      }
  
@@ -534,7 +543,7 @@
      {
          return this.chunkProvider.chunkExists(p_72916_1_, p_72916_2_);
      }
-@@ -421,6 +743,28 @@
+@@ -421,6 +746,28 @@
  
      public boolean setBlock(int p_147465_1_, int p_147465_2_, int p_147465_3_, Block p_147465_4_, int p_147465_5_, int p_147465_6_)
      {
@@ -563,7 +572,7 @@
          if (p_147465_1_ >= -30000000 && p_147465_3_ >= -30000000 && p_147465_1_ < 30000000 && p_147465_3_ < 30000000)
          {
              if (p_147465_2_ < 0)
-@@ -435,32 +779,42 @@
+@@ -435,32 +782,42 @@
              {
                  Chunk chunk = this.getChunkFromChunkCoords(p_147465_1_ >> 4, p_147465_3_ >> 4);
                  Block block1 = null;
@@ -617,7 +626,7 @@
                  {
                      // Modularize client and physic updates
                      this.markAndNotifyBlock(p_147465_1_, p_147465_2_, p_147465_3_, chunk, block1, p_147465_4_, p_147465_6_);
-@@ -496,6 +850,20 @@
+@@ -496,6 +853,20 @@
  
      public int getBlockMetadata(int p_72805_1_, int p_72805_2_, int p_72805_3_)
      {
@@ -638,7 +647,7 @@
          if (p_72805_1_ >= -30000000 && p_72805_3_ >= -30000000 && p_72805_1_ < 30000000 && p_72805_3_ < 30000000)
          {
              if (p_72805_2_ < 0)
-@@ -511,7 +879,7 @@
+@@ -511,7 +882,7 @@
                  Chunk chunk = this.getChunkFromChunkCoords(p_72805_1_ >> 4, p_72805_3_ >> 4);
                  p_72805_1_ &= 15;
                  p_72805_3_ &= 15;
@@ -647,7 +656,7 @@
              }
          }
          else
-@@ -534,6 +902,14 @@
+@@ -534,6 +905,14 @@
              }
              else
              {
@@ -662,7 +671,7 @@
                  Chunk chunk = this.getChunkFromChunkCoords(p_72921_1_ >> 4, p_72921_3_ >> 4);
                  int j1 = p_72921_1_ & 15;
                  int k1 = p_72921_3_ & 15;
-@@ -541,20 +917,25 @@
+@@ -541,20 +920,25 @@
  
                  if (flag)
                  {
@@ -699,7 +708,7 @@
                          }
                      }
                  }
-@@ -610,6 +991,12 @@
+@@ -610,6 +994,12 @@
  
      public void notifyBlockChange(int p_147444_1_, int p_147444_2_, int p_147444_3_, Block p_147444_4_)
      {
@@ -712,7 +721,7 @@
          this.notifyBlocksOfNeighborChange(p_147444_1_, p_147444_2_, p_147444_3_, p_147444_4_);
      }
  
-@@ -694,6 +1081,21 @@
+@@ -694,6 +1084,21 @@
  
              try
              {
@@ -734,7 +743,7 @@
                  block.onNeighborBlockChange(this, p_147460_1_, p_147460_2_, p_147460_3_, p_147460_4_);
              }
              catch (Throwable throwable1)
-@@ -1307,8 +1709,22 @@
+@@ -1307,8 +1712,22 @@
  
      public boolean spawnEntityInWorld(Entity p_72838_1_)
      {
@@ -758,7 +767,7 @@
  
          int i = MathHelper.floor_double(p_72838_1_.posX / 16.0D);
          int j = MathHelper.floor_double(p_72838_1_.posZ / 16.0D);
-@@ -1319,23 +1735,99 @@
+@@ -1319,23 +1738,99 @@
              flag = true;
          }
  
@@ -860,7 +869,7 @@
              return true;
          }
      }
-@@ -1346,6 +1838,8 @@
+@@ -1346,6 +1841,8 @@
          {
              ((IWorldAccess)this.worldAccesses.get(i)).onEntityCreate(p_72923_1_);
          }
@@ -869,7 +878,7 @@
      }
  
      public void onEntityRemoved(Entity p_72847_1_)
-@@ -1354,6 +1848,8 @@
+@@ -1354,6 +1851,8 @@
          {
              ((IWorldAccess)this.worldAccesses.get(i)).onEntityDestroy(p_72847_1_);
          }
@@ -878,7 +887,7 @@
      }
  
      public void removeEntity(Entity p_72900_1_)
-@@ -1397,6 +1893,19 @@
+@@ -1397,6 +1896,19 @@
          }
  
          this.loadedEntityList.remove(p_72973_1_);
@@ -898,7 +907,7 @@
          this.onEntityRemoved(p_72973_1_);
      }
  
-@@ -1408,40 +1917,58 @@
+@@ -1408,40 +1920,58 @@
      public List getCollidingBoundingBoxes(Entity p_72945_1_, AxisAlignedBB p_72945_2_)
      {
          this.collidingBoundingBoxes.clear();
@@ -971,7 +980,7 @@
  
          for (int j2 = 0; j2 < list.size(); ++j2)
          {
-@@ -1797,11 +2324,22 @@
+@@ -1797,11 +2327,22 @@
          Entity entity;
          CrashReport crashreport;
          CrashReportCategory crashreportcategory;
@@ -994,7 +1003,7 @@
              try
              {
                  ++entity.ticksExisted;
-@@ -1812,14 +2350,7 @@
+@@ -1812,14 +2353,7 @@
                  crashreport = CrashReport.makeCrashReport(throwable2, "Ticking entity");
                  crashreportcategory = crashreport.makeCategory("Entity being ticked");
  
@@ -1010,7 +1019,7 @@
  
                  if (ForgeModContainer.removeErroringEntities)
                  {
-@@ -1862,10 +2393,14 @@
+@@ -1862,10 +2396,14 @@
  
          this.unloadedEntityList.clear();
          this.theProfiler.endStartSection("regular");
@@ -1028,7 +1037,7 @@
  
              if (entity.ridingEntity != null)
              {
-@@ -1884,7 +2419,9 @@
+@@ -1884,7 +2422,9 @@
              {
                  try
                  {
@@ -1038,7 +1047,7 @@
                  }
                  catch (Throwable throwable1)
                  {
-@@ -1916,30 +2453,84 @@
+@@ -1916,30 +2456,84 @@
                  {
                      this.getChunkFromChunkCoords(j, l).removeEntity(entity);
                  }
@@ -1130,7 +1139,7 @@
                      crashreport = CrashReport.makeCrashReport(throwable, "Ticking block entity");
                      crashreportcategory = crashreport.makeCategory("Block entity being ticked");
                      tileentity.func_145828_a(crashreportcategory);
-@@ -1955,23 +2546,13 @@
+@@ -1955,23 +2549,13 @@
                      }
                  }
              }
@@ -1159,7 +1168,7 @@
          if (!this.field_147483_b.isEmpty())
          {
              for (Object tile : field_147483_b)
-@@ -1981,6 +2562,7 @@
+@@ -1981,6 +2565,7 @@
              this.loadedTileEntityList.removeAll(this.field_147483_b);
              this.field_147483_b.clear();
          }
@@ -1167,7 +1176,7 @@
  
          this.field_147481_N = false;
  
-@@ -2016,17 +2598,23 @@
+@@ -2016,17 +2601,23 @@
              this.addedTileEntityList.clear();
          }
  
@@ -1194,7 +1203,7 @@
      }
  
      public void updateEntity(Entity p_72870_1_)
-@@ -2036,21 +2624,41 @@
+@@ -2036,21 +2627,41 @@
  
      public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
      {
@@ -1238,7 +1247,7 @@
              p_72866_1_.lastTickPosX = p_72866_1_.posX;
              p_72866_1_.lastTickPosY = p_72866_1_.posY;
              p_72866_1_.lastTickPosZ = p_72866_1_.posZ;
-@@ -2134,6 +2742,7 @@
+@@ -2134,6 +2745,7 @@
                      p_72866_1_.riddenByEntity = null;
                  }
              }
@@ -1246,7 +1255,7 @@
          }
      }
  
-@@ -2570,7 +3179,7 @@
+@@ -2570,7 +3182,7 @@
              return;
          }
  
@@ -1255,7 +1264,7 @@
          {
              if (this.field_147481_N)
              {
-@@ -2612,6 +3221,9 @@
+@@ -2612,6 +3224,9 @@
  
      public void func_147457_a(TileEntity p_147457_1_)
      {
@@ -1265,7 +1274,7 @@
          this.field_147483_b.add(p_147457_1_);
      }
  
-@@ -2718,7 +3330,15 @@
+@@ -2718,7 +3333,15 @@
  
                      if (i <= 0)
                      {
@@ -1282,7 +1291,7 @@
                      }
                  }
  
-@@ -2754,7 +3374,15 @@
+@@ -2754,7 +3377,15 @@
  
                      if (j <= 0)
                      {
@@ -1299,7 +1308,7 @@
                      }
                  }
  
-@@ -2777,8 +3405,41 @@
+@@ -2777,8 +3408,41 @@
      protected void setActivePlayerChunksAndCheckLight()
      {
          this.activeChunkSet.clear();
@@ -1342,7 +1351,7 @@
          int i;
          EntityPlayer entityplayer;
          int j;
-@@ -2788,17 +3449,28 @@
+@@ -2788,17 +3452,28 @@
          for (i = 0; i < this.playerEntities.size(); ++i)
          {
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
@@ -1377,7 +1386,7 @@
          }
  
          this.theProfiler.endSection();
-@@ -2810,7 +3482,7 @@
+@@ -2810,7 +3485,7 @@
  
          this.theProfiler.startSection("playerCheckLight");
  
@@ -1386,7 +1395,7 @@
          {
              i = this.rand.nextInt(this.playerEntities.size());
              entityplayer = (EntityPlayer)this.playerEntities.get(i);
-@@ -3034,9 +3706,9 @@
+@@ -3034,9 +3709,9 @@
          }
      }
  
@@ -1398,7 +1407,7 @@
          {
              return false;
          }
-@@ -3284,8 +3956,21 @@
+@@ -3284,8 +3959,21 @@
          {
              Entity entity = (Entity)this.loadedEntityList.get(j);
  
@@ -1421,7 +1430,7 @@
                  ++i;
              }
          }
-@@ -3298,6 +3983,7 @@
+@@ -3298,6 +3986,7 @@
          for (int i = 0; i < p_72868_1_.size(); ++i)
          {
              Entity entity = (Entity)p_72868_1_.get(i);
@@ -1429,7 +1438,7 @@
              if (!MinecraftForge.EVENT_BUS.post(new EntityJoinWorldEvent(entity, this)))
              {
                  loadedEntityList.add(entity);
-@@ -3314,8 +4000,17 @@
+@@ -3314,8 +4003,17 @@
      public boolean canPlaceEntityOnSide(Block p_147472_1_, int p_147472_2_, int p_147472_3_, int p_147472_4_, boolean p_147472_5_, int p_147472_6_, Entity p_147472_7_, ItemStack p_147472_8_)
      {
          Block block1 = this.getBlock(p_147472_2_, p_147472_3_, p_147472_4_);
@@ -1448,7 +1457,7 @@
      }
  
      public PathEntity getPathEntityToEntity(Entity p_72865_1_, Entity p_72865_2_, float p_72865_3_, boolean p_72865_4_, boolean p_72865_5_, boolean p_72865_6_, boolean p_72865_7_)
-@@ -3464,6 +4159,12 @@
+@@ -3464,6 +4162,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1461,7 +1470,7 @@
              double d5 = entityplayer1.getDistanceSq(p_72977_1_, p_72977_3_, p_72977_5_);
  
              if ((p_72977_7_ < 0.0D || d5 < p_72977_7_ * p_72977_7_) && (d4 == -1.0D || d5 < d4))
-@@ -3489,7 +4190,12 @@
+@@ -3489,7 +4193,12 @@
          for (int i = 0; i < this.playerEntities.size(); ++i)
          {
              EntityPlayer entityplayer1 = (EntityPlayer)this.playerEntities.get(i);
@@ -1475,7 +1484,7 @@
              if (!entityplayer1.capabilities.disableDamage && entityplayer1.isEntityAlive())
              {
                  double d5 = entityplayer1.getDistanceSq(p_72846_1_, p_72846_3_, p_72846_5_);
-@@ -3660,6 +4366,18 @@
+@@ -3660,6 +4369,18 @@
  
      public void updateAllPlayersSleepingFlag() {}
  
@@ -1494,7 +1503,7 @@
      public float getWeightedThunderStrength(float p_72819_1_)
      {
          return (this.prevThunderingStrength + (this.thunderingStrength - this.prevThunderingStrength) * p_72819_1_) * this.getRainStrength(p_72819_1_);
-@@ -3932,8 +4650,8 @@
+@@ -3932,8 +4653,8 @@
       */
      public void addTileEntity(TileEntity entity)
      {
@@ -1505,7 +1514,7 @@
          {
              dest.add(entity);
          }
-@@ -4029,4 +4747,117 @@
+@@ -4029,4 +4750,117 @@
          }
          return count;
      }

@@ -84,6 +84,8 @@ public class UraniumConfig extends ConfigBase {
     public BoolSetting enableForgeRespawnClone =new BoolSetting(this,"forge.clone-player-on-respawn",false,"Original forge will clone a new player when player respawn, some mods needs this feature.");
     public BoolSetting enableEndlessLoopCheck =new BoolSetting(this,"EndlessLoopCheck.enable",false,"enable a check to prevent endless loop");
     public IntSetting endlessLoopCheckDeep =new IntSetting(this,"EndlessLoopCheck.deep",2,"same event type,default loop deep");
+    public BoolSetting enablePreventChunkLoad = new BoolSetting(this, "experimental.PerventChunkLoad",false,"EXPERIMENTAL ! Prevent tile to load chunk, it will borken lots mods," +
+            "but it maybe can prevent server crash!");
     public UraniumConfig() {
         super("uranium.yml", "um");
         for(Field sField : UraniumConfig.class.getDeclaredFields()){
