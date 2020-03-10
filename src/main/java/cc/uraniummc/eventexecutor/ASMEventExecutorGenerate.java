@@ -132,7 +132,7 @@ public class ASMEventExecutorGenerate{
         return Modifier.isPublic(pTarget.getModifiers())&&Modifier.isPublic(pMethod.getModifiers());
     }
 
-    private static Class<?> defineClass(String pName,byte[] pData,ClassLoader pLoader){
+    public static Class<?> defineClass(String pName,byte[] pData,ClassLoader pLoader){
         try{
             return (Class<?>)method_ClassLoader_defineClass.invoke(pLoader,pName,pData,0,pData.length);
         }catch(Exception e){

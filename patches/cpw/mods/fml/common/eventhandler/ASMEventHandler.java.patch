@@ -1,0 +1,31 @@
+--- ../src-base/minecraft/cpw/mods/fml/common/eventhandler/ASMEventHandler.java
++++ ../src-work/minecraft/cpw/mods/fml/common/eventhandler/ASMEventHandler.java
+@@ -6,11 +6,14 @@
+ import java.util.HashMap;
+ 
+ import org.apache.logging.log4j.ThreadContext;
++import org.bukkit.plugin.java.PluginClassLoader;
+ import org.objectweb.asm.ClassWriter;
+ import org.objectweb.asm.MethodVisitor;
+ import org.objectweb.asm.Type;
+ 
+ import com.google.common.collect.Maps;
++
++import cc.uraniummc.eventexecutor.ASMEventExecutorGenerate;
+ import cpw.mods.fml.common.ModContainer;
+ 
+ 
+@@ -118,7 +121,12 @@
+             mv.visitEnd();
+         }
+         cw.visitEnd();
+-        Class<?> ret = LOADER.define(name, cw.toByteArray());
++
++        Class<?> ret;
++        if (callback.getDeclaringClass().getClassLoader() instanceof PluginClassLoader) {
++            ret = ASMEventExecutorGenerate.defineClass(name, cw.toByteArray(), callback.getDeclaringClass().getClassLoader());
++        } else ret = LOADER.define(name, cw.toByteArray());
++
+         cache.put(callback, ret);
+         return ret;
+     }

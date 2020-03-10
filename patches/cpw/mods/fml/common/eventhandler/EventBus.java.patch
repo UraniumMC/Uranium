@@ -16,17 +16,26 @@
  import org.apache.logging.log4j.Level;
  
  import com.google.common.base.Preconditions;
-@@ -19,6 +22,9 @@
+@@ -19,6 +22,10 @@
  import cpw.mods.fml.common.FMLLog;
  import cpw.mods.fml.common.Loader;
  import cpw.mods.fml.common.ModContainer;
 +import net.minecraft.server.MinecraftServer;
 +import net.minecraftforge.common.MinecraftForge;
 +import org.bukkit.Bukkit;
++import org.bukkit.plugin.java.PluginClassLoader;
  
  public class EventBus implements IEventExceptionHandler
  {
-@@ -129,8 +135,25 @@
+@@ -52,6 +59,7 @@
+         ModContainer activeModContainer = Loader.instance().activeModContainer();
+         if (activeModContainer == null)
+         {
++            if (target == null || !(target.getClass().getClassLoader() instanceof PluginClassLoader))
+             FMLLog.log(Level.ERROR, new Throwable(), "Unable to determine registrant mod for %s. This is a critical error and should be impossible", target);
+             activeModContainer = Loader.instance().getMinecraftModContainer();
+         }
+@@ -129,8 +137,25 @@
          }
      }
  
@@ -52,7 +61,7 @@
          IEventListener[] listeners = event.getListenerList().getListeners(busID);
          int index = 0;
          try
-@@ -144,8 +167,22 @@
+@@ -144,8 +169,22 @@
          {
              exceptionHandler.handleException(this, event, listeners, index, throwable);
              Throwables.propagate(throwable);
