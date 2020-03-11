@@ -61,7 +61,7 @@
          IEventListener[] listeners = event.getListenerList().getListeners(busID);
          int index = 0;
          try
-@@ -144,8 +169,22 @@
+@@ -144,7 +169,21 @@
          {
              exceptionHandler.handleException(this, event, listeners, index, throwable);
              Throwables.propagate(throwable);
@@ -75,13 +75,11 @@
 +                }
 +            }
          }
--        return (event.isCancelable() ? event.isCanceled() : false);
 +        if((MinecraftServer.uraniumConfig.enableBukkitForgeEvent.getValue())&&(!event.isCancelable() || !event.isCanceled())) {
 +            val bukkitEvent = new UraniumForgeEvent(event);
 +            Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
-+            return event.isCancelable() && event.isCanceled();
 +        }
-+        return false;
++
+         return (event.isCancelable() ? event.isCanceled() : false);
      }
  
-     @Override
