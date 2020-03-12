@@ -152,7 +152,7 @@
 +    // Spigot end
 +    // Cauldron start
 +    public static CauldronConfig cauldronConfig;
-+    public static UraniumConfig uraniumConfig;
++    public static UraniumConfig uraniumConfig = new UraniumConfig();;
 +    public static TileEntityConfig tileEntityConfig;
 +    public static EntityConfig entityConfig;
 +    public static YamlConfiguration configuration;

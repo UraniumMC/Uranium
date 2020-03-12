@@ -35,7 +35,7 @@
              FMLLog.log(Level.ERROR, new Throwable(), "Unable to determine registrant mod for %s. This is a critical error and should be impossible", target);
              activeModContainer = Loader.instance().getMinecraftModContainer();
          }
-@@ -129,8 +137,25 @@
+@@ -129,8 +137,24 @@
          }
      }
  
@@ -43,8 +43,7 @@
 +
      public boolean post(Event event)
      {
-+        Boolean tEnable = MinecraftServer.uraniumConfig==null?Boolean.FALSE:MinecraftServer.uraniumConfig.enableEndlessLoopCheck.getValue();
-+        if (tEnable && this == MinecraftForge.EVENT_BUS) {
++        if (MinecraftServer.uraniumConfig.enableEndlessLoopCheck.getValue() && this == MinecraftForge.EVENT_BUS) {
 +            // not handle async
 +            Class<? extends Event> tClazz = event.getClass();
 +            Integer tDeep = this.mEventStackDeep.get(tClazz);
@@ -61,7 +60,7 @@
          IEventListener[] listeners = event.getListenerList().getListeners(busID);
          int index = 0;
          try
-@@ -144,7 +169,21 @@
+@@ -144,7 +168,21 @@
          {
              exceptionHandler.handleException(this, event, listeners, index, throwable);
              Throwables.propagate(throwable);
