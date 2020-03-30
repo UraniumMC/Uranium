@@ -116,7 +116,7 @@
          {
              // Let the client know the block still exists
              entityPlayer.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
-@@ -488,95 +499,43 @@
+@@ -488,94 +499,31 @@
  
      public static boolean onPlaceItemIntoWorld(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
      {
@@ -135,26 +135,11 @@
 -        if (!(itemstack.getItem() instanceof ItemBucket)) // if not bucket
 -        {
 -            world.captureBlockSnapshots = true;
-+        if(!(itemstack.getItem() instanceof ItemBucket)){ // if not bucket
-+            tCapture=world.mCapture.get().startCapture(player,itemstack);
-+            tCapture.setAgaistPostionAndSide(side,x,y,z);
-+            // Cauldron start
-+            if(itemstack.getItem() instanceof net.minecraft.item.ItemDye&&itemstack.getItemDamage()==15){
-+                Block block=world.getBlock(x,y,z);
-+                if(block!=null&&(block instanceof net.minecraft.block.BlockSapling||block instanceof net.minecraft.block.BlockMushroom)){
-+                    tTreeGenCapture=world.mCapture.get().startTreeGenCapture(player,x,y,z);
-+                    tTreeGenCapture.setAgaistPostionAndSide(x,y,z,side);
-+                }
-+            }
-+            // Cauldron end
-         }
- 
+-        }
+-
 -        boolean flag = itemstack.getItem().onItemUse(itemstack, player, world, x, y, z, side, hitX, hitY, hitZ);
 -        world.captureBlockSnapshots = false;
-+        ItemStack.currentPlayer=player; // Cauldron
-+        boolean flag=itemstack.getItem().onItemUse(itemstack,player,world,x,y,z,side,hitX,hitY,hitZ);
-+        ItemStack.currentPlayer=null; // Cauldron
- 
+-
 -        if (flag)
 -        {
 -            // save new item data
@@ -168,22 +153,14 @@
 -            net.minecraftforge.event.world.BlockEvent.PlaceEvent placeEvent = null;
 -            List<net.minecraftforge.common.util.BlockSnapshot> blockSnapshots = (List<net.minecraftforge.common.util.BlockSnapshot>) world.capturedBlockSnapshots.clone();
 -            world.capturedBlockSnapshots.clear();
-+        if(tCapture!=null) tCapture.disableCapture();
-+        if(tTreeGenCapture!=null) tTreeGenCapture.disableCapture();
- 
+-
 -            // make sure to set pre-placement item data for event
 -            itemstack.setItemDamage(meta);
 -            itemstack.stackSize = size;
 -            if (nbt != null)
 -            {
 -                itemstack.setTagCompound(nbt);
-+        // Cauldron start
-+        if(flag){
-+            if(tTreeGenCapture!=null&&tTreeGenCapture.mCapturedBlocks.size()>0){
-+                tTreeGenCapture.endCapture();
-+            }else if(tCapture!=null){
-+                tCapture.endCapture();
-             }
+-            }
 -            if (blockSnapshots.size() > 1)
 -            {
 -                placeEvent = ForgeEventFactory.onPlayerMultiBlockPlace(player, blockSnapshots, net.minecraftforge.common.util.ForgeDirection.getOrientation(side));
@@ -202,8 +179,17 @@
 -                    world.restoringBlockSnapshots = true;
 -                    blocksnapshot.restore(true, false);
 -                    world.restoringBlockSnapshots = false;
--                }
--            }
++        if(!(itemstack.getItem() instanceof ItemBucket)){ // if not bucket
++            tCapture=world.mCapture.get().startCapture(player,itemstack);
++            tCapture.setAgaistPostionAndSide(side,x,y,z);
++            // Cauldron start
++            if(itemstack.getItem() instanceof net.minecraft.item.ItemDye&&itemstack.getItemDamage()==15){
++                Block block=world.getBlock(x,y,z);
++                if(block!=null&&(block instanceof net.minecraft.block.BlockSapling||block instanceof net.minecraft.block.BlockMushroom)){
++                    tTreeGenCapture=world.mCapture.get().startTreeGenCapture(player,x,y,z);
++                    tTreeGenCapture.setAgaistPostionAndSide(x,y,z,side);
+                 }
+             }
 -            else
 -            {
 -                // Change the stack to its new content
@@ -213,7 +199,9 @@
 -                {
 -                    itemstack.setTagCompound(newNBT);
 -                }
--
++            // Cauldron end
++        }
+ 
 -                for (net.minecraftforge.common.util.BlockSnapshot blocksnapshot : blockSnapshots)
 -                {
 -                    int blockX = blocksnapshot.x;
@@ -227,17 +215,19 @@
 -                    {
 -                        newBlock.onBlockAdded(world, blockX, blockY, blockZ);
 -                    }
--
++        ItemStack.currentPlayer=player; // Cauldron
++        boolean flag=itemstack.getItem().onItemUse(itemstack,player,world,x,y,z,side,hitX,hitY,hitZ);
++        ItemStack.currentPlayer=null; // Cauldron
+ 
 -                    world.markAndNotifyBlock(blockX, blockY, blockZ, null, oldBlock, newBlock, updateFlag);
 -                }
 -                player.addStat(StatList.objectUseStats[Item.getIdFromItem(itemstack.getItem())], 1);
 -            }
-         }
+-        }
 -        world.capturedBlockSnapshots.clear();
++        // Cauldron start
++        if (tTreeGenCapture != null) tTreeGenCapture.endCapture();
++        if (tCapture != null) flag = tCapture.endCapture();
  
-+        if(tCapture!=null) tCapture.markHandled();
-+        if(tTreeGenCapture!=null) tTreeGenCapture.markHandled();
-+
          return flag;
      }
- 

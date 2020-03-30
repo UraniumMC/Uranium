@@ -15,55 +15,59 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.BlockSnapshot;
 
-public class CaptureTree extends ACapture{
+public class CaptureTree extends ACapture {
 
     /** 捕获数模式下的位置 */
-    public org.bukkit.Location mTreeLoc=null;
+    public org.bukkit.Location mTreeLoc = null;
 
-    public CaptureTree(WorldCapture pWorldCapture, int pId, EntityPlayer pPlayer){
-        super(pWorldCapture,pId,pPlayer);
+    public CaptureTree(WorldCapture pWorldCapture, int pId, EntityPlayer pPlayer) {
+        super(pWorldCapture, pId, pPlayer);
     }
 
     @Override
-    public void setAgaistPostionAndSide(int pSide,int pPosX,int pPosY,int pPosZ){
-        super.setAgaistPostionAndSide(pSide,pPosX,pPosY,pPosZ);
-        this.mTreeLoc=new org.bukkit.Location(this.mWorld.getWorld(),(double)pPosX,(double)pPosY,(double)pPosZ);
+    public void setAgaistPostionAndSide(int pSide, int pPosX, int pPosY, int pPosZ) {
+        super.setAgaistPostionAndSide(pSide, pPosX, pPosY, pPosZ);
+        this.mTreeLoc = new org.bukkit.Location(this.mWorld.getWorld(), (double)pPosX, (double)pPosY, (double)pPosZ);
     }
 
     @Override
-    public void markHandled(){
+    public void markHandled() {
         super.markHandled();
         this.mWorldCapture.mTreeCaptures.remove(this);
     }
 
-    public boolean endCapture(){
-        if(this.mHandled) return true;
-        this.markHandled();
+    public boolean endCapture() {
+        if (this.mHandled) return true;
+        this.disableCapture();
 
-        boolean tResult=true;
-        if(this.mCapturedBlocks.isEmpty())
+        boolean tResult = true;
+        if (this.mCapturedBlocks.isEmpty())
             return true;
 
-        TreeType tType=BlockSapling.treeType;
-        BlockSapling.treeType=null;
-        List<BlockState> tStates=new ArrayList();
+        TreeType tType = BlockSapling.treeType;
+        BlockSapling.treeType = null;
+        List<BlockState> tStates = new ArrayList();
 
-        for(BlockSnapshot sSnapshot : (List<BlockSnapshot>)this.mCapturedBlocks.clone()){
-            tStates.add(new CraftBlockState(sSnapshot));
-        }
-
-        StructureGrowEvent tEvent=null;
-        if(tType!=null){
-            tEvent=new StructureGrowEvent(this.mTreeLoc,tType,false,
-                    this.mCapturePlayer==null?null:(Player)this.mCapturePlayer.getBukkitEntity(),tStates);
-            Bukkit.getPluginManager().callEvent(tEvent);
-        }
-
-        if(tEvent==null||!tEvent.isCancelled()){
-            for(BlockState sState : tStates){
-                sState.update(true);
+        try {
+            for (BlockSnapshot sSnapshot : (List<BlockSnapshot>)this.mCapturedBlocks.clone()) {
+                tStates.add(new CraftBlockState(sSnapshot));
             }
-            tResult=true;
+
+            StructureGrowEvent tEvent = null;
+            if (tType != null) {
+                tEvent = new StructureGrowEvent(this.mTreeLoc, tType, false,
+                        this.mCapturePlayer == null ? null : (Player)this.mCapturePlayer.getBukkitEntity(), tStates);
+                Bukkit.getPluginManager().callEvent(tEvent);
+            }
+
+            if (tEvent == null || !tEvent.isCancelled()) {
+                for (BlockState sState : tStates) {
+                    sState.update(true);
+                }
+                tResult = true;
+            }
+        } finally {
+            this.markHandled();
         }
 
         return tResult;

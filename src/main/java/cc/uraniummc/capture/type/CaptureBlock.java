@@ -23,39 +23,39 @@ import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 
-public class CaptureBlock extends ACapture{
+public class CaptureBlock extends ACapture {
 
     /** 当前物品 */
-    public ItemStack mUseItem=null;
+    public ItemStack mUseItem = null;
     /** 当前物品所在的快捷栏位置,如果为-1表示不存在,或者不是从背包取出的物品 */
-    public int mSlot=-1;
-    public int mOldItemSize=0;
-    public int mOldItemMeta=0;
-    public NBTTagCompound mOldItemNBT=null;
+    public int mSlot = -1;
+    public int mOldItemSize = 0;
+    public int mOldItemMeta = 0;
+    public NBTTagCompound mOldItemNBT = null;
     /** 捕获的数据 */
-    public ArrayList<EntitySnapshot> mCapturedEntitys=new ArrayList<EntitySnapshot>();
-    public ArrayList<ItemSnapshot> mCapturedItems=new ArrayList<ItemSnapshot>();
-    public ArrayList<Location> mCheckedBlocks=new ArrayList<Location>();
+    public ArrayList<EntitySnapshot> mCapturedEntitys = new ArrayList<EntitySnapshot>();
+    public ArrayList<ItemSnapshot> mCapturedItems = new ArrayList<ItemSnapshot>();
+    public ArrayList<Location> mCheckedBlocks = new ArrayList<Location>();
     /** 处理结果 */
-    protected boolean mAllow=true;
+    protected boolean mAllow = true;
 
-    public CaptureBlock(WorldCapture pWorldCapture,int pId,EntityPlayer pPlayer){
-        super(pWorldCapture,pId,pPlayer);
+    public CaptureBlock(WorldCapture pWorldCapture, int pId, EntityPlayer pPlayer) {
+        super(pWorldCapture, pId, pPlayer);
     }
 
     @Override
-    public void markHandled(){
+    public void markHandled() {
         super.markHandled();
         this.mWorldCapture.mBlockCaptures.remove(this);
     }
 
-    public boolean isChecked(World pWorld,int pPosX,int pPosY,int pPosZ,boolean pSimulate){
-        if(!this.mCheckedBlocks.isEmpty()){
-            Iterator<Location> tIt=this.mCheckedBlocks.iterator();
-            while(tIt.hasNext()){
-                Location tLoc=tIt.next();
-                if(tLoc.mWorld==pWorld&&tLoc.mPosX==pPosX&&tLoc.mPosY==pPosY&&tLoc.mPosZ==pPosZ){
-                    if(!pSimulate) tIt.remove();
+    public boolean isChecked(World pWorld, int pPosX, int pPosY, int pPosZ, boolean pSimulate) {
+        if (!this.mCheckedBlocks.isEmpty()) {
+            Iterator<Location> tIt = this.mCheckedBlocks.iterator();
+            while (tIt.hasNext()) {
+                Location tLoc = tIt.next();
+                if (tLoc.mWorld == pWorld && tLoc.mPosX == pPosX && tLoc.mPosY == pPosY && tLoc.mPosZ == pPosZ) {
+                    if (!pSimulate) tIt.remove();
                     return true;
                 }
             }
@@ -63,20 +63,20 @@ public class CaptureBlock extends ACapture{
         return false;
     }
 
-    public void addCaptureEntity(World pWorld,Entity pEntity,SpawnReason pReason){
-        if(!this.mEnable) return;
+    public void addCaptureEntity(World pWorld, Entity pEntity, SpawnReason pReason) {
+        if (!this.mEnable) return;
 
-        this.mCapturedEntitys.add(new EntitySnapshot(pWorld,pEntity,pReason));
+        this.mCapturedEntitys.add(new EntitySnapshot(pWorld, pEntity, pReason));
     }
 
-    public void addCaptureItem(EntityPlayer pPlayer,ItemStack pItem){
-        if(!this.mEnable) return;
+    public void addCaptureItem(EntityPlayer pPlayer, ItemStack pItem) {
+        if (!this.mEnable) return;
 
-        this.mCapturedItems.add(new ItemSnapshot(pPlayer,pItem));
+        this.mCapturedItems.add(new ItemSnapshot(pPlayer, pItem));
     }
 
-    public void addCheckedBlock(World pWorld,int pPosX,int pPosY,int pPosZ){
-        this.mCheckedBlocks.add(new Location(pWorld,pPosX,pPosY,pPosZ));
+    public void addCheckedBlock(World pWorld, int pPosX, int pPosY, int pPosZ) {
+        this.mCheckedBlocks.add(new Location(pWorld, pPosX, pPosY, pPosZ));
     }
 
     /**
@@ -91,18 +91,18 @@ public class CaptureBlock extends ACapture{
      *            是否为模拟
      * @return 事件是否被允许
      */
-    public boolean fireBlockBreak(BlockSnapshot pSnapshot,boolean pSimulate){
-        if(!this.mEnable||this.isChecked(pSnapshot.world,pSnapshot.x,pSnapshot.y,pSnapshot.z,pSimulate))
+    public boolean fireBlockBreak(BlockSnapshot pSnapshot, boolean pSimulate) {
+        if (!this.mEnable || this.isChecked(pSnapshot.world, pSnapshot.x, pSnapshot.y, pSnapshot.z, pSimulate))
             return true;
-        if(!this.mAllow) return false;
+        if (!this.mAllow) return false;
 
-        this.mEnable=false; // 设置未false,防止BlockEvent中添加检查过方块
-        BlockEvent tEvent=new BlockEvent.BreakEvent(pSnapshot.x,pSnapshot.y,pSnapshot.z,pSnapshot.world,
-                pSnapshot.getReplacedBlock(),pSnapshot.meta,this.mCapturePlayer);
+        this.mEnable = false; // 设置未false,防止BlockEvent中添加检查过方块
+        BlockEvent tEvent = new BlockEvent.BreakEvent(pSnapshot.x, pSnapshot.y, pSnapshot.z, pSnapshot.world,
+                pSnapshot.getReplacedBlock(), pSnapshot.meta, this.mCapturePlayer);
         MinecraftForge.EVENT_BUS.post(tEvent);
-        this.mEnable=true;
+        this.mEnable = true;
 
-        if(!pSimulate){
+        if (!pSimulate) {
             this.mergeBlockChangeResult(!tEvent.isCanceled());
         }
         return !tEvent.isCanceled();
@@ -122,16 +122,16 @@ public class CaptureBlock extends ACapture{
      *            是否为模拟
      * @return 事件是否被允许
      */
-    public boolean fireBlockPlace(BlockSnapshot pSnapshot,Block pPlaced,boolean pSimulate){
-        if(!this.mEnable||this.isChecked(pSnapshot.world,pSnapshot.x,pSnapshot.y,pSnapshot.z,pSimulate))
+    public boolean fireBlockPlace(BlockSnapshot pSnapshot, Block pPlaced, boolean pSimulate) {
+        if (!this.mEnable || this.isChecked(pSnapshot.world, pSnapshot.x, pSnapshot.y, pSnapshot.z, pSimulate))
             return true;
-        if(!this.mAllow) return false;
+        if (!this.mAllow) return false;
 
-        this.mEnable=false; // 设置未false,防止BlockEvent中添加检查过方块
-        BlockEvent tEvent=ForgeEventFactory.onPlayerBlockPlace(this.mCapturePlayer,pSnapshot,this.mSide);
-        this.mEnable=true;
+        this.mEnable = false; // 设置未false,防止BlockEvent中添加检查过方块
+        BlockEvent tEvent = ForgeEventFactory.onPlayerBlockPlace(this.mCapturePlayer, pSnapshot, this.mSide);
+        this.mEnable = true;
 
-        if(!pSimulate){
+        if (!pSimulate) {
             this.mergeBlockChangeResult(!tEvent.isCanceled());
         }
         return !tEvent.isCanceled();
@@ -144,65 +144,69 @@ public class CaptureBlock extends ACapture{
      *            是否允许当前方块的更改
      * @return 是否允许此次方块捕获的更改
      */
-    public boolean mergeBlockChangeResult(boolean pAllow){
-        return this.mAllow&=pAllow;
+    public boolean mergeBlockChangeResult(boolean pAllow) {
+        return this.mAllow &= pAllow;
     }
 
-    public boolean endCapture(){
-        if(this.mHandled) return true;
-        this.markHandled();
+    public boolean endCapture() {
+        if (this.mHandled) return true;
+        this.disableCapture();
 
-        if(!this.mAllow){
-            if(this.mUseItem!=null){
-                if(this.mSlot==-1){
-                    this.mUseItem.setItemDamage(this.mOldItemMeta);
-                    this.mUseItem.stackSize=this.mOldItemSize;
-                    this.mUseItem.setTagCompound(this.mOldItemNBT);
-                }else{
-                    this.mCapturePlayer.inventory.setInventorySlotContents(this.mSlot,this.mUseItem);
-                }
-            }
-            if(!this.mCapturedBlocks.isEmpty()){
-                for(int i=this.mCapturedBlocks.size();i>0;){
-                    this.mWorld.restoringBlockSnapshots=true;
-                    BlockSnapshot tSnapshot=this.mCapturedBlocks.get(--i);
-                    tSnapshot.restore(true,false);
-                    this.mWorld.restoringBlockSnapshots=false;
-                }
-            }
-            for(EntitySnapshot sSnapshot : this.mCapturedEntitys){
-                sSnapshot.cancel();
-            }
-        }else{
-            for(BlockSnapshot tSnapshot : this.mCapturedBlocks){
-                int tBlockX=tSnapshot.x;
-                int tBlockY=tSnapshot.y;
-                int tBlockZ=tSnapshot.z;
-                int tMetadata=this.mWorld.getBlockMetadata(tBlockX,tBlockY,tBlockZ);
-                Block tOldBlock=tSnapshot.replacedBlock;
-                Block tNewBlock=this.mWorld.getBlock(tBlockX,tBlockY,tBlockZ);
-                if(tNewBlock!=null&&!(tNewBlock.hasTileEntity(tMetadata))){
-                    tNewBlock.onBlockAdded(this.mWorld,tBlockX,tBlockY,tBlockZ);
-                }
-                this.mWorld.markAndNotifyBlock(tBlockX,tBlockY,tBlockZ,null,tOldBlock,tNewBlock,tSnapshot.flag);
-            }
-            for(EntitySnapshot sSnapshot : this.mCapturedEntitys){
-                sSnapshot.apply();
-            }
-            if(!this.mCapturedItems.isEmpty()){
-                HashSet<EntityPlayer> tNotifyPlayers=new HashSet<EntityPlayer>();
-                for(ItemSnapshot sSnapshot : this.mCapturedItems){
-                    if(sSnapshot.apply()){
-                        tNotifyPlayers.add(sSnapshot.mPlayer);
+        try {
+            if (!this.mAllow) {
+                if (this.mUseItem != null) {
+                    if (this.mSlot == -1) {
+                        this.mUseItem.setItemDamage(this.mOldItemMeta);
+                        this.mUseItem.stackSize = this.mOldItemSize;
+                        this.mUseItem.setTagCompound(this.mOldItemNBT);
+                    } else {
+                        this.mCapturePlayer.inventory.setInventorySlotContents(this.mSlot, this.mUseItem);
                     }
                 }
-                for(EntityPlayer sPlayer : tNotifyPlayers){
-                    sPlayer.openContainer.detectAndSendChanges();
+                if (!this.mCapturedBlocks.isEmpty()) {
+                    for (int i = this.mCapturedBlocks.size(); i > 0;) {
+                        this.mWorld.restoringBlockSnapshots = true;
+                        BlockSnapshot tSnapshot = this.mCapturedBlocks.get(--i);
+                        tSnapshot.restore(true, false);
+                        this.mWorld.restoringBlockSnapshots = false;
+                    }
+                }
+                for (EntitySnapshot sSnapshot : this.mCapturedEntitys) {
+                    sSnapshot.cancel();
+                }
+            } else {
+                for (BlockSnapshot tSnapshot : this.mCapturedBlocks) {
+                    int tBlockX = tSnapshot.x;
+                    int tBlockY = tSnapshot.y;
+                    int tBlockZ = tSnapshot.z;
+                    int tMetadata = this.mWorld.getBlockMetadata(tBlockX, tBlockY, tBlockZ);
+                    Block tOldBlock = tSnapshot.replacedBlock;
+                    Block tNewBlock = this.mWorld.getBlock(tBlockX, tBlockY, tBlockZ);
+                    if (tNewBlock != null && !(tNewBlock.hasTileEntity(tMetadata))) {
+                        tNewBlock.onBlockAdded(this.mWorld, tBlockX, tBlockY, tBlockZ);
+                    }
+                    this.mWorld.markAndNotifyBlock(tBlockX, tBlockY, tBlockZ, null, tOldBlock, tNewBlock, tSnapshot.flag);
+                }
+                for (EntitySnapshot sSnapshot : this.mCapturedEntitys) {
+                    sSnapshot.apply();
+                }
+                if (!this.mCapturedItems.isEmpty()) {
+                    HashSet<EntityPlayer> tNotifyPlayers = new HashSet<EntityPlayer>();
+                    for (ItemSnapshot sSnapshot : this.mCapturedItems) {
+                        if (sSnapshot.apply()) {
+                            tNotifyPlayers.add(sSnapshot.mPlayer);
+                        }
+                    }
+                    for (EntityPlayer sPlayer : tNotifyPlayers) {
+                        sPlayer.openContainer.detectAndSendChanges();
+                    }
+                }
+                if (this.mUseItem != null && this.mCapturePlayer != null) {
+                    this.mCapturePlayer.addStat(StatList.objectUseStats[Item.getIdFromItem(this.mUseItem.getItem())], 1);
                 }
             }
-            if(this.mUseItem!=null&&this.mCapturePlayer!=null){
-                this.mCapturePlayer.addStat(StatList.objectUseStats[Item.getIdFromItem(this.mUseItem.getItem())],1);
-            }
+        } finally {
+            this.markHandled();
         }
 
         return this.mAllow;
