@@ -123,13 +123,15 @@ public class WatchdogThread extends Thread
                 
                 log.log(Level.SEVERE, "------------------------------");
                 log.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Cauldron!):");
-                dumpThread(ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().primaryThread.getId(), Integer.MAX_VALUE), log);
+                ThreadInfo tServerThread = ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().primaryThread.getId(), Integer.MAX_VALUE);
+                dumpThread(tServerThread, log);
                 log.log(Level.SEVERE, "------------------------------");
                 //
                 log.log(Level.SEVERE, "Entire Thread Dump:");
                 ThreadInfo[] threads = ManagementFactory.getThreadMXBean().dumpAllThreads(true, true);
                 for (ThreadInfo thread : threads)
                 {
+                    if(thread == tServerThread) continue;
                     dumpThread(thread, log);
                 }
                 log.log(Level.SEVERE, "------------------------------");
@@ -187,8 +189,8 @@ public class WatchdogThread extends Thread
     private static void dumpThread(ThreadInfo thread, Logger log, Level level)
     {
         if (thread == null) return;
-        if ( thread.getThreadState() != State.WAITING )
-        {
+        //if ( thread.getThreadState() != State.WAITING )
+        //{
             log.log( level, "------------------------------" );
             //
             log.log( level, "Current Thread: " + thread.getThreadName() );
@@ -215,6 +217,6 @@ public class WatchdogThread extends Thread
             {
                 log.log( level, "\t\t" + stack[line].toString() );
             }
-        }
+        //}
     }
 }
