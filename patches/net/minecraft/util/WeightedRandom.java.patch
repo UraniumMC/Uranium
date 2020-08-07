@@ -1,0 +1,26 @@
+--- ../src-base/minecraft/net/minecraft/util/WeightedRandom.java
++++ ../src-work/minecraft/net/minecraft/util/WeightedRandom.java
+@@ -25,7 +25,12 @@
+     {
+         if (p_76273_2_ <= 0)
+         {
+-            throw new IllegalArgumentException();
++            //throw new IllegalArgumentException();
++            if(p_76273_1_.size()==0)return null;
++            int tNext = p_76273_0_.nextInt(p_76273_1_.size());
++            for(Object sObj : p_76273_1_){
++                if(tNext--<=0) return (Item)sObj;
++            }
+         }
+         return getItem(p_76273_1_, p_76273_0_.nextInt(p_76273_2_));
+     }
+@@ -79,7 +84,8 @@
+     {
+         if (p_76269_2_ <= 0)
+         {
+-            throw new IllegalArgumentException();
++            // throw new IllegalArgumentException();
++            return p_76269_1_.length==0?null:p_76269_1_[p_76269_0_.nextInt(p_76269_1_.length)];
+         }
+         return getItem(p_76269_1_, p_76269_0_.nextInt(p_76269_2_));
+     }
