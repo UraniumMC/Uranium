@@ -1,0 +1,41 @@
+--- ../src-base/minecraft/net/minecraft/util/LongHashMap.java
++++ ../src-work/minecraft/net/minecraft/util/LongHashMap.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.util;
+ 
++import java.util.ArrayList;
++
+ public class LongHashMap
+ {
+     private transient LongHashMap.Entry[] hashArray = new LongHashMap.Entry[16];
+@@ -243,4 +245,30 @@
+                 return this.getKey() + "=" + this.getValue();
+             }
+         }
++    
++    public Object[] values(){
++        ArrayList<Object> tValues=new ArrayList<Object>();
++
++        LongHashMap.Entry[] aentry = this.hashArray;
++        for (int j = 0; j < aentry.length; ++j)
++        {
++            LongHashMap.Entry entry = aentry[j];
++
++            if (entry != null)
++            {
++                aentry[j] = null;
++                LongHashMap.Entry entry1;
++
++                do
++                {
++                    entry1 = entry.nextEntry;
++                    tValues.add(entry1);
++                }
++                while (entry1 != null);
++            }
++        }
++        
++        return tValues.toArray();
++        
++    }
+ }

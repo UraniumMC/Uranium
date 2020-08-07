@@ -22,7 +22,7 @@
  import net.minecraft.crash.CrashReport;
  import net.minecraft.crash.CrashReportCategory;
  import net.minecraft.entity.EnumCreatureType;
-@@ -33,22 +40,52 @@
+@@ -33,22 +40,66 @@
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
  
@@ -68,7 +68,21 @@
 +    public boolean loadChunkOnProvideRequest = MinecraftServer.getServer().cauldronConfig.loadChunkOnRequest.getValue(); // Cauldron - if true, allows mods to force load chunks. to disable, set load-chunk-on-request in cauldron.yml to false
 +    public int initialTick; // Cauldron counter to keep track of when this loader was created
 +
-+    public List loadedChunks = Collections.synchronizedList(new ArrayList()); // Cauldron - vanilla compatibility
++    public List loadedChunks = Collections.synchronizedList(new ArrayList(){
++        public boolean add(Object e) {
++            Chunk tChunk=(Chunk)e;
++            if(chunkExists(tChunk.xPosition, tChunk.zPosition)){
++                Iterator<Chunk> tIt=(Iterator<Chunk>)this.iterator();
++                while(tIt.hasNext()){
++                    Chunk chunk = tIt.next();
++                    if(chunk.xPosition==tChunk.xPosition&&chunk.zPosition==tChunk.zPosition){
++                        tIt.remove();
++                    }
++                }
++            }
++            return super.add(e);
++        }
++    }); // Cauldron - vanilla compatibility
      public WorldServer worldObj;
      private Set<Long> loadingChunks = com.google.common.collect.Sets.newHashSet();
 +    public LongHashMap loadedChunkHashMap = new LongHashMap();
@@ -80,7 +94,7 @@
          this.defaultEmptyChunk = new EmptyChunk(p_i1520_1_, 0, 0);
          this.worldObj = p_i1520_1_;
          this.currentChunkLoader = p_i1520_2_;
-@@ -60,13 +97,19 @@
+@@ -60,13 +111,19 @@
          return this.loadedChunkHashMap.containsItem(ChunkCoordIntPair.chunkXZ2Int(p_73149_1_, p_73149_2_));
      }
  
@@ -101,7 +115,7 @@
          if (this.worldObj.provider.canRespawnHere() && DimensionManager.shouldLoadSpawn(this.worldObj.provider.dimensionId))
          {
              ChunkCoordinates chunkcoordinates = this.worldObj.getSpawnPoint();
-@@ -74,14 +117,33 @@
+@@ -74,14 +131,33 @@
              int l = p_73241_2_ * 16 + 8 - chunkcoordinates.posZ;
              short short1 = 128;
  
@@ -137,7 +151,7 @@
          }
      }
  
-@@ -96,6 +158,14 @@
+@@ -96,6 +172,14 @@
          }
      }
  
@@ -152,7 +166,7 @@
      public Chunk loadChunk(int p_73158_1_, int p_73158_2_)
      {
          return loadChunk(p_73158_1_, p_73158_2_, null);
-@@ -103,9 +173,9 @@
+@@ -103,9 +187,9 @@
  
      public Chunk loadChunk(int par1, int par2, Runnable runnable)
      {
@@ -165,7 +179,7 @@
          AnvilChunkLoader loader = null;
  
          if (this.currentChunkLoader instanceof AnvilChunkLoader)
-@@ -113,6 +183,8 @@
+@@ -113,6 +197,8 @@
              loader = (AnvilChunkLoader) this.currentChunkLoader;
          }
  
@@ -174,7 +188,7 @@
          // We can only use the queue for already generated chunks
          if (chunk == null && loader != null && loader.chunkExists(this.worldObj, par1, par2))
          {
-@@ -128,6 +200,12 @@
+@@ -128,6 +214,12 @@
          }
          else if (chunk == null)
          {
@@ -187,7 +201,7 @@
              chunk = this.originalLoadChunk(par1, par2);
          }
  
-@@ -142,18 +220,20 @@
+@@ -142,18 +234,20 @@
  
      public Chunk originalLoadChunk(int p_73158_1_, int p_73158_2_)
      {
@@ -213,7 +227,7 @@
              if (chunk == null)
              {
                  chunk = this.safeLoadChunk(p_73158_1_, p_73158_2_);
-@@ -176,30 +256,84 @@
+@@ -176,30 +270,84 @@
                          CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Exception generating new chunk");
                          CrashReportCategory crashreportcategory = crashreport.makeCategory("Chunk to be generated");
                          crashreportcategory.addCrashSection("Location", String.format("%d,%d", new Object[] {Integer.valueOf(p_73158_1_), Integer.valueOf(p_73158_2_)}));
@@ -306,7 +320,7 @@
      {
          if (this.currentChunkLoader == null)
          {
-@@ -209,6 +343,7 @@
+@@ -209,6 +357,7 @@
          {
              try
              {
@@ -314,7 +328,7 @@
                  Chunk chunk = this.currentChunkLoader.loadChunk(this.worldObj, p_73239_1_, p_73239_2_);
  
                  if (chunk != null)
-@@ -217,8 +352,11 @@
+@@ -217,8 +366,11 @@
  
                      if (this.currentChunkProvider != null)
                      {
@@ -326,7 +340,7 @@
                  }
  
                  return chunk;
-@@ -231,7 +369,7 @@
+@@ -231,7 +383,7 @@
          }
      }
  
@@ -335,7 +349,7 @@
      {
          if (this.currentChunkLoader != null)
          {
-@@ -246,7 +384,7 @@
+@@ -246,7 +398,7 @@
          }
      }
  
@@ -344,7 +358,7 @@
      {
          if (this.currentChunkLoader != null)
          {
-@@ -254,15 +392,18 @@
+@@ -254,15 +406,18 @@
              {
                  p_73242_1_.lastSaveTime = this.worldObj.getTotalWorldTime();
                  this.currentChunkLoader.saveChunk(this.worldObj, p_73242_1_);
@@ -364,7 +378,7 @@
          }
      }
  
-@@ -276,9 +417,40 @@
+@@ -276,9 +431,40 @@
  
              if (this.currentChunkProvider != null)
              {
@@ -405,13 +419,13 @@
              }
          }
      }
-@@ -286,11 +458,13 @@
+@@ -286,11 +472,13 @@
      public boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_)
      {
          int i = 0;
 -        ArrayList arraylist = Lists.newArrayList(this.loadedChunks);
 +        // Cauldron start - use thread-safe method for iterating loaded chunks
-+        Object[] chunks = this.loadedChunks.toArray();
++        Object[] chunks = this.loadedChunkHashMap.values();
  
 -        for (int j = 0; j < arraylist.size(); ++j)
 +        for (int j = 0; j < chunks.length; ++j)
@@ -422,7 +436,7 @@
  
              if (p_73151_1_)
              {
-@@ -325,36 +499,73 @@
+@@ -325,36 +513,73 @@
      {
          if (!this.worldObj.levelSaving)
          {
@@ -515,7 +529,7 @@
              if (this.currentChunkLoader != null)
              {
                  this.currentChunkLoader.chunkTick();
-@@ -371,7 +582,7 @@
+@@ -371,7 +596,7 @@
  
      public String makeString()
      {
@@ -524,7 +538,7 @@
      }
  
      public List getPossibleCreatures(EnumCreatureType p_73155_1_, int p_73155_2_, int p_73155_3_, int p_73155_4_)
-@@ -390,4 +601,49 @@
+@@ -390,4 +615,49 @@
      }
  
      public void recreateStructures(int p_82695_1_, int p_82695_2_) {}
