@@ -27,7 +27,7 @@
 +                do
 +                {
 +                    entry = entry.nextEntry;
-+                    tValues.add(entry);
++                    tValues.add(entry.value);
 +                }
 +                while (entry != null);
 +            }
