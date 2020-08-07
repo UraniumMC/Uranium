@@ -8,7 +8,7 @@
  public class LongHashMap
  {
      private transient LongHashMap.Entry[] hashArray = new LongHashMap.Entry[16];
-@@ -243,4 +245,30 @@
+@@ -243,4 +245,28 @@
                  return this.getKey() + "=" + this.getValue();
              }
          }
@@ -24,14 +24,12 @@
 +            if (entry != null)
 +            {
 +                aentry[j] = null;
-+                LongHashMap.Entry entry1;
-+
 +                do
 +                {
-+                    entry1 = entry.nextEntry;
-+                    tValues.add(entry1);
++                    entry = entry.nextEntry;
++                    tValues.add(entry);
 +                }
-+                while (entry1 != null);
++                while (entry != null);
 +            }
 +        }
 +        
