@@ -26,8 +26,8 @@
 +                aentry[j] = null;
 +                do
 +                {
-+                    entry = entry.nextEntry;
 +                    tValues.add(entry.value);
++                    entry = entry.nextEntry;
 +                }
 +                while (entry != null);
 +            }
