@@ -227,7 +227,7 @@
 -        world.capturedBlockSnapshots.clear();
 +        // Cauldron start
 +        if (tTreeGenCapture != null) tTreeGenCapture.endCapture();
-+        if (tCapture != null) flag = tCapture.endCapture();
++        if (tCapture != null) flag = !tCapture.endCapture();
  
          return flag;
      }
