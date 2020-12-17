@@ -103,17 +103,11 @@
          Collections.sort(this.recipes, new Comparator()
          {
              private static final String __OBFID = "CL_00000091";
-@@ -312,7 +377,22 @@
+@@ -312,7 +377,16 @@
                  i1 = 0;
              }
  
 -            return new ItemStack(itemstack.getItem(), 1, i1);
-+            // Cauldron start - vanilla compatibility
-+            if (p_82787_1_.resultInventory == null)
-+            {
-+                return new ItemStack(itemstack.getItem(), 1, i1);
-+            }
-+            // Cauldron end
 +            // CraftBukkit start - Construct a dummy repair recipe
 +            ItemStack result = new ItemStack(itemstack.getItem(), 1, i1);
 +            List<ItemStack> ingredients = new ArrayList<ItemStack>();
@@ -127,25 +121,17 @@
          }
          else
          {
-@@ -320,12 +400,23 @@
-             {
-                 IRecipe irecipe = (IRecipe)this.recipes.get(j);
+@@ -322,10 +396,15 @@
  
--                if (irecipe.matches(p_82787_1_, p_82787_2_))
-+                if (irecipe.matches(p_82787_1_, p_82787_2_) && p_82787_1_.resultInventory != null) // Cauldron - add null check for vanilla compatibility
+                 if (irecipe.matches(p_82787_1_, p_82787_2_))
                  {
+-                    return irecipe.getCraftingResult(p_82787_1_);
 +                    // CraftBukkit start - INVENTORY_PRE_CRAFT event
 +                    p_82787_1_.currentRecipe = irecipe;
 +                    ItemStack result = irecipe.getCraftingResult(p_82787_1_);
 +                    return CraftEventFactory.callPreCraftEvent(p_82787_1_, result, lastCraftView, false);
 +                    // CraftBukkit end
-+                }
-+                // Cauldron start - vanilla
-+                else if (irecipe.matches(p_82787_1_, p_82787_2_))
-+                {
-                     return irecipe.getCraftingResult(p_82787_1_);
                  }
-+                // Cauldron end
              }
  
 +            p_82787_1_.currentRecipe = null; // CraftBukkit - Clear recipe when no recipe is found
