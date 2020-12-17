@@ -11,6 +11,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import net.minecraft.entity.Entity;
 
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.util.MovingObjectPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -792,7 +793,7 @@ public class CraftEventFactory {
     }
 
     public static net.minecraft.item.ItemStack callPreCraftEvent(net.minecraft.inventory.InventoryCrafting matrix, net.minecraft.item.ItemStack result, InventoryView lastCraftView, boolean isRepair) {
-        CraftInventoryCrafting inventory = new CraftInventoryCrafting(matrix, matrix.resultInventory);
+        CraftInventoryCrafting inventory = new CraftInventoryCrafting(matrix, matrix.resultInventory == null ? new InventoryCraftResult() : matrix.resultInventory);
         inventory.setResult(CraftItemStack.asCraftMirror(result));
 
         PrepareItemCraftEvent event = new PrepareItemCraftEvent(inventory, lastCraftView, isRepair);
